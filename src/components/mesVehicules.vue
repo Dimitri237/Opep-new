@@ -2,110 +2,158 @@
     <div class="all">
         <div class="side_barre">
 
-<nav style="width: 100%;">
-    <center>
-        <img style="width: 100px;" src="@/assets/log1.png" alt="" />
-    </center>
-    <ul>
-        <button @click="logout">Déconnexion</button>
-        <li>
-            <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
-                @click="showPage('home')">
-                <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
-                <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'depense' }"
-                style="display: flex;text-decoration: none;" @click="showPage('depense')">
-                <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
-                    class="fas fa-layer-group"></i>
-                <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
-                @click="showPage('stats')">
-                <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }"
-                    class="fas fa-chart-bar"></i>
-                <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
-                @click="showPage('profil')">
-                <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
-                <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
-            </button>
-        </li>
-    </ul>
-</nav>
-</div>
-<div class="extra">
-
-<div class="page" v-if="currentPage === 'home'">
-    <h1>Welcome to the Home Page</h1>
-    <p>This is the home page content.</p>
-</div>
-
-<div class="page" v-if="currentPage === 'depense'">
-    <div class="head">
-        <router-link to="/ajouterV" class="new_car">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h3>Ajouter une dépense</h3>
-                <p style="margin-top: -20px;">Ajouter une dépense maintenant </p>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-        </router-link>
-    </div>
-    <div style="margin-top: 50px;">
-        <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (1).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h4 style="color: #06283dc9;">Reparation</h4>
-                <h5 style="margin-top: -20px; color: #F2994A;">650.000 fcfa</h5>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+            <nav style="width: 100%;">
+                <center>
+                    <img style="width: 100px;" src="@/assets/log1.png" alt="" />
+                </center>
+                <ul>
+                    <li>
+                        <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
+                            @click="showPage('home')">
+                            <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
+                            <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
+                        </button>
+                    </li>
+                    <li>
+                        <button :class="{ selected: currentPage === 'depense' }"
+                            style="display: flex;text-decoration: none;" @click="showPage('depense')">
+                            <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
+                                class="fas fa-layer-group"></i>
+                            <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
+                        </button>
+                    </li>
+                    <li>
+                        <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
+                            @click="showPage('stats')">
+                            <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }"
+                                class="fas fa-chart-bar"></i>
+                            <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
+                        </button>
+                    </li>
+                    <li>
+                        <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
+                            @click="showPage('profil')">
+                            <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
+                            <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (2).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h4 style="color: #06283dc9;">Carburant</h4>
-                <h5 style="margin-top: -20px; color: #F2994A;">600.000 fcfa</h5>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-        </div>
-        <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (3).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h4 style="color: #06283dc9;">Administrations</h4>
-                <h5 style="margin-top: -20px; color: #F2994A;">300.000 fcfa</h5>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-        </div>
-        <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h4 style="color: #06283dc9;">Autres</h4>
-                <h5 style="margin-top: -20px; color: #F2994A;">100.000 fcfa</h5>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-        </div>
-    </div>
-</div>
+        <div class="extra">
 
-<div class="page" v-if="currentPage === 'stats'">
-    <h1>Contact Us</h1>
-    <p>This is the contact page content.</p>
-</div>
+            <div class="page" v-if="currentPage === 'home'">
+                <h1 style="color: #06283D;">Ravis de vous revoir Mr. <span  v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
+                <div class="cont">
+                    <div class="cont1">
 
-<div class="page" v-if="currentPage === 'profil'">
-    <h1>User</h1>
-    <p>This is the profile page content.</p>
-</div>
+                    </div>
+                    <div class="cont2">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="cont3">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
 
-</div>
+            <div class="page" v-if="currentPage === 'depense'">
+                <div class="head">
+                    <router-link to="/ajouterD" class="new_car">
+                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+                        <div style="margin: auto 10px; width: 500px;">
+                            <h3>Ajouter une dépense</h3>
+                            <p style="margin-top: -20px;">Ajouter une dépense maintenant </p>
+                        </div>
+                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </router-link>
+                </div>
+                <div style="margin-top: 50px;">
+                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (1).png" alt="">
+                        <div style="margin: auto 10px; width: 500px;">
+                            <h4 style="color: #06283dc9;">Reparation</h4>
+                            <h5 style="margin-top: -20px; color: #F2994A;">650.000 fcfa</h5>
+                        </div>
+                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </div>
+                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (2).png" alt="">
+                        <div style="margin: auto 10px; width: 500px;">
+                            <h4 style="color: #06283dc9;">Carburant</h4>
+                            <h5 style="margin-top: -20px; color: #F2994A;">600.000 fcfa</h5>
+                        </div>
+                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </div>
+                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (3).png" alt="">
+                        <div style="margin: auto 10px; width: 500px;">
+                            <h4 style="color: #06283dc9;">Administrations</h4>
+                            <h5 style="margin-top: -20px; color: #F2994A;">300.000 fcfa</h5>
+                        </div>
+                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </div>
+                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+                        <div style="margin: auto 10px; width: 500px;">
+                            <h4 style="color: #06283dc9;">Autres</h4>
+                            <h5 style="margin-top: -20px; color: #F2994A;">100.000 fcfa</h5>
+                        </div>
+                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" v-if="currentPage === 'stats'">
+                <h1>Contact Us</h1>
+                <p>This is the contact page content.</p>
+            </div>
+
+            <div class="page" v-if="currentPage === 'profil'">
+                <div>
+                    <div class="profil">
+                        <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+                        <div class="name">
+                            <h1 style="color: #06283D;">Dimitri Tsaffo <span  v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
+                            <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont ici</p>
+                        </div>
+                    </div>
+                    <div class="pList">
+                        <ul class="list">
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span>Parametres</span>
+                            </li>
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span>A propos de nous</span>
+                            </li>
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span>Theme</span>
+                            </li>
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span @click="logout">Deconnexion</span>
+                            </li>
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span>Politique de confidentialite</span>
+                            </li>
+                            <li>
+                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <span>Termes et conditions</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <div class="container">
             <div class="head">
                 <router-link to="/ajouterV" class="new_car">
@@ -125,7 +173,7 @@
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" to="/" class="car">
                         <img style="width: 100%; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                            <h4 style="color: #06283dc9;">{{ vehicle.marque }}{{ vehicle.modele }}</h4>
+                            <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
                             <h5 style="margin-top: -20px; color: #F2994A;">75.000 FCFA ce mois</h5>
                         </div>
                         <div style="display: flex; justify-content: space-between; padding: 10px 0;">
@@ -133,6 +181,7 @@
                             <span style="color: #06283dc9;">3 chargements</span>
                         </div>
                     </router-link>
+                    
                 </div>
             </div>
         </div>
@@ -147,9 +196,11 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'depense',
+            currentPage: 'profil',
             userId: null,
+            vehicleId: null,
             vehicles: [],
+            depenses: [],
             loading: false
         };
     },
@@ -168,7 +219,7 @@ export default {
         }
     },
     methods: {
-        Page(page) {
+        showPage(page) {
             this.currentPage = page;
         },
         async getVehicles() {
@@ -186,6 +237,7 @@ export default {
                 // Initialisation de l'application Firebase
                 const firebaseApp = initializeApp(firebaseConfig);
                 const db = getFirestore(firebaseApp);
+
 
                 // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
                 const vehiclesRef = collection(db, 'vehicles');
@@ -376,8 +428,83 @@ button {
 .selected {
     background-color: white;
     border-bottom-left-radius: 25px;
+    transition: all 0.3s;
     color: #06283D !important;
     border-top-left-radius: 25px;
     /* Ajoutez ici vos styles personnalisés pour le bouton sélectionné */
 }
+.cont{
+    width: 100%;
+    display: block;
+}
+.cont1{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
+    height: 300px;
+    border-radius: 15px;
+}
+.cont2{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+.cont2 div{
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 49%;
+    border-radius: 15px;
+    height: 250px;
+}
+.cont3{
+    width: 100%;
+    display: block;
+    margin-top: 40px;
+    
+    padding-bottom: 40px!important;
+}
+.cont3 div{
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 20px;
+    height: 100px;
+}
+.profil{
+    display: flex;
+}
+.profil img{
+    border: 6px solid white;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.profil h1{
+    font-size: 22px;
+    
+}
+.name{
+    margin: auto 15px;
+}
+.pList{
+    margin-top: 50px;
+}
+.list{
+    display: block;
+}
+.list li{
+    display: flex;
+    margin-top: 25px;
+    width: 100%;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.list li span{
+    font-size: 21px;
+    margin: auto 10px;
+    color: #06283db7 !important;
+}
+.list li img{
+    border-radius: 50%;
+    
+}
+
 </style>
