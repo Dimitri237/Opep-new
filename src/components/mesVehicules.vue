@@ -121,8 +121,7 @@
                     <div class="profil">
                         <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
                         <div class="name">
-                            <h1 style="color: #06283D;">Dimitri Tsaffo <span v-for="user in users" :key="user.id">{{
-                                user.name }}</span></h1>
+                            <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{user.name}}</span></h1>
                             <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
                                 ici</p>
                         </div>
@@ -130,27 +129,27 @@
                     <div class="pList">
                         <ul class="list">
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
                                 <span>Parametres</span>
                             </li>
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
                                 <span>A propos de nous</span>
                             </li>
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px  margin: auto 0px;" src="@/assets/sun.png" alt="">
                                 <span>Theme</span>
                             </li>
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px  margin: auto 0px;" src="@/assets/log-out.png" alt="">
                                 <span @click="logout">Deconnexion</span>
                             </li>
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px  margin: auto 0px;" src="@/assets/scroll.png" alt="">
                                 <span>Politique de confidentialite</span>
                             </li>
                             <li>
-                                <img style="width: 50px; height: 50px; margin: auto 0px;" src="@/assets/icon.png" alt="">
+                                <img style="width: 30px  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
                                 <span>Termes et conditions</span>
                             </li>
                         </ul>
@@ -206,10 +205,11 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'depense',
+            currentPage: 'profil',
             userId: null,
             vehicleId: null,
             vehicles: [],
+            users: [],
             depenses: [],
             loading: false
         };
@@ -217,6 +217,7 @@ export default {
     mounted() {
         try {
             this.fetchDepenses();
+            this.getUserInfos();
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -234,6 +235,7 @@ export default {
         if (this.isAuthenticated) {
             // Récupérer les véhicules associés à l'ID de l'utilisateur
             this.getVehicles();
+            this.getUserInfos();
         }
     },
     methods: {
@@ -243,7 +245,6 @@ export default {
         async getVehicles() {
             try {
                 this.loading = true;
-
                 // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
                 const vehiclesRef = collection(db, 'vehicles');
                 const q = query(vehiclesRef, where('userId', '==', this.userId));
@@ -255,6 +256,17 @@ export default {
                 console.error("Erreur lors de la récupération des véhicules : ", error);
             }
         },
+        async getUserInfos() {
+      try {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('userId', '==', this.userId));
+        console.log(this.userId);
+        const querySnapshot = await getDocs(q);
+        this.users = querySnapshot.docs.map(doc => doc.data());
+      } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs :', error);
+      }
+    },
         async fetchDepenses() {
             try {
                 this.loading = true;
@@ -526,13 +538,12 @@ button {
 }
 
 .list li span {
-    font-size: 21px;
+    font-size: 18px;
     margin: auto 10px;
     color: #06283db7 !important;
 }
 
 .list li img {
-    border-radius: 50%;
-
+    height: 30px!important;
 }
 </style>
