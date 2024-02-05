@@ -76,7 +76,7 @@
   </ul>
 </div>-->
                 <div class="head">
-                    <router-link to="/ajouterD" class="new_car">
+                    <router-link style="margin-top: -20px;" to="/ajouterD" class="new_car">
                         <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
                         <div style="margin: auto 10px; width: 500px;">
                             <h3>Ajouter une dépense</h3>
@@ -85,7 +85,7 @@
                         <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
                     </router-link>
                 </div>
-                <div style="margin-top: 50px;">
+                <!--<div style="margin-top: 50px;">
                     <div v-for="depense in depenses" :key="depense.id" style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                         <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (1).png" alt="">
                         <div style="margin: auto 10px; width: 500px;">
@@ -93,6 +93,20 @@
                             <h5 style="margin-top: -20px; color: #F2994A;">{{ depense.montant }}</h5>
                         </div>
                         <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                    </div>
+                </div>-->
+                <div style="margin: auto; width: 50%;">
+                    <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                        <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic3.jpg" alt="">
+                        <h3 style="text-align: center;color: #06283db7;">Reparation</h3>
+                    </div>
+                    <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                        <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic2.jpg" alt="">
+                        <h3 style="text-align: center;color: #06283db7;">Carburant</h3>
+                    </div>
+                    <div style="margin-bottom: 60px!important; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                        <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic4.png" alt="">
+                        <h3 style="text-align: center;color: #06283db7;">Autre</h3>
                     </div>
                 </div>
             </div>
