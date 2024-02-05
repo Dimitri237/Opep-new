@@ -46,21 +46,15 @@
   </div>
 </template>
 <script>
+import { firebaseConfig } from '@/config/firebaseConfig';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, doc, getDoc, getDocs} from 'firebase/firestore';
+import { getFirestore, collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA2hQVzKO_2RO6WJtKJxtRg1_JbtMt4vbI",
-  authDomain: "opep-new.firebaseapp.com",
-  projectId: "opep-new",
-  storageBucket: "opep-new.appspot.com",
-  messagingSenderId: "990565326767",
-  appId: "1:990565326767:web:c5f6c4ca18d650c1e5995a"
-};
 
 // Initialisation de l'application Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 export default {
   name: 'AddVehicle',
@@ -126,9 +120,9 @@ export default {
         userId: this.userId // Ajouter l'ID de l'utilisateur au document de la voiture
       };
       try {
-        const docRef = await addDoc(collection(db, 'vehicles'), vehicle);
+        setDoc(doc(firestore, 'vehicles', vehicle._id), {...vehicle})
         
-        alert('Véhicule créé', docRef.id);
+        alert('Véhicule créé');
         // Réinitialiser les champs du formulaire
         this.$router.push("/mesVehicules");
       } catch (error) {

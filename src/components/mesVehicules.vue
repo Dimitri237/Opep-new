@@ -43,7 +43,8 @@
         <div class="extra">
 
             <div class="page" v-if="currentPage === 'home'">
-                <h1 style="color: #06283D;">Ravis de vous revoir Mr. <span  v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
+                <h1 style="color: #06283D;">Ravis de vous revoir Mr. <span v-for="user in users" :key="user.id">{{ user.name
+                }}</span></h1>
                 <div class="cont">
                     <div class="cont1">
 
@@ -62,6 +63,18 @@
             </div>
 
             <div class="page" v-if="currentPage === 'depense'">
+            <!--    <div>
+  <h3>Dépenses enregistrées :</h3>
+  <ul>
+    <li v-for="depense in depenses" :key="depense._id">
+      <p>Type de dépense : {{ depense.typeDepense }}</p>
+      <p>Montant : {{ depense.montant }}</p>
+      <p>Description : {{ depense.libelle }}</p>
+      <p>Date : {{ depense.date }}</p>
+      <p>ID du véhicule : {{ depense.vehicleId }}</p>
+    </li>
+  </ul>
+</div>-->
                 <div class="head">
                     <router-link to="/ajouterD" class="new_car">
                         <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
@@ -73,35 +86,11 @@
                     </router-link>
                 </div>
                 <div style="margin-top: 50px;">
-                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                    <div v-for="depense in depenses" :key="depense.id" style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                         <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (1).png" alt="">
                         <div style="margin: auto 10px; width: 500px;">
-                            <h4 style="color: #06283dc9;">Reparation</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">650.000 fcfa</h5>
-                        </div>
-                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-                    </div>
-                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (2).png" alt="">
-                        <div style="margin: auto 10px; width: 500px;">
-                            <h4 style="color: #06283dc9;">Carburant</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">600.000 fcfa</h5>
-                        </div>
-                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-                    </div>
-                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (3).png" alt="">
-                        <div style="margin: auto 10px; width: 500px;">
-                            <h4 style="color: #06283dc9;">Administrations</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">300.000 fcfa</h5>
-                        </div>
-                        <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-                    </div>
-                    <div style="margin-top: 10px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                        <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
-                        <div style="margin: auto 10px; width: 500px;">
-                            <h4 style="color: #06283dc9;">Autres</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">100.000 fcfa</h5>
+                            <h4 style="color: #06283dc9;">{{ depense.typeDepense }}</h4>
+                            <h5 style="margin-top: -20px; color: #F2994A;">{{ depense.montant }}</h5>
                         </div>
                         <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
                     </div>
@@ -118,8 +107,10 @@
                     <div class="profil">
                         <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
                         <div class="name">
-                            <h1 style="color: #06283D;">Dimitri Tsaffo <span  v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
-                            <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont ici</p>
+                            <h1 style="color: #06283D;">Dimitri Tsaffo <span v-for="user in users" :key="user.id">{{
+                                user.name }}</span></h1>
+                            <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
+                                ici</p>
                         </div>
                     </div>
                     <div class="pList">
@@ -170,7 +161,7 @@
                     <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
                 </div>
                 <div v-else class="vList" style="margin-top: 40px;">
-                    <router-link v-for="vehicle in vehicles" :key="vehicle.id" to="/" class="car">
+                    <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id" class="car">
                         <img style="width: 100%; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
@@ -181,7 +172,7 @@
                             <span style="color: #06283dc9;">3 chargements</span>
                         </div>
                     </router-link>
-                    
+
                 </div>
             </div>
         </div>
@@ -189,20 +180,33 @@
 </template>
   
 <script>
+import { firebaseConfig } from '@/config/firebaseConfig';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+
+// Initialisation de l'application Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'profil',
+            currentPage: 'depense',
             userId: null,
             vehicleId: null,
             vehicles: [],
             depenses: [],
             loading: false
         };
+    },
+    mounted() {
+        try {
+            this.fetchDepenses();
+            // ...
+        } catch (error) {
+            console.error('Erreur lors de la récupération des dépenses :', error);
+        }
     },
     created() {
         // Récupérer les informations d'authentification depuis le localStorage
@@ -225,19 +229,6 @@ export default {
         async getVehicles() {
             try {
                 this.loading = true;
-                const firebaseConfig = {
-                    apiKey: "AIzaSyA2hQVzKO_2RO6WJtKJxtRg1_JbtMt4vbI",
-                    authDomain: "opep-new.firebaseapp.com",
-                    projectId: "opep-new",
-                    storageBucket: "opep-new.appspot.com",
-                    messagingSenderId: "990565326767",
-                    appId: "1:990565326767:web:c5f6c4ca18d650c1e5995a"
-                };
-
-                // Initialisation de l'application Firebase
-                const firebaseApp = initializeApp(firebaseConfig);
-                const db = getFirestore(firebaseApp);
-
 
                 // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
                 const vehiclesRef = collection(db, 'vehicles');
@@ -249,7 +240,16 @@ export default {
             } catch (error) {
                 console.error("Erreur lors de la récupération des véhicules : ", error);
             }
-        }
+        },
+        async fetchDepenses() {
+            try {
+                this.loading = true;
+                const querySnapshot = await getDocs(collection(db, 'depenses'));
+                this.depenses = querySnapshot.docs.map((doc) => doc.data());
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses :', error);
+            }
+        },
     }
 };
 </script>
@@ -433,78 +433,92 @@ button {
     border-top-left-radius: 25px;
     /* Ajoutez ici vos styles personnalisés pour le bouton sélectionné */
 }
-.cont{
+
+.cont {
     width: 100%;
     display: block;
 }
-.cont1{
+
+.cont1 {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.05);
     height: 300px;
     border-radius: 15px;
 }
-.cont2{
+
+.cont2 {
     width: 100%;
     display: flex;
     justify-content: space-between;
     margin-top: 40px;
 }
-.cont2 div{
+
+.cont2 div {
     background-color: rgba(0, 0, 0, 0.05);
     width: 49%;
     border-radius: 15px;
     height: 250px;
 }
-.cont3{
+
+.cont3 {
     width: 100%;
     display: block;
     margin-top: 40px;
-    
-    padding-bottom: 40px!important;
+
+    padding-bottom: 40px !important;
 }
-.cont3 div{
+
+.cont3 div {
     background-color: rgba(0, 0, 0, 0.05);
     width: 100%;
     border-radius: 15px;
     margin-top: 20px;
     height: 100px;
 }
-.profil{
+
+.profil {
     display: flex;
 }
-.profil img{
+
+.profil img {
     border: 6px solid white;
     border-radius: 50%;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
-.profil h1{
+
+.profil h1 {
     font-size: 22px;
-    
+
 }
-.name{
+
+.name {
     margin: auto 15px;
 }
-.pList{
+
+.pList {
     margin-top: 50px;
 }
-.list{
+
+.list {
     display: block;
 }
-.list li{
+
+.list li {
     display: flex;
     margin-top: 25px;
     width: 100%;
     padding-bottom: 25px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.list li span{
+
+.list li span {
     font-size: 21px;
     margin: auto 10px;
     color: #06283db7 !important;
 }
-.list li img{
-    border-radius: 50%;
-    
-}
 
+.list li img {
+    border-radius: 50%;
+
+}
 </style>

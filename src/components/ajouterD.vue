@@ -11,8 +11,7 @@
       <form @submit.prevent="ajouterDepense">
         <div class="input-field">
           <select v-model="selectedVehicle">
-            <option value="">Sélectionner un véhicule</option>
-            <option v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense">{{ typeDepense }}</option>
+            <option v-for="vehicle in vehicles" :value="vehicle._id" v-bind:key="vehicle._id">{{ vehicle.marque }}</option>
           </select>
         </div>
         <div class="input-field">
@@ -48,21 +47,14 @@
   </div>
 </template>
 <script>
+import { firebaseConfig } from '@/config/firebaseConfig';
 import { initializeApp } from 'firebase/app';
 import { v4 as uuidv4 } from 'uuid';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA2hQVzKO_2RO6WJtKJxtRg1_JbtMt4vbI",
-  authDomain: "opep-new.firebaseapp.com",
-  projectId: "opep-new",
-  storageBucket: "opep-new.appspot.com",
-  messagingSenderId: "990565326767",
-  appId: "1:990565326767:web:c5f6c4ca18d650c1e5995a"
-};
+import { getFirestore, collection, setDoc, doc, getDocs} from 'firebase/firestore';
 
 // Initialisation de l'application Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+/*const firestore = getFirestore(firebaseApp);*/
 const db = getFirestore(firebaseApp);
 
 export default {
@@ -78,8 +70,8 @@ export default {
       isAuthenticated: false,
       vehicleId: null,
       selectedVehicle: null,
-      typeDepenses: []
-
+      typeDepenses: [],
+      vehicles: [] // Ajoutez cette ligne pour déclarer la variable "vehicles"
     };
   },
   created() {
@@ -93,7 +85,6 @@ export default {
   },
   mounted() {
     try {
-
       getDocs(collection(db, 'typeDepenses'))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
@@ -101,13 +92,12 @@ export default {
 
             this.typeDepenses.push(typeDepense.libelle); // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
           });
-        })
+        });
     } catch (error) {
       console.error('Erreur lors de la récupération des typeDepenses :', error);
     }
     try {
       this.fetchVehicles(); // Appel à la méthode fetchVehicles pour récupérer les véhicules
-      // ...
     } catch (error) {
       console.error('Erreur lors de la récupération des véhicules :', error);
     }
@@ -117,54 +107,40 @@ export default {
       this.loading = true;
 
       if (!this.isAuthenticated) {
-        alert('Vous devez être connecté pour ajouter une depense.');
+        alert('Vous devez être connecté pour ajouter une dépense.');
         return;
       }
 
 
-      const depense = {
-        typeDepense: this.typeDepense,
-        montant: this.montant,
-        libelle: this.libelle,
-        date: this.date,
-        vehicleId: this.selectedVehicle // Ajouter l'ID du vehicule au document de la depense
-      };
-      // Générer un ID unique pour la dépense
-      const id = uuidv4();
-      depense._id = id;
-      try {
-        const docRef = await addDoc(collection(db, 'depenses'), depense);
+        const depense = {
+          _id: uuidv4(),// Générer un ID unique pour la dépense
+          typeDepense: this.typeDepense,
+          montant: this.montant,
+          libelle: this.libelle,
+          date: this.date,
+          vehicleId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
+        };
+        try {
+          setDoc(doc(db, 'depenses', depense._id), depense);
+  
+          this.loading = false;
+          this.$router.push('/mesVehicules');
+        } catch (error) {
+          alert('Erreur lors de la création de la dépense :', error);
+          this.loading = false;
+        }
+      
 
-        // Mettre à jour le document du véhicule avec les informations de la dépense
-        const vehicleDocRef = doc(db, 'vehicles', this.selectedVehicle);
-        await updateDoc(vehicleDocRef, {
-          depenseId: docRef.id
-        });
-
-        alert('Depense créé', docRef.id);
-        // Réinitialiser les champs du formulaire
-        this.$router.push("/mesVehicules");
-      } catch (error) {
-        console.error('Erreur lors de la création de la depense :', error);
-      }
-      finally {
-        this.loading = false;
-      }
     },
     async fetchVehicles() {
       try {
         const querySnapshot = await getDocs(collection(db, 'vehicles'));
-        this.vehicles = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          marque: doc.data().marque, // Ajouter le champ "marque"
-          ...doc.data()
-        }));
+        this.vehicles = querySnapshot.docs.map(doc => ({...doc.data()}));
       } catch (error) {
         console.error('Erreur lors de la récupération des véhicules :', error);
       }
     }
-  },
-
+  }
 };
 </script>
 <style scoped>

@@ -7,6 +7,7 @@ import ajouterV from '@/components/ajouterV.vue';
 import ajouterD from '@/components/ajouterD.vue';
 //import LoadingPage from './components/LoadingPage.vue';
 import MesVehicules from './components/mesVehicules.vue';
+import detailsVehicule from './components/detailsVehicule.vue';
 
 const routes = [
   { path: '/', component: CreateAccount },
@@ -15,6 +16,7 @@ const routes = [
   { path: '/ajouterV', component: ajouterV },
   { path: '/ajouterD', component: ajouterD },
   { path: '/MesVehicules', component: MesVehicules },
+  { path: '/detailsVehicule/:id', component: detailsVehicule },
 ];
 
 const router = createRouter({
