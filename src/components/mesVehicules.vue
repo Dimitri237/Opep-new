@@ -180,7 +180,7 @@
                 <div v-else class="vList" style="margin-top: 100px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car">
-                        <img style="width: 100%; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
+                        <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
                             <h5 style="margin-top: -20px; color: #F2994A;">75.000 FCFA ce mois</h5>
@@ -311,7 +311,7 @@ body {
 }
 
 .side_barre {
-    width: 15%;
+    width: 16%;
     background-color: #06283D;
 }
 
@@ -324,6 +324,8 @@ body {
 
 .side_barre h3 {
     color: white;
+    width: 100px;
+    text-align: left;
     padding-left: 15px;
     font-family: Monda;
 }
