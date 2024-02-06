@@ -63,7 +63,7 @@
             </div>
 
             <div class="page" v-if="currentPage === 'depense'">
-            <!--    <div>
+                <!--    <div>
   <h3>Dépenses enregistrées :</h3>
   <ul>
     <li v-for="depense in depenses" :key="depense._id">
@@ -96,15 +96,18 @@
                     </div>
                 </div>-->
                 <div style="margin: auto; width: 50%;">
-                    <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                    <div
+                        style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
                         <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic3.jpg" alt="">
                         <h3 style="text-align: center;color: #06283db7;">Reparation</h3>
                     </div>
-                    <div style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                    <div
+                        style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
                         <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic2.jpg" alt="">
                         <h3 style="text-align: center;color: #06283db7;">Carburant</h3>
                     </div>
-                    <div style="margin-bottom: 60px!important; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
+                    <div
+                        style="margin-bottom: 60px!important; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
                         <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic4.png" alt="">
                         <h3 style="text-align: center;color: #06283db7;">Autre</h3>
                     </div>
@@ -121,7 +124,7 @@
                     <div class="profil">
                         <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
                         <div class="name">
-                            <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{user.name}}</span></h1>
+                            <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
                             <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
                                 ici</p>
                         </div>
@@ -174,7 +177,8 @@
                     <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
                 </div>
                 <div v-else class="vList" style="margin-top: 40px;">
-                    <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id" class="car">
+                    <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
+                        class="car">
                         <img style="width: 100%; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
@@ -193,13 +197,8 @@
 </template>
   
 <script>
-import { firebaseConfig } from '@/config/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-
-// Initialisation de l'application Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/config/firebaseConfig';
 
 export default {
     data() {
@@ -257,16 +256,16 @@ export default {
             }
         },
         async getUserInfos() {
-      try {
-        const usersRef = collection(db, 'users');
-        const q = query(usersRef, where('userId', '==', this.userId));
-        console.log(this.userId);
-        const querySnapshot = await getDocs(q);
-        this.users = querySnapshot.docs.map(doc => doc.data());
-      } catch (error) {
-        console.error('Erreur lors de la récupération des utilisateurs :', error);
-      }
-    },
+            try {
+                const usersRef = collection(db, 'users');
+                const q = query(usersRef, where('userId', '==', this.userId));
+                console.log(this.userId);
+                const querySnapshot = await getDocs(q);
+                this.users = querySnapshot.docs.map(doc => doc.data());
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs :', error);
+            }
+        },
         async fetchDepenses() {
             try {
                 this.loading = true;
@@ -544,6 +543,5 @@ button {
 }
 
 .list li img {
-    height: 30px!important;
-}
-</style>
+    height: 30px !important;
+}</style>

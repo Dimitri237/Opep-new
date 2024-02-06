@@ -29,13 +29,9 @@
 </template>
 
 <script>
-import { firebaseConfig } from '@/config/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-
-// Initialisation de l'application Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore(firebaseApp);
+import { firestore } from '@/config/firebaseConfig';
+import { getDocs, collection, query,where,} from 'firebase/firestore';
+import bcryptjs from 'bcryptjs';
 
 export default {
   data() {
@@ -65,7 +61,7 @@ export default {
         } else {
           // L'utilisateur a été trouvé, vérification du mot de passe
           const user = querySnapshot.docs[0].data();
-          if (user.password === this.password) {
+          if (bcryptjs.compareSync(this.password, user.password)) {
             // Mot de passe correct, connexion de l'utilisateur
             localStorage.setItem('isAuthenticated', true);
             localStorage.setItem('userId', user._id); // Remplacez userId par l'ID de l'utilisateur connecté

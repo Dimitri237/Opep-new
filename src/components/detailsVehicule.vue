@@ -30,13 +30,8 @@
 </template>
   
 <script>
-import { firebaseConfig } from '@/config/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, where, query} from 'firebase/firestore';
-
-// Initialisation de l'application Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+import { collection, getDocs, where, query} from 'firebase/firestore';
+import { db } from '@/config/firebaseConfig';
 
 export default {
     data() {

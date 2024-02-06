@@ -46,15 +46,9 @@
   </div>
 </template>
 <script>
-import { firebaseConfig } from '@/config/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
+import { db, firestore } from '@/config/firebaseConfig';
+import {collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
 
-
-// Initialisation de l'application Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const firestore = getFirestore(firebaseApp);
 
 export default {
   name: 'AddVehicle',

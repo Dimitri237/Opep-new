@@ -29,15 +29,12 @@
   </div>
 </template>
 <script>
-import { firebaseConfig } from '@/config/firebaseConfig';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { uuid } from 'vue-uuid';
-//import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
+import { firestore } from '@/config/firebaseConfig';
+import { setDoc, doc } from 'firebase/firestore';
+//import { randomBytes } from 'crypto-browserify';
 
-// Initialisation de l'application Firebase
-const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore(firebaseApp);
 
 export default {
   data() {
@@ -53,25 +50,21 @@ export default {
     createAccount() {
       this.loading = true;
       // Créer un compte utilisateur avec l'email et le mot de passe
-
+      const saltRounds = 10;
+      //const salt = randomBytes(16).toString('hex');
+      const hashedPassword = bcryptjs.hashSync(this.password, saltRounds);
+      console.log('Mot de passe haché :', hashedPassword);
       // Succès de la création du compte, vous pouvez enregistrer les autres données dans Firebase Firestore
       // Enregistrer les autres données dans Firestore
       const user = {
         name: this.name,
         contact: this.contact,
-        password: this.password,
+        password: hashedPassword,
         _id: uuid.v4(),
       };
-      // bcrypt.hash("Dimitri", 10, function (err, hash) {
-      //   // Store hash in your password DB.
-      //   if(!err){
-      //     console.log(hash);
-      //   }else{
-      //     console.log('errrorr');
-      //   }
-      // });
-      
-      setDoc(doc(firestore, 'users', user._id), {...user})
+
+
+      setDoc(doc(firestore, 'users', user._id), { ...user })
         .then(() => {
           // Données enregistrées avec succès
           alert('Inscrit avec succès');
@@ -106,11 +99,10 @@ h2 {
 .container {
   text-align: left;
   width: 450px;
-  height: 450px;
   margin: auto;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   padding: 15px;
-  margin-top: 150px;
+  margin-top: 100px;
 }
 
 form {
