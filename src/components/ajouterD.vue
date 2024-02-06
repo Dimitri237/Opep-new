@@ -11,14 +11,18 @@
       <form @submit.prevent="ajouterDepense">
         <div class="input-field">
           <div>
-          <label for="">Type</label>
-          <div class="button-container" ref="buttonContainer" >
-            <div class="button-wrapper" ref="buttonWrapper">
-            <button v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense" @click="selectTypeDepense(typeDepense)" :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</button>
+            <label for="">Type</label>
+            <span class="loading-indicator" v-if="loading"></span>
+            <div v-else class="button-container" ref="buttonContainer">
+              <div class="button-wrapper" ref="buttonWrapper">
+                <button  v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
+                  @click="selectTypeDepense(typeDepense)"
+                  :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</button>
+              </div>
+            </div>
           </div>
-          </div>
+
         </div>
-      </div>
         <div class="input-field">
           <div><label for="">Vehicule</label></div>
           <select class="selectM" v-model="selectedVehicle">
@@ -26,9 +30,15 @@
               vehicle.marque }} &#8226; {{ vehicle.modele }}</option>
           </select>
         </div>
-        <div class="input-field">
-          <div><label for="">Montant</label></div>
-          <input v-model="montant" placeholder="15 000fcfa" required>
+        <div class="input-field" style="display: flex; justify-content: space-between;">
+          <div style="width: 45%;">
+            <div><label for="">Montant</label></div>
+            <input type="number" v-model="montant" placeholder="15 000fcfa" required>
+          </div>
+          <div style="width: 45%;" v-if="selectedTypeDepense && selectedTypeDepense.toLowerCase().includes('carburant')">
+            <label for="quantite">Quantité : </label>
+            <input type="number" placeholder="20 Litres" id="quantite" v-model="quantite">
+          </div>
         </div>
         <div class="input-field">
           <div><label for="">Description</label></div>
@@ -36,7 +46,7 @@
         </div>
         <div class="input-field">
           <div><label for="">Date</label></div>
-          <input type="date" v-model="date" required>
+          <input type="date" v-model="date">
         </div>
         <div class="button">
           <button class="btn" type="submit">
@@ -63,14 +73,16 @@ export default {
       typeDepense: '',
       montant: '',
       libelle: '',
-      date: '',
+      //date: '',
+      date: new Date().toISOString().substr(0, 10),
       loading: false,
       selectedImage: null,
       isAuthenticated: false,
       vehicleId: null,
       selectedVehicle: null,
       typeDepenses: [],
-      selectedTypeDepense: null,
+      selectedTypeDepense: '',
+      quantite: '',
       vehicles: [] // Ajoutez cette ligne pour déclarer la variable "vehicles"
     };
   },
@@ -90,6 +102,7 @@ export default {
     container.addEventListener('mouseup', this.handleMouseUp);
     container.addEventListener('mouseleave', this.handleMouseLeave);
     try {
+      this.loading = true;
       getDocs(collection(db, 'typeDepenses'))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
@@ -97,10 +110,14 @@ export default {
 
             this.typeDepenses.push(typeDepense.libelle); // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
           });
+
+          if (this.typeDepenses.length) this.selectedTypeDepense = this.typeDepenses[0]
+
         });
     } catch (error) {
       console.error('Erreur lors de la récupération des typeDepenses :', error);
     }
+          this.loading = false; // Mettre loading à false une fois la connexion terminée (succès ou échec)
     try {
       this.fetchVehicles(); // Appel à la méthode fetchVehicles pour récupérer les véhicules
     } catch (error) {
@@ -117,27 +134,32 @@ export default {
     // ...
   },
   methods: {
+    onTypeDepenseChange() {
+      if (this.selectedTypeDepense == 'Carburant') {
+        this.quantite = '';
+      }
+    },
     handleMouseDown(event) {
-    this.isDragging = true;
-    this.startX = event.clientX;
-    this.scrollLeft = this.$refs.buttonContainer.scrollLeft;
-  },
+      this.isDragging = true;
+      this.startX = event.clientX;
+      this.scrollLeft = this.$refs.buttonContainer.scrollLeft;
+    },
 
-  handleMouseMove(event) {
-    if (!this.isDragging) return;
-    event.preventDefault();
-    const x = event.clientX;
-    const deltaX = x - this.startX;
-    this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;
-  },
+    handleMouseMove(event) {
+      if (!this.isDragging) return;
+      event.preventDefault();
+      const x = event.clientX;
+      const deltaX = x - this.startX;
+      this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;
+    },
 
-  handleMouseUp() {
-    this.isDragging = false;
-  },
+    handleMouseUp() {
+      this.isDragging = false;
+    },
 
-  handleMouseLeave() {
-    this.isDragging = false;
-  },
+    handleMouseLeave() {
+      this.isDragging = false;
+    },
 
     async ajouterDepense() {
       this.loading = true;
@@ -152,6 +174,7 @@ export default {
         montant: this.montant,
         libelle: this.libelle,
         date: this.date,
+        quantite: this.quantite,
         vehicleId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
       };
       try {
@@ -167,8 +190,8 @@ export default {
 
     },
     selectTypeDepense(typeDepense) {
-    this.selectedTypeDepense = typeDepense;
-  },
+      this.selectedTypeDepense = typeDepense;
+    },
     async fetchVehicles() {
       try {
         const querySnapshot = await getDocs(collection(db, 'vehicles'));
@@ -239,7 +262,7 @@ h2 {
   text-align: left;
   width: 450px;
   margin: 0 auto;
-  margin-top: 60px;
+  margin-top: 30px;
   padding: 0 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
@@ -262,6 +285,7 @@ form {
   margin-top: 30px;
   width: 100%;
 }
+
 .button-container {
   overflow: hidden;
 }
@@ -277,17 +301,17 @@ form {
   margin-right: 10px;
   border: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
-  padding: 5px 5px;
-  border-radius: 5px;
+  padding: 5px 25px;
+  border-radius: 50px;
   color: rgba(0, 0, 0, 0.5);
   background-color: transparent;
 }
+
 .selected-button {
-  background-color: rgba(51, 167, 226, 1)!important;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  border: none!important;
-  color: white!important;
+  color: rgba(51, 167, 226, 1) !important;
+  border-color: rgba(51, 167, 226, 1) !important;
 }
+
 input {
   width: 98.3%;
   height: 30px;
@@ -319,7 +343,30 @@ label {
   width: 47%;
   height: 35px;
   color: white;
+}
 
+.loading-indicator::after {
+  content: "";
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  border: 3px solid #06283D;
+  border-top-color: #F2994A;
+  border-bottom-color: #F2994A;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  height: 100px;
 }
 
 .btn:nth-child(1) {

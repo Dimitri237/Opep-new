@@ -76,7 +76,7 @@
   </ul>
 </div>-->
                 <div class="head">
-                    <router-link style="margin-top: -20px;" to="/ajouterD" class="new_car">
+                    <router-link style="margin-left: -15px;" to="/ajouterD" class="new_car">
                         <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
                         <div style="margin: auto 10px; width: 500px;">
                             <h3>Ajouter une dépense</h3>
@@ -95,7 +95,7 @@
                         <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
                     </div>
                 </div>-->
-                <div style="margin: auto; width: 50%;">
+                <div style="margin: auto; padding-top: 60px!important; width: 50%;">
                     <div
                         style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); border-radius: 15px; width: 100%; margin: auto; margin-top: 30px;">
                         <img style="width: 150px; height: 150px; margin-left: 52px;" src="@/assets/ic3.jpg" alt="">
@@ -124,7 +124,8 @@
                     <div class="profil">
                         <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
                         <div class="name">
-                            <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{ user.name }}</span></h1>
+                            <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{ user.name }}</span>
+                            </h1>
                             <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
                                 ici</p>
                         </div>
@@ -176,7 +177,7 @@
                 <div v-if="loading" class="loading-indicator">
                     <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
                 </div>
-                <div v-else class="vList" style="margin-top: 40px;">
+                <div v-else class="vList" style="margin-top: 100px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car">
                         <img style="width: 100%; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
@@ -411,6 +412,14 @@ ul {
 li {
     display: inline;
     margin-right: 10px;
+}
+
+.head {
+    width: 37.5%;
+    position: fixed;
+    top: 7px;
+    background-color: #ffffff;
+    z-index: 9999;
 }
 
 button {

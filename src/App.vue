@@ -33,4 +33,8 @@ body{
   padding: 0;
   margin: 0;
 }
+.fa-chevron-left{
+  color: #06283D;
+  font-size: 20px;
+}
 </style>

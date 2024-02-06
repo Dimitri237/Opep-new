@@ -15,10 +15,21 @@
             <option v-for="marque in marques" :value="marque" v-bind:key="marque">{{ marque }}</option>
           </select>
         </div>
-        <div class="input-field">
-          <div><label for="">Modèle</label></div>
-          <input  v-model="modele" placeholder="Classe C" required>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+          <div style="width: 47%;">
+          <div><label for="">Modele véhicule</label></div>
+          <select class="selectM" name="" v-model="modele" id="modeles-select">
+            <option v-for="modele in modeles" :value="modele" v-bind:key="modele">{{ modele }}</option>
+          </select>
         </div>
+        <div style="width: 47%;">
+          <div><label for="">Annee véhicule</label></div>
+          <select class="selectM" name="" v-model="annee" id="annees-select">
+            <option v-for="annee in annees" :value="annee" v-bind:key="annee">{{ annee }}</option>
+          </select>
+        </div>
+        </div>
+        
         <div class="input-field">
           <div><label for="">Couleur</label></div>
           <input  v-model="color" placeholder="Rouge, Jaune, verte ...etc" required>
@@ -46,9 +57,8 @@
   </div>
 </template>
 <script>
-import { db, firestore } from '@/config/firebaseConfig';
-import {collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
-
+import { db, firestore} from '@/config/firebaseConfig';
+import { collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
 
 export default {
   name: 'AddVehicle',
@@ -56,13 +66,14 @@ export default {
     return {
       marque: '',
       modele: '',
-      color:'',
+      color: '',
       loading: false,
       selectedImage: null,
       isAuthenticated: false,
       userId: null,
-      marques: []
-
+      marques: [],
+      modeles: [],
+      annees: []
     };
   },
   created() {
@@ -74,27 +85,37 @@ export default {
     this.isAuthenticated = isAuthenticated === 'true';
     this.userId = userId;
   },
-   mounted() {
+  mounted() {
     try {
-    //const selectElement = document.getElementById('marques-select');
-
-    // Récupérer les marques depuis la base de données Firestore
-    getDocs(collection(db, 'marques'))
-      .then((querySnapshot) => {
+      // Récupérer les marques depuis la base de données Firestore
+      getDocs(collection(db, 'marques')).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const marque = doc.data();
-          //const option = document.createElement('option');
-         // option.value = marque.libelle; // Utiliser la propriété "libelle" de la marque comme valeur de l'option
-         // option.text = marque.libelle;
-         // selectElement.appendChild(option);
-          this.marques.push(marque.libelle); // Ajouter la marque à la liste des marques dans les données du composant
+          this.marques.push(marque.libelle);
         });
-      })
-  } catch (error) {
-    console.error('Erreur lors de la récupération des marques :', error);
-  }
-  this.fetchUserId();
-},
+      });
+
+      // Récupérer les modèles depuis la base de données Firestore
+      getDocs(collection(db, 'modeles')).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const modele = doc.data();
+          this.modeles.push(modele.libelle);
+        });
+      });
+
+      // Récupérer les années depuis la base de données Firestore
+      getDocs(collection(db, 'annees')).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const annee = doc.data();
+          this.annees.push(annee.libelle);
+        });
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des marques :', error);
+    }
+
+    this.fetchUserId();
+  },
   methods: {
     async ajouterVehicule() {
       this.loading = true;
@@ -103,16 +124,17 @@ export default {
         alert('Vous devez être connecté pour ajouter un véhicule.');
         return;
       }
-      
 
       const vehicle = {
         marque: this.marque,
         modele: this.modele,
+        annee: this.annee,
         color: this.color,
         imageUrl: this.selectedImage,
-        _id: this._id,
-        userId: this.userId // Ajouter l'ID de l'utilisateur au document de la voiture
+        _id: this._id, // Veuillez spécifier la source de cet ID (_id)
+        userId: this.userId
       };
+      
       try {
         setDoc(doc(firestore, 'vehicles', vehicle._id), {...vehicle})
         
@@ -120,9 +142,8 @@ export default {
         // Réinitialiser les champs du formulaire
         this.$router.push("/mesVehicules");
       } catch (error) {
-        console.error('Erreur lors de la création du véhicule :', error);
-      }
-      finally {
+        console.error('Erreur lors du téléchargement de l\'image :', error);
+      } finally {
         this.loading = false;
       }
     },
@@ -137,16 +158,17 @@ export default {
       }
     },
     async fetchUserId() {
-      // Récupérer l'utilisateur connecté depuis Firestore
-      const userDoc = await getDoc(doc(db, 'users', '<ID_DE_L_UTILISATEUR_CONNECTE>'));
-      if (userDoc.exists()) {
-        // Récupérer l'ID de l'utilisateur depuis le champ "_id"
-        this.userId = userDoc.data()._id;
-        console.log('ID de l\'utilisateur :', this.userId); 
+      try {
+        const userDoc = await getDoc(doc(db, 'users', '<ID_DE_L_UTILISATEUR_CONNECTE>'));
+        if (userDoc.exists()) {
+          this.userId = userDoc.data()._id;
+          console.log('ID de l\'utilisateur :', this.userId);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'ID de l\'utilisateur :', error);
       }
     }
-  },
-  
+  }
 };
 </script>
 <style scoped>
@@ -206,7 +228,7 @@ h2 {
   text-align: left;
   width: 450px;
   margin: 0 auto;
-  margin-top: 60px;
+  margin-top: 30px;
   padding: 0 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;

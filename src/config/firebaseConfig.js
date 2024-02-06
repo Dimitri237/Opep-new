@@ -14,6 +14,7 @@ import { getFirestore} from 'firebase/firestore';
 
 
 // Initialisation de l'application Firebase
+
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
 const db = getFirestore(firebaseApp);
