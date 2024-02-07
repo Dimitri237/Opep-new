@@ -1,55 +1,142 @@
 <template>
-    <div class="all">
-        <side_barre />
-        
-        <div class="container">
-            <div class="head">
-                <router-link to="/ajouterV" class="new_car">
-                    <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon.png" alt="">
-                    <div style="margin: auto 10px; width: 500px;">
-                        <h3>Ajouter un véhicule</h3>
-                        <p style="margin-top: -20px;">Suivez l'activité de votre véhicule dès maintenant</p>
-                    </div>
-                    <img style="width: 35px; height: 35px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-                </router-link>
-            </div>
-            <div>
-                <div v-if="loading" class="loading-indicator">
-                    <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
-                </div>
-                <div v-else class="vList" style="margin-top: 100px;">
-                    <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
-                        class="car">
-                        <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
-                        <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                            <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">75.000 FCFA ce mois</h5>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; padding: 10px 0;">
-                            <span style="color: #06283dc9;">4 réparations </span>
-                            <span style="color: #06283dc9;">3 chargements</span>
-                        </div>
-                    </router-link>
+    <div class="side_barre">
 
-                </div>
-            </div>
+<nav style="width: 100%;">
+    <center>
+        <img style="width: 100px;" src="@/assets/log1.png" alt="" />
+    </center>
+    <ul>
+        <li>
+            <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
+                @click="showPage('home')">
+                <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
+                <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
+            </button>
+        </li>
+        <li>
+            <button :class="{ selected: currentPage === 'depense' }"
+                style="display: flex;text-decoration: none;" @click="showPage('depense')">
+                <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
+                    class="fas fa-layer-group"></i>
+                <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
+            </button>
+        </li>
+        <li>
+            <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
+                @click="showPage('stats')">
+                <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }"
+                    class="fas fa-chart-bar"></i>
+                <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
+            </button>
+        </li>
+        <li>
+            <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
+                @click="showPage('profil')">
+                <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
+                <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
+            </button>
+        </li>
+    </ul>
+</nav>
+</div>
+<div class="extra">
+
+<div class="page" v-if="currentPage === 'home'">
+    <h1 style="color: #06283D;">Ravis de vous revoir Mr. <span v-for="user in users" :key="user.id">{{ user.name
+    }}</span></h1>
+    <div class="cont">
+        <div class="cont1">
+
+        </div>
+        <div class="cont2">
+            <div></div>
+            <div></div>
+        </div>
+        <div class="cont3">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
+</div>
+
+<div class="page" v-if="currentPage === 'depense'">
+    <div class="head">
+        <router-link style="margin-left: -15px;" to="/ajouterD" class="new_car">
+            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+            <div style="margin: auto 10px; width: 500px;">
+                <h3>Ajouter une dépense</h3>
+                <p style="margin-top: -20px;">Ajouter une dépense maintenant </p>
+            </div>
+            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+        </router-link>
+    </div>
+    <div style="margin: auto; padding-top: 60px!important; width: 50%;">
+
+    </div>
+</div>
+
+<div class="page" v-if="currentPage === 'stats'">
+    <h1>Contact Us</h1>
+    <p>This is the contact page content.</p>
+</div>
+
+<div class="page" v-if="currentPage === 'profil'">
+    <div>
+        <div class="profil">
+            <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+            <div class="name">
+                <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{ user.name }}</span>
+                </h1>
+                <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
+                    ici</p>
+            </div>
+        </div>
+        <div class="pList">
+            <ul class="list">
+                <li>
+                    <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
+                    <span>Parametres</span>
+                </li>
+                <li>
+                    <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
+                    <span>A propos de nous</span>
+                </li>
+                <li>
+                    <img style="width: 30px  margin: auto 0px;" src="@/assets/sun.png" alt="">
+                    <span>Theme</span>
+                </li>
+                <li>
+                    <img style="width: 30px  margin: auto 0px;" src="@/assets/log-out.png" alt="">
+                    <span @click="logout">Deconnexion</span>
+                </li>
+                <li>
+                    <img style="width: 30px  margin: auto 0px;" src="@/assets/scroll.png" alt="">
+                    <span>Politique de confidentialite</span>
+                </li>
+                <li>
+                    <img style="width: 30px  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
+                    <span>Termes et conditions</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</div>
 </template>
-  
 <script>
-import side_barre from '@/components/layouts/side_barre.vue';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 
 export default {
     components: {
-        side_barre
-  },
+    },
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'profil',
+            currentPage: 'home',
             userId: null,
             vehicleId: null,
             vehicles: [],
@@ -78,7 +165,6 @@ export default {
 
         if (this.isAuthenticated) {
             // Récupérer les véhicules associés à l'ID de l'utilisateur
-            this.getVehicles();
             this.getUserInfos();
         }
     },
@@ -86,20 +172,18 @@ export default {
         showPage(page) {
             this.currentPage = page;
         },
-        async getVehicles() {
-            try {
-                this.loading = true;
-                // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
-                const vehiclesRef = collection(db, 'vehicles');
-                const q = query(vehiclesRef, where('userId', '==', this.userId));
-                const querySnapshot = await getDocs(q);
+        logout() {
+      // Supprimer les informations de connexion de localStorage
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userId');
+      
+      // Réinitialiser les variables de l'état de connexion
+      this.isAuthenticated = false;
+      this.userId = null;
 
-                this.vehicles = querySnapshot.docs.map(doc => doc.data());
-                this.loading = false; // Fin du chargement
-            } catch (error) {
-                console.error("Erreur lors de la récupération des véhicules : ", error);
-            }
-        },
+      // Rediriger l'utilisateur vers la page de connexion
+      this.$router.push("/auth");
+    },
         async getUserInfos() {
             try {
                 const usersRef = collection(db, 'users');
@@ -135,21 +219,12 @@ body {
     font-family: Monda;
 }
 
-.all {
-    background-color: rgba(0, 0, 0, 0.05);
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex !important;
-    font-family: Monda;
-}
-
 .container {
     width: 40%;
     margin-left: 5%;
     background-color: white;
     padding: 20px;
-    height: 94.6vh;
+    height: 95vh;
     overflow-y: auto;
     font-family: Monda;
 }
@@ -163,7 +238,6 @@ body {
     color: white;
     margin: auto 10px;
     font-size: 25px;
-
 }
 
 .side_barre h3 {
@@ -177,7 +251,7 @@ body {
 .extra {
     width: 40%;
     background-color: white;
-    height: 100vh;
+    height: 94.6vh;
     /* Hauteur fixe du conteneur */
     overflow-y: auto;
     padding: 20px;
@@ -258,6 +332,9 @@ ul {
 li {
     display: inline;
     margin-right: 10px;
+}
+li:hover{
+    cursor: pointer;
 }
 
 .head {

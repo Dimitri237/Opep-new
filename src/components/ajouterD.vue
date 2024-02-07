@@ -15,7 +15,7 @@
             <span class="loading-indicator" v-if="loading"></span>
             <div v-else class="button-container" ref="buttonContainer">
               <div class="button-wrapper" ref="buttonWrapper">
-                <button  v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
+                <button v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
                   @click="selectTypeDepense(typeDepense)"
                   :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</button>
               </div>
@@ -75,6 +75,8 @@ export default {
       libelle: '',
       //date: '',
       date: new Date().toISOString().substr(0, 10),
+      createdAt: new Date().toISOString().substr(0, 10),
+      updatedAt: new Date().toISOString().substr(0, 10),
       loading: false,
       selectedImage: null,
       isAuthenticated: false,
@@ -117,7 +119,7 @@ export default {
     } catch (error) {
       console.error('Erreur lors de la récupération des typeDepenses :', error);
     }
-          this.loading = false; // Mettre loading à false une fois la connexion terminée (succès ou échec)
+    this.loading = false; // Mettre loading à false une fois la connexion terminée (succès ou échec)
     try {
       this.fetchVehicles(); // Appel à la méthode fetchVehicles pour récupérer les véhicules
     } catch (error) {
@@ -174,6 +176,8 @@ export default {
         montant: this.montant,
         libelle: this.libelle,
         date: this.date,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
         quantite: this.quantite,
         vehicleId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
       };

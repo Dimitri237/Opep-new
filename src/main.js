@@ -8,6 +8,7 @@ import ajouterD from '@/components/ajouterD.vue';
 //import LoadingPage from './components/LoadingPage.vue';
 import MesVehicules from './components/mesVehicules.vue';
 import detailsVehicule from './components/detailsVehicule.vue';
+import side_barre from './components/layouts/side_barre.vue';
 
 const routes = [
   { path: '/', component: CreateAccount },
@@ -17,6 +18,7 @@ const routes = [
   { path: '/ajouterD', component: ajouterD },
   { path: '/MesVehicules', component: MesVehicules },
   { path: '/detailsVehicule/:id', component: detailsVehicule },
+  { path: '/side_barre', component: side_barre },
 ];
 
 const router = createRouter({

@@ -68,6 +68,9 @@ export default {
       modele: '',
       color: '',
       loading: false,
+      date: new Date().toISOString().substr(0, 10),
+      createdAt: new Date().toISOString().substr(0, 10),
+      updatedAt: new Date().toISOString().substr(0, 10),
       selectedImage: null,
       isAuthenticated: false,
       userId: null,
@@ -132,7 +135,9 @@ export default {
         color: this.color,
         imageUrl: this.selectedImage,
         _id: this._id, // Veuillez spécifier la source de cet ID (_id)
-        userId: this.userId
+        userId: this.userId,
+        createdAt: this.createdAt, 
+        updatedAt: this.updatedAt
       };
       
       try {

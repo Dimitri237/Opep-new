@@ -1,10 +1,19 @@
 <template>
-    <div class="detail">
-        <h3>Dépenses liées au véhicule</h3>
-        <div v-for="vehicle in vehicles" :key="vehicle.id">
-            <h2>{{ vehicle.marque }} {{ vehicle.modele }}</h2>
-
-        </div>
+    <div class="all">
+        <side_barre />
+        <div class="container">
+            <div class="head">
+                <router-link to="/mesVehicules" class="new_car">
+                    <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+                    <div style="margin: auto 10px; width: 500px;">
+                        <h3>Dépenses liees au vehicule</h3>
+                        <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">dépenses liees au vehicule selectionne</p>
+                    </div>
+                    
+                </router-link>
+                <h2 style="color: #06283D; display: flex;width: 100%;"><h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span></h2>
+            </div>
+        
 
 
         <div v-if="loading" class="loading-indicator">
@@ -15,25 +24,30 @@
                 <h4>
                     <p>Type de dépense : </p><span> {{ depense.typeDepense }}</span>
                 </h4>
-                <h4>
+                <h4 style="margin-top: -40px;">
                     <p>Montant : </p><span> {{ depense.montant }}</span>
                 </h4>
-                <h4>
+                <h4 style="margin-top: -40px;">
                     <p>Description : </p><span>{{ depense.libelle }}</span>
                 </h4>
-                <h4>
+                <h4 style="margin-top: -40px;">
                     <p>Date : </p><span>{{ depense.date }}</span>
                 </h4>
             </li>
         </ul>
+    </div>
     </div>
 </template>
   
 <script>
 import { collection, getDocs, where, query} from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
+import side_barre from '@/components/layouts/side_barre.vue';
 
 export default {
+    components: {
+        side_barre
+  },
     data() {
         return {
             depenses: [],
@@ -47,7 +61,14 @@ export default {
         this.fetchVehicle(vehicleId);
         console.log('Valeur de this.$route.params.id:', this.$route.params.id);
     },
+    computed: {
+    // Calcul de la somme totale des dépenses
+    totalDepenses() {
+      return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+    }
+  },
     methods: {
+       
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
@@ -74,39 +95,82 @@ export default {
 };
 </script>
 <style scoped>
+@import url(https://fonts.googleapis.com/css2?family=Monda:wght@100;200;300;400;500;600;700&display=swap);
+
+body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.5)!important;
+    font-family: Monda;
+}
+.all {
+    background-color: rgba(0, 0, 0, 0.05)!important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex !important;
+    font-family: Monda;
+}
 .detail {
     width: 95%;
     margin: auto;
 }
-
 h3 {
     color: #06283D;
-    width: 50%;
-    font-size: 30px;
-    padding: 10px 0;
-    margin: 30px auto;
-    border-radius: 50px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
+}
+
+p {
+    color: #06283D;
+    font-size: 12px;
+}
+.head {
+    width: 37.5%;
+    position: fixed;
+    top: 7px;
+    background-color: #ffffff;
+    z-index: 9999;
+}
+.new_car {
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
 
 ul {
-    display: flex;
+    justify-content: space-between;
     padding: 0;
+    margin-top: 200px;
+    width: 95%;
 }
 
 li {
-    width: 17%;
+    width: 100%;
     list-style: none;
-    margin-left: 25px;
     padding: 0 15px;
     border-radius: 15px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
-li:hover {
-    transform: scale(1.1);
+.container {
+    width: 40%;
+    margin-left: 5%;
+    background-color: white;
+    padding: 20px;
+    height: 94.6vh;
+    overflow-y: auto;
+    font-family: Monda;
+}
+.container::-webkit-scrollbar {
+    width: 0.1em;
+    /* Largeur de la barre de défilement */
+}
+.container::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    /* Couleur de la poignée de défilement */
 }
 
 h4 {
