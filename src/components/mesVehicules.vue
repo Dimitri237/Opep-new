@@ -1,7 +1,7 @@
 <template>
     <div class="all">
         <side_barre />
-        
+
         <div class="container">
             <div class="head">
                 <router-link to="/ajouterV" class="new_car">
@@ -20,10 +20,12 @@
                 <div v-else class="vList" style="margin-top: 100px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car">
-                        <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" :src="vehicle.imageUrl" alt="Image de la voiture" />
+                        <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"
+                            :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">75.000 FCFA ce mois</h5>
+                            <h5 style="margin-top: -20px; color: #F2994A;">{{ getTotalDepenses(vehicle._id) }} FCFA ce mois
+                            </h5>
                         </div>
                         <div style="display: flex; justify-content: space-between; padding: 10px 0;">
                             <span style="color: #06283dc9;">4 réparations </span>
@@ -45,7 +47,7 @@ import { db } from '@/config/firebaseConfig';
 export default {
     components: {
         side_barre
-  },
+    },
     data() {
         return {
             isAuthenticated: false,
@@ -86,6 +88,10 @@ export default {
         showPage(page) {
             this.currentPage = page;
         },
+        getTotalDepenses(vehicleId) {
+            const depenses = this.depenses.filter((depense) => depense.vehicleId === vehicleId);
+            return depenses.reduce((total, depense) => total + depense.montant, 0);
+        },
         async getVehicles() {
             try {
                 this.loading = true;
@@ -94,10 +100,15 @@ export default {
                 const q = query(vehiclesRef, where('userId', '==', this.userId));
                 const querySnapshot = await getDocs(q);
 
-                this.vehicles = querySnapshot.docs.map(doc => doc.data());
+                this.vehicles = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false; // Fin du chargement
+
+                // Pour chaque véhicule, récupérer les dépenses associées
+                this.vehicles.forEach((vehicle) => {
+                    this.fetchDepenses(vehicle._id);
+                });
             } catch (error) {
-                console.error("Erreur lors de la récupération des véhicules : ", error);
+                console.error('Erreur lors de la récupération des véhicules :', error);
             }
         },
         async getUserInfos() {
@@ -111,13 +122,17 @@ export default {
                 console.error('Erreur lors de la récupération des utilisateurs :', error);
             }
         },
-        async fetchDepenses() {
+        async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
                 const querySnapshot = await getDocs(collection(db, 'depenses'));
-                this.depenses = querySnapshot.docs.map((doc) => doc.data());
+                this.depenses = querySnapshot.docs
+                    .map((doc) => doc.data())
+                    .filter((depense) => depense.vehicleId === vehicleId);
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses :', error);
+            } finally {
+                this.loading = false;
             }
         },
     }

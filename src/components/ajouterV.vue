@@ -17,22 +17,22 @@
         </div>
         <div style="display: flex; justify-content: space-between; margin-top: 20px;">
           <div style="width: 47%;">
-          <div><label for="">Modele véhicule</label></div>
-          <select class="selectM" name="" v-model="modele" id="modeles-select">
-            <option v-for="modele in modeles" :value="modele" v-bind:key="modele">{{ modele }}</option>
-          </select>
+            <div><label for="">Modele véhicule</label></div>
+            <select class="selectM" name="" v-model="modele" id="modeles-select">
+              <option v-for="modele in modeles" :value="modele" v-bind:key="modele">{{ modele }}</option>
+            </select>
+          </div>
+          <div style="width: 47%;">
+            <div><label for="">Annee véhicule</label></div>
+            <select class="selectM" name="" v-model="annee" id="annees-select">
+              <option v-for="a in annees" :value="a" v-bind:key="a">{{ a }}</option>
+            </select>
+          </div>
         </div>
-        <div style="width: 47%;">
-          <div><label for="">Annee véhicule</label></div>
-          <select class="selectM" name="" v-model="annee" id="annees-select">
-            <option v-for="annee in annees" :value="annee" v-bind:key="annee">{{ annee }}</option>
-          </select>
-        </div>
-        </div>
-        
+
         <div class="input-field">
           <div><label for="">Couleur</label></div>
-          <input  v-model="color" placeholder="Rouge, Jaune, verte ...etc" required>
+          <input v-model="color" placeholder="Rouge, Jaune, verte ...etc" required>
         </div>
         <div class="input-field">
           <div><label for="">Immatriculation</label></div>
@@ -57,8 +57,8 @@
   </div>
 </template>
 <script>
-import { db, firestore} from '@/config/firebaseConfig';
-import { collection, setDoc, doc, getDoc, getDocs} from 'firebase/firestore';
+import { db, firestore } from '@/config/firebaseConfig';
+import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
 
 export default {
   name: 'AddVehicle',
@@ -76,7 +76,8 @@ export default {
       userId: null,
       marques: [],
       modeles: [],
-      annees: []
+      annees: [],
+      annee: [],
     };
   },
   created() {
@@ -90,6 +91,11 @@ export default {
   },
   mounted() {
     try {
+      const date = new Date()
+
+      for (let index = date.getFullYear()- 24; index <= date.getFullYear(); index++) {
+        this.annees.push(index)
+      }
       // Récupérer les marques depuis la base de données Firestore
       getDocs(collection(db, 'marques')).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -105,19 +111,9 @@ export default {
           this.modeles.push(modele.libelle);
         });
       });
-
-      // Récupérer les années depuis la base de données Firestore
-      getDocs(collection(db, 'annees')).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const annee = doc.data();
-          this.annees.push(annee.libelle);
-        });
-      });
     } catch (error) {
       console.error('Erreur lors de la récupération des marques :', error);
     }
-
-    this.fetchUserId();
   },
   methods: {
     async ajouterVehicule() {
@@ -136,13 +132,13 @@ export default {
         imageUrl: this.selectedImage,
         _id: this._id, // Veuillez spécifier la source de cet ID (_id)
         userId: this.userId,
-        createdAt: this.createdAt, 
+        createdAt: this.createdAt,
         updatedAt: this.updatedAt
       };
-      
+
       try {
-        setDoc(doc(firestore, 'vehicles', vehicle._id), {...vehicle})
-        
+        setDoc(doc(firestore, 'vehicles', vehicle._id), { ...vehicle })
+
         alert('Véhicule créé');
         // Réinitialiser les champs du formulaire
         this.$router.push("/mesVehicules");
@@ -162,17 +158,6 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    async fetchUserId() {
-      try {
-        const userDoc = await getDoc(doc(db, 'users', '<ID_DE_L_UTILISATEUR_CONNECTE>'));
-        if (userDoc.exists()) {
-          this.userId = userDoc.data()._id;
-          console.log('ID de l\'utilisateur :', this.userId);
-        }
-      } catch (error) {
-        console.error('Erreur lors de la récupération de l\'ID de l\'utilisateur :', error);
-      }
-    }
   }
 };
 </script>
@@ -182,6 +167,7 @@ export default {
 nav {
   padding-top: 10px;
 }
+
 .loading-indicator::after {
   content: "";
   display: inline-block;
@@ -199,16 +185,19 @@ nav {
     transform: rotate(360deg);
   }
 }
+
 .loading-indicator {
   display: flex;
   justify-content: center;
   height: 100px;
 }
+
 .selectI {
   color: white;
   border: 1px solid rgba(0, 0, 0, 0.2);
   width: 99.6%;
 }
+
 .selectM {
   border: 1px solid rgba(0, 0, 0, 0.2);
   width: 99.6%;

@@ -72,8 +72,20 @@
             <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
         </router-link>
     </div>
-    <div style="margin: auto; padding-top: 60px!important; width: 50%;">
-
+    <div style="margin: auto; padding-top: 60px!important; width: 100%;">
+        <div>
+    <h2 style="color: #06283D;">Ce mois</h2>
+    <ul class="dMois">
+      <li style="width: 97%; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 5px 10px; margin-top: 15px; display: flex; justify-content: space-between;" v-for="depense in depenses" :key="depense.id">
+        <div style="display: block;">
+           <h4 style="margin-top: 0px;"> {{ depense.typeDepense }}</h4> <br> <h4 style="margin-top: -40px;">{{ depense.libelle }}</h4>
+        </div>
+       <div>
+        <h4 style="color: #F2994A; ">{{ depense.montant }} fcfa</h4>
+       </div>
+      </li>
+    </ul>
+  </div>
     </div>
 </div>
 
@@ -136,12 +148,13 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'home',
+            currentPage: 'depense',
             userId: null,
             vehicleId: null,
             vehicles: [],
             users: [],
             depenses: [],
+            moisActuel: new Date().getMonth(),
             loading: false
         };
     },
@@ -168,6 +181,12 @@ export default {
             this.getUserInfos();
         }
     },
+    computed: {
+    depensesFiltrees() {
+        const moisActuel = new Date().getMonth();
+      return this.depenses.filter((expense) => expense.mois === moisActuel);
+    }
+  },
     methods: {
         showPage(page) {
             this.currentPage = page;
@@ -204,6 +223,10 @@ export default {
                 console.error('Erreur lors de la récupération des dépenses :', error);
             }
         },
+        filtrerParMois() {
+      // Appeler cette méthode pour mettre à jour les dépenses filtrées
+      this.depensesFiltrees;
+    }
     }
 };
 </script>
@@ -218,7 +241,10 @@ body {
     background-color: rgba(0, 0, 0, 0.05);
     font-family: Monda;
 }
-
+h4 {
+    color: #06283D;
+    font-size: 13px;
+}
 .container {
     width: 40%;
     margin-left: 5%;

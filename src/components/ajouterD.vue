@@ -15,12 +15,15 @@
             <span class="loading-indicator" v-if="loading"></span>
             <div v-else class="button-container" ref="buttonContainer">
               <div class="button-wrapper" ref="buttonWrapper">
-                <button v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
-                  @click="selectTypeDepense(typeDepense)"
-                  :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</button>
+                <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
+                  @click="changeTypeDepense(typeDepense)"
+                  :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</div>
               </div>
+              
             </div>
           </div>
+          
+         
 
         </div>
         <div class="input-field">
@@ -83,6 +86,7 @@ export default {
       vehicleId: null,
       selectedVehicle: null,
       typeDepenses: [],
+      sousTypeDepenses: [],
       selectedTypeDepense: '',
       quantite: '',
       vehicles: [] // Ajoutez cette ligne pour déclarer la variable "vehicles"
@@ -110,16 +114,20 @@ export default {
           querySnapshot.forEach((doc) => {
             const typeDepense = doc.data();
 
-            this.typeDepenses.push(typeDepense.libelle); // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
+            this.typeDepenses.push(typeDepense.libelle);
+             // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
           });
 
-          if (this.typeDepenses.length) this.selectedTypeDepense = this.typeDepenses[0]
+          if (this.typeDepenses.length) {this.selectedTypeDepense = this.typeDepenses[0]}
 
         });
     } catch (error) {
       console.error('Erreur lors de la récupération des typeDepenses :', error);
     }
     this.loading = false; // Mettre loading à false une fois la connexion terminée (succès ou échec)
+    //Recuperation des sousTypes de depenses
+    
+    
     try {
       this.fetchVehicles(); // Appel à la méthode fetchVehicles pour récupérer les véhicules
     } catch (error) {
@@ -193,7 +201,7 @@ export default {
 
 
     },
-    selectTypeDepense(typeDepense) {
+    changeTypeDepense(typeDepense) {
       this.selectedTypeDepense = typeDepense;
     },
     async fetchVehicles() {
@@ -300,7 +308,7 @@ form {
   margin-top: 15px;
 }
 
-.button-wrapper button {
+.button-wrapper .btns {
   flex-shrink: 0;
   margin-right: 10px;
   border: none;
@@ -309,6 +317,7 @@ form {
   border-radius: 50px;
   color: rgba(0, 0, 0, 0.5);
   background-color: transparent;
+  cursor: pointer;
 }
 
 .selected-button {
