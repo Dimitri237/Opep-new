@@ -14,15 +14,28 @@
             <label for="">Type</label>
             <span class="loading-indicator" v-if="loading"></span>
             <div v-else class="button-container" ref="buttonContainer">
-              <div class="button-wrapper" ref="buttonWrapper">
-                <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense" v-bind:key="typeDepense"
+              <div class="button-wrapper" ref="this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;">
+                <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense.libelle" v-bind:key="typeDepense._id"
                   @click="changeTypeDepense(typeDepense)"
-                  :class="{ 'selected-button': typeDepense === selectedTypeDepense }">{{ typeDepense }}</div>
+                  :class="{ 'selected-button': typeDepense.libelle === selectedTypeDepense.libelle }">{{ typeDepense.libelle }}</div>
               </div>
               
             </div>
           </div>
-          
+          <div>
+            <label for="">Sous type</label>
+            <span class="loading-indicator" v-if="loading"></span>
+            <div v-else class="button-container" ref="buttonContainers">
+              <div class="button-wrapper" ref="buttonWrapper">
+                <div class="btns" v-for="sousTypeDepense in sousTypeDepenses" :value="sousTypeDepense.libelle" v-bind:key="sousTypeDepense._id"
+                  >{{ sousTypeDepense.libelle }}</div>
+              </div>
+
+              <!-- @click="changeSousTypeDepense(sousTypeDepense)"
+                  :class="{ 'selected-button': sousTypeDepense.libelle === selectedSousTypeDepense.libelle }" -->
+              
+            </div>
+          </div>
          
 
         </div>
@@ -38,7 +51,7 @@
             <div><label for="">Montant</label></div>
             <input type="number" v-model="montant" placeholder="15 000fcfa" required>
           </div>
-          <div style="width: 45%;" v-if="selectedTypeDepense && selectedTypeDepense.toLowerCase().includes('carburant')">
+          <div style="width: 45%;" v-if="selectedTypeDepense.libelle && selectedTypeDepense.libelle.toLowerCase().includes('carburant')">
             <label for="quantite">Quantité : </label>
             <input type="number" placeholder="20 Litres" id="quantite" v-model="quantite">
           </div>
@@ -66,7 +79,7 @@
 </template>
 <script>
 import { db } from '@/config/firebaseConfig';
-import { getDocs, collection, setDoc, doc, } from 'firebase/firestore';
+import { getDocs, collection, setDoc, doc, query, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -87,7 +100,7 @@ export default {
       selectedVehicle: null,
       typeDepenses: [],
       sousTypeDepenses: [],
-      selectedTypeDepense: '',
+      selectedTypeDepense: {},
       quantite: '',
       vehicles: [] // Ajoutez cette ligne pour déclarer la variable "vehicles"
     };
@@ -103,18 +116,21 @@ export default {
   },
   mounted() {
     const container = this.$refs.buttonContainer;
+    const containers = this.$refs.buttonContainers;
     container.addEventListener('mousedown', this.handleMouseDown);
     container.addEventListener('mousemove', this.handleMouseMove);
     container.addEventListener('mouseup', this.handleMouseUp);
     container.addEventListener('mouseleave', this.handleMouseLeave);
+    containers.addEventListener('mousedown', this.handleMouseDown);
+    containers.addEventListener('mousemove', this.handleMouseMove);
+    containers.addEventListener('mouseup', this.handleMouseUp);
+    containers.addEventListener('mouseleave', this.handleMouseLeave);
     try {
       this.loading = true;
       getDocs(collection(db, 'typeDepenses'))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            const typeDepense = doc.data();
-
-            this.typeDepenses.push(typeDepense.libelle);
+            this.typeDepenses.push({_id: doc.id, ...doc.data()});
              // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
           });
 
@@ -141,6 +157,12 @@ export default {
     container.removeEventListener('mouseup', this.handleMouseUp);
     container.removeEventListener('mouseleave', this.handleMouseLeave);
 
+    const containers = this.$refs.buttonContainers;
+    containers.removeEventListener('mousedown', this.handleMouseDown);
+    containers.removeEventListener('mousemove', this.handleMouseMove);
+    containers.removeEventListener('mouseup', this.handleMouseUp);
+    containers.removeEventListener('mouseleave', this.handleMouseLeave);
+
     // ...
   },
   methods: {
@@ -153,6 +175,7 @@ export default {
       this.isDragging = true;
       this.startX = event.clientX;
       this.scrollLeft = this.$refs.buttonContainer.scrollLeft;
+      this.scrollLeft = this.$refs.buttonContainers.scrollLeft;
     },
 
     handleMouseMove(event) {
@@ -161,6 +184,7 @@ export default {
       const x = event.clientX;
       const deltaX = x - this.startX;
       this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;
+      this.$refs.buttonContainers.scrollLeft = this.scrollLeft - deltaX;
     },
 
     handleMouseUp() {
@@ -180,7 +204,7 @@ export default {
       }
       const depense = {
         _id: uuidv4(),// Générer un ID unique pour la dépense
-        typeDepense: this.selectedTypeDepense,
+        typeDepense: this.selectedTypeDepense._id,
         montant: this.montant,
         libelle: this.libelle,
         date: this.date,
@@ -198,11 +222,18 @@ export default {
         alert('Erreur lors de la création de la dépense :', error);
         this.loading = false;
       }
-
-
     },
     changeTypeDepense(typeDepense) {
       this.selectedTypeDepense = typeDepense;
+      console.log(this.selectedTypeDepense._id);
+      this.fetchSousTypeDepense(this.selectedTypeDepense._id)
+    },
+    async fetchSousTypeDepense(idTypeDepense){
+      const sousTypeDepensesRef = collection(db, 'sousTypeDepense');
+                const q = query(sousTypeDepensesRef, where('idTypeDepense', '==',idTypeDepense));
+                const querySnapshot = await getDocs(q);
+
+                this.sousTypeDepenses = querySnapshot.docs.map((doc) => doc.data());
     },
     async fetchVehicles() {
       try {
