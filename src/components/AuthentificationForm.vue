@@ -1,5 +1,5 @@
 <template>
-  <div class="container monda-font">
+  <div class="container monda-font animate__animated animate__fadeInDown">
     <nav>
       <img src="@/assets/log2.png" alt="" />
     </nav>
@@ -103,7 +103,7 @@ h2{
     margin: auto;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2)!important;
     padding: 15px;
-    margin-top: 150px;
+    margin-top: 120px;
 }
 form{
     width: 100%;

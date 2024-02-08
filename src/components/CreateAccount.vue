@@ -1,5 +1,5 @@
 <template>
-  <div class="container monda-font">
+  <div class="container monda-font animate__animated animate__fadeInDown">
     <nav>
       <img src="@/assets/log2.png" alt="" />
     </nav>
@@ -33,7 +33,6 @@ import { uuid } from 'vue-uuid';
 import bcryptjs from 'bcryptjs';
 import { firestore } from '@/config/firebaseConfig';
 import { setDoc, doc } from 'firebase/firestore';
-//import { randomBytes } from 'crypto-browserify';
 
 
 export default {

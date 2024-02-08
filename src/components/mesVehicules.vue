@@ -19,7 +19,7 @@
                 </div>
                 <div v-else class="vList" style="margin-top: 100px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
-                        class="car">
+                        class="car animate__animated animate__fadeInRight">
                         <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"
                             :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">

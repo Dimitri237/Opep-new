@@ -9,12 +9,14 @@ import ajouterD from '@/components/ajouterD.vue';
 import MesVehicules from './components/mesVehicules.vue';
 import detailsVehicule from './components/detailsVehicule.vue';
 import side_barre from './components/layouts/side_barre.vue';
+import modifierUser from './components/modifierUser.vue';
 
 const routes = [
   { path: '/', component: CreateAccount },
   //{ path: '/LoadingPage', component: LoadingPage },
   { path: '/auth', component: AuthentificationPage },
   { path: '/ajouterV', component: ajouterV },
+  { path: '/modifierUser', component: modifierUser },
   { path: '/ajouterD', component: ajouterD },
   { path: '/MesVehicules', component: MesVehicules },
   { path: '/detailsVehicule/:id', component: detailsVehicule },

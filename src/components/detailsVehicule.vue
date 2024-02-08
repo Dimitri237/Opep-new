@@ -20,7 +20,7 @@
             <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
         </div>
         <ul v-else>
-            <li v-for="depense in depenses" :key="depense.id">
+            <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
                 <h4>
                     <p>Type de dépense : </p><span> {{ depense.typeDepense }}</span>
                 </h4>

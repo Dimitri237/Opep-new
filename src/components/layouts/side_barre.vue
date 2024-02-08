@@ -42,8 +42,7 @@
 <div class="extra">
 
 <div class="page" v-if="currentPage === 'home'">
-    <h1 style="color: #06283D;">Ravis de vous revoir Mr. <span v-for="user in users" :key="user.id">{{ user.name
-    }}</span></h1>
+    <h1 class="animate__animated animate__fadeInUp" style="color: #06283D;">Ravis de vous revoir Mr. <span >{{ currentUser ? currentUser.name : '' }}</span></h1>
     <div class="cont">
         <div class="cont1">
 
@@ -99,17 +98,16 @@
         <div class="profil">
             <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
             <div class="name">
-                <h1 style="color: #06283D;"><span v-for="user in users" :key="user.id">{{ user.name }}</span>
+                <h1 style="color: #06283D;"><span>{{ currentUser ? currentUser.name : '' }}</span>
                 </h1>
-                <p style="font-size: 15px; margin-top: -10px;">Toute les modification liees a votre compte sont
-                    ici</p>
+                <p style="font-size: 15px; margin-top: -10px;">{{ currentUser ? currentUser.contact : '' }}</p>
             </div>
         </div>
         <div class="pList">
             <ul class="list">
                 <li>
                     <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
-                    <span>Parametres</span>
+                    <router-link style="text-decoration: none;" to="/modifierUser"><span>Parametres</span></router-link>
                 </li>
                 <li>
                     <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
@@ -139,7 +137,7 @@
 </div>
 </template>
 <script>
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 
 export default {
@@ -148,11 +146,11 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'depense',
+            currentPage: 'home',
             userId: null,
             vehicleId: null,
             vehicles: [],
-            users: [],
+            currentUser: null, // Variable pour stocker les informations de l'utilisateur connecté
             depenses: [],
             moisActuel: new Date().getMonth(),
             loading: false
@@ -161,7 +159,7 @@ export default {
     mounted() {
         try {
             this.fetchDepenses();
-            this.getUserInfos();
+            this.fetchCurrentUser();
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -178,7 +176,7 @@ export default {
 
         if (this.isAuthenticated) {
             // Récupérer les véhicules associés à l'ID de l'utilisateur
-            this.getUserInfos();
+            this.fetchCurrentUser();
         }
     },
     computed: {
@@ -188,6 +186,22 @@ export default {
     }
   },
     methods: {
+
+        async fetchCurrentUser() {
+      const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
+
+      const usersRef = collection(db, 'users');
+      const queryRef = query(usersRef, where('_id', '==', userId));
+
+      try {
+        const querySnapshot = await getDocs(queryRef);
+        if (!querySnapshot.empty) {
+          this.currentUser = querySnapshot.docs[0].data();
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
+      }
+    },
         showPage(page) {
             this.currentPage = page;
         },
@@ -203,17 +217,6 @@ export default {
       // Rediriger l'utilisateur vers la page de connexion
       this.$router.push("/auth");
     },
-        async getUserInfos() {
-            try {
-                const usersRef = collection(db, 'users');
-                const q = query(usersRef, where('userId', '==', this.userId));
-                console.log(this.userId);
-                const querySnapshot = await getDocs(q);
-                this.users = querySnapshot.docs.map(doc => doc.data());
-            } catch (error) {
-                console.error('Erreur lors de la récupération des utilisateurs :', error);
-            }
-        },
         async fetchDepenses() {
             try {
                 this.loading = true;
