@@ -10,7 +10,7 @@ import MesVehicules from './components/mesVehicules.vue';
 import detailsVehicule from './components/detailsVehicule.vue';
 import side_barre from './components/layouts/side_barre.vue';
 import modifierUser from './components/modifierUser.vue';
-
+import listingDepenses from './components/listingDepenses.vue';
 const routes = [
   { path: '/', component: CreateAccount },
   //{ path: '/LoadingPage', component: LoadingPage },
@@ -21,6 +21,7 @@ const routes = [
   { path: '/MesVehicules', component: MesVehicules },
   { path: '/detailsVehicule/:id', component: detailsVehicule },
   { path: '/side_barre', component: side_barre },
+  { path: '/listingDepenses/:id', component: listingDepenses },
 ];
 
 const router = createRouter({

@@ -1,140 +1,173 @@
 <template>
     <div class="side_barre">
 
-<nav style="width: 100%;">
-    <center>
-        <img style="width: 100px;" src="@/assets/log1.png" alt="" />
-    </center>
-    <ul>
-        <li>
-            <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
-                @click="showPage('home')">
-                <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
-                <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'depense' }"
-                style="display: flex;text-decoration: none;" @click="showPage('depense')">
-                <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
-                    class="fas fa-layer-group"></i>
-                <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
-                @click="showPage('stats')">
-                <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }"
-                    class="fas fa-chart-bar"></i>
-                <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
-            </button>
-        </li>
-        <li>
-            <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
-                @click="showPage('profil')">
-                <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
-                <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
-            </button>
-        </li>
-    </ul>
-</nav>
-</div>
-<div class="extra">
-
-<div class="page" v-if="currentPage === 'home'">
-    <h1 class="animate__animated animate__fadeInUp" style="color: #06283D;">Ravis de vous revoir Mr. <span >{{ currentUser ? currentUser.name : '' }}</span></h1>
-    <div class="cont">
-        <div class="cont1">
-
-        </div>
-        <div class="cont2">
-            <div></div>
-            <div></div>
-        </div>
-        <div class="cont3">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-</div>
-
-<div class="page" v-if="currentPage === 'depense'">
-    <div class="head">
-        <router-link style="margin-left: -15px;" to="/ajouterD" class="new_car">
-            <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
-            <div style="margin: auto 10px; width: 500px;">
-                <h3>Ajouter une dépense</h3>
-                <p style="margin-top: -20px;">Ajouter une dépense maintenant </p>
-            </div>
-            <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
-        </router-link>
-    </div>
-    <div style="margin: auto; padding-top: 60px!important; width: 100%;">
-        <div>
-    <h2 style="color: #06283D;">Ce mois</h2>
-    <ul class="dMois">
-      <li style="width: 97%; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 5px 10px; margin-top: 15px; display: flex; justify-content: space-between;" v-for="depense in depenses" :key="depense.id">
-        <div style="display: block;">
-           <h4 style="margin-top: 0px;"> {{ depense.typeDepense }}</h4> <br> <h4 style="margin-top: -40px;">{{ depense.libelle }}</h4>
-        </div>
-       <div>
-        <h4 style="color: #F2994A; ">{{ depense.montant }} fcfa</h4>
-       </div>
-      </li>
-    </ul>
-  </div>
-    </div>
-</div>
-
-<div class="page" v-if="currentPage === 'stats'">
-    <h1>Contact Us</h1>
-    <p>This is the contact page content.</p>
-</div>
-
-<div class="page" v-if="currentPage === 'profil'">
-    <div>
-        <div class="profil">
-            <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
-            <div class="name">
-                <h1 style="color: #06283D;"><span>{{ currentUser ? currentUser.name : '' }}</span>
-                </h1>
-                <p style="font-size: 15px; margin-top: -10px;">{{ currentUser ? currentUser.contact : '' }}</p>
-            </div>
-        </div>
-        <div class="pList">
-            <ul class="list">
+        <nav style="width: 100%;">
+            <center>
+                <img style="width: 100px;" src="@/assets/log1.png" alt="" />
+            </center>
+            <ul>
                 <li>
-                    <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
-                    <router-link style="text-decoration: none;" to="/modifierUser"><span>Parametres</span></router-link>
+                    <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
+                        @click="showPage('home')">
+                        <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
+                        <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
+                    </button>
                 </li>
                 <li>
-                    <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
-                    <span>A propos de nous</span>
+                    <button :class="{ selected: currentPage === 'depense' }" style="display: flex;text-decoration: none;"
+                        @click="showPage('depense')">
+                        <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
+                            class="fas fa-layer-group"></i>
+                        <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
+                    </button>
                 </li>
                 <li>
-                    <img style="width: 30px  margin: auto 0px;" src="@/assets/sun.png" alt="">
-                    <span>Theme</span>
+                    <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
+                        @click="showPage('stats')">
+                        <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }" class="fas fa-chart-bar"></i>
+                        <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
+                    </button>
                 </li>
                 <li>
-                    <img style="width: 30px  margin: auto 0px;" src="@/assets/log-out.png" alt="">
-                    <span @click="logout">Deconnexion</span>
-                </li>
-                <li>
-                    <img style="width: 30px  margin: auto 0px;" src="@/assets/scroll.png" alt="">
-                    <span>Politique de confidentialite</span>
-                </li>
-                <li>
-                    <img style="width: 30px  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
-                    <span>Termes et conditions</span>
+                    <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
+                        @click="showPage('profil')">
+                        <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
+                        <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
+                    </button>
                 </li>
             </ul>
-        </div>
+        </nav>
     </div>
-</div>
+    <div class="extra">
 
-</div>
+        <div class="page" v-if="currentPage === 'home'">
+            <h1 class="animate__animated animate__fadeInUp" style="font-size: 26px; color: #06283D;">Ravis de vous revoir
+                Mr. <span>{{ currentUser ? currentUser.name : '' }}</span></h1>
+            <div class="cont">
+                <div class="cont1">
+
+                </div>
+                <div class="cont2">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="cont3">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <div style=" width: 100%;" class="page" v-if="currentPage === 'depense'">
+            <div class="head">
+                <router-link style="margin-left: -15px;" to="/ajouterD" class="new_car">
+                    <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+                    <div style="margin: auto 10px; width: 500px;">
+                        <h3>Ajouter une dépense</h3>
+                        <p style="margin-top: -20px;">Ajouter une dépense maintenant </p>
+                    </div>
+                    <img style="width: 25px; height: 25px; margin: auto 10px;" src="@/assets/arrow-right.png" alt="">
+                </router-link>
+            </div>
+
+            <div style="margin-top: 100px; width: 100%;">
+                <h2 style="font-size: 26px; color: #06283D;">Résumé</h2>
+                <div class="resume">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div  @click="getAllDepensesByType('Reparation')" class="inbox">
+                            <img src="@/assets/icon (1).png" alt="">
+                            <h3>Reparation</h3>
+                            <p>650.000 fcfa</p>
+                        </div>
+                        <div @click="getAllDepensesByType('Consommation')" style="text-decoration: none;" class="inbox">
+                            <img src="@/assets/icon (2).png" alt="">
+                            <h3>Consommation</h3>
+                            <p>600.000 fcfa</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div @click="getAllDepensesByType('Administration')" class="inbox">
+                            <img src="@/assets/icon (3).png" alt="">
+                            <h3>Administrations</h3>
+                            <p>300.000 fcfa</p>
+                        </div>
+                        <div  @click="getAllDepensesByType('Autres')" class="inbox">
+                            <img src="@/assets/icon (4).png" alt="">
+                            <h3>Autres</h3>
+                            <p>100.000 fcfa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin: auto; padding-top: 60px!important; width: 100%;">
+                <div>
+                    <h2 style="color: #06283D;">Ce mois</h2>
+                    <ul class="dMois">
+                        <li style="width: 97%; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 5px 10px; margin-top: 15px; display: flex; justify-content: space-between;"
+                            v-for="depense in depenses" :key="depense.id">
+                            <div style="display: block;">
+                                <h4 style="margin-top: 0px;"> {{ depense.typeDepense }}</h4> <br>
+                                <h4 style="margin-top: -40px;">{{ depense.libelle }}</h4>
+                            </div>
+                            <div>
+                                <h4 style="color: #F2994A; ">{{ depense.montant }} fcfa</h4>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" v-if="currentPage === 'stats'">
+            <h1>Contact Us</h1>
+            <p>This is the contact page content.</p>
+        </div>
+
+        <div class="page" v-if="currentPage === 'profil'">
+            <div>
+                <div class="profil">
+                    <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+                    <div class="name">
+                        <h1 style="color: #06283D;"><span>{{ currentUser ? currentUser.name : '' }}</span>
+                        </h1>
+                        <p style="font-size: 15px; margin-top: -10px;">{{ currentUser ? currentUser.contact : '' }}</p>
+                    </div>
+                </div>
+                <div class="pList">
+                    <ul class="list">
+                        <li>
+                            <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
+                            <router-link style="text-decoration: none;"
+                                to="/modifierUser"><span>Parametres</span></router-link>
+                        </li>
+                        <li>
+                            <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
+                            <span>A propos de nous</span>
+                        </li>
+                        <li>
+                            <img style="width: 30px  margin: auto 0px;" src="@/assets/sun.png" alt="">
+                            <span>Theme</span>
+                        </li>
+                        <li>
+                            <img style="width: 30px  margin: auto 0px;" src="@/assets/log-out.png" alt="">
+                            <span @click="logout">Deconnexion</span>
+                        </li>
+                        <li>
+                            <img style="width: 30px  margin: auto 0px;" src="@/assets/scroll.png" alt="">
+                            <span>Politique de confidentialite</span>
+                        </li>
+                        <li>
+                            <img style="width: 30px  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
+                            <span>Termes et conditions</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </template>
 <script>
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -146,12 +179,14 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'home',
+            currentPage: 'depense',
             userId: null,
             vehicleId: null,
+            typeDepenses: [],
             vehicles: [],
             currentUser: null, // Variable pour stocker les informations de l'utilisateur connecté
             depenses: [],
+            idTypeDepense: null,
             moisActuel: new Date().getMonth(),
             loading: false
         };
@@ -160,6 +195,7 @@ export default {
         try {
             this.fetchDepenses();
             this.fetchCurrentUser();
+            this.fetchTypeDepense();
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -180,43 +216,53 @@ export default {
         }
     },
     computed: {
-    depensesFiltrees() {
-        const moisActuel = new Date().getMonth();
-      return this.depenses.filter((expense) => expense.mois === moisActuel);
-    }
-  },
-    methods: {
-
-        async fetchCurrentUser() {
-      const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
-
-      const usersRef = collection(db, 'users');
-      const queryRef = query(usersRef, where('_id', '==', userId));
-
-      try {
-        const querySnapshot = await getDocs(queryRef);
-        if (!querySnapshot.empty) {
-          this.currentUser = querySnapshot.docs[0].data();
+        depensesFiltrees() {
+            const moisActuel = new Date().getMonth();
+            return this.depenses.filter((expense) => expense.mois === moisActuel);
         }
-      } catch (error) {
-        console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
-      }
     },
+    methods: {
+        async getAllDepensesByType(libelle) {
+            const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
+
+            const depensesRef = collection(db, 'depenses');
+                const q = query(depensesRef, where('idTypeDepense', '==', id));
+                const querySnapshot = await getDocs(q);
+                this.depenses = querySnapshot.docs.map((doc) => doc.data());
+
+            console.log( this.depenses );
+            this.$router.push('/listingDepenses/' + id);
+        },
+        async fetchCurrentUser() {
+            const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
+
+            const usersRef = collection(db, 'users');
+            const queryRef = query(usersRef, where('_id', '==', userId));
+
+            try {
+                const querySnapshot = await getDocs(queryRef);
+                if (!querySnapshot.empty) {
+                    this.currentUser = querySnapshot.docs[0].data();
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'utilisateur connecté :', error);
+            }
+        },
         showPage(page) {
             this.currentPage = page;
         },
         logout() {
-      // Supprimer les informations de connexion de localStorage
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userId');
-      
-      // Réinitialiser les variables de l'état de connexion
-      this.isAuthenticated = false;
-      this.userId = null;
+            // Supprimer les informations de connexion de localStorage
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('userId');
 
-      // Rediriger l'utilisateur vers la page de connexion
-      this.$router.push("/auth");
-    },
+            // Réinitialiser les variables de l'état de connexion
+            this.isAuthenticated = false;
+            this.userId = null;
+
+            // Rediriger l'utilisateur vers la page de connexion
+            this.$router.push("/auth");
+        },
         async fetchDepenses() {
             try {
                 this.loading = true;
@@ -226,10 +272,23 @@ export default {
                 console.error('Erreur lors de la récupération des dépenses :', error);
             }
         },
+        async fetchTypeDepense() {
+            try {
+                this.loading = true;
+                const querySnapshot = await getDocs(collection(db, 'typeDepenses'));
+                this.typeDepenses = querySnapshot.docs.map((doc) =>({_id: doc.id, ...doc.data()}));
+                
+                
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses :', error);
+            } finally {
+                this.loading = false;
+            }
+        },
         filtrerParMois() {
-      // Appeler cette méthode pour mettre à jour les dépenses filtrées
-      this.depensesFiltrees;
-    }
+            // Appeler cette méthode pour mettre à jour les dépenses filtrées
+            this.depensesFiltrees;
+        }
     }
 };
 </script>
@@ -244,10 +303,31 @@ body {
     background-color: rgba(0, 0, 0, 0.05);
     font-family: Monda;
 }
+
+.resume {
+    display: block;
+    width: 100%;
+}
+
+.inbox {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 42%;
+    border-radius: 15px;
+    margin-top: 15px;
+    padding: 15px;
+}
+
+.inbox p {
+    color: #F2994A;
+    font-size: 13px;
+    font-weight: bold;
+}
+
 h4 {
     color: #06283D;
     font-size: 13px;
 }
+
 .container {
     width: 40%;
     margin-left: 5%;
@@ -289,9 +369,8 @@ h4 {
 .page {
     margin-top: 20px;
     background-color: transparent;
-    width: 95%;
+    width: 80%;
     height: 100vh;
-    margin-left: 15px;
 }
 
 .new_car {
@@ -362,7 +441,8 @@ li {
     display: inline;
     margin-right: 10px;
 }
-li:hover{
+
+li:hover {
     cursor: pointer;
 }
 
@@ -505,4 +585,5 @@ button {
 
 .list li img {
     height: 30px !important;
-}</style>
+}
+</style>

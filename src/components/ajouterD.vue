@@ -15,11 +15,12 @@
             <span class="loading-indicator" v-if="loading"></span>
             <div v-else class="button-container" ref="buttonContainer">
               <div class="button-wrapper" ref="this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;">
-                <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense.libelle" v-bind:key="typeDepense._id"
-                  @click="changeTypeDepense(typeDepense)"
-                  :class="{ 'selected-button': typeDepense.libelle === selectedTypeDepense.libelle }">{{ typeDepense.libelle }}</div>
+                <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense.libelle"
+                  v-bind:key="typeDepense._id" @click="changeTypeDepense(typeDepense)"
+                  :class="{ 'selected-button': typeDepense.libelle === selectedTypeDepense.libelle }">{{
+                    typeDepense.libelle }}</div>
               </div>
-              
+
             </div>
           </div>
           <div>
@@ -27,16 +28,19 @@
             <span class="loading-indicator" v-if="loading"></span>
             <div v-else class="button-container" ref="buttonContainers">
               <div class="button-wrapper" ref="buttonWrapper">
-                <div class="btns" v-for="sousTypeDepense in sousTypeDepenses" :value="sousTypeDepense.libelle" v-bind:key="sousTypeDepense._id"
-                  >{{ sousTypeDepense.libelle }}</div>
+                <div class="btns" v-for="sousTypeDepense in sousTypeDepenses" :value="sousTypeDepense.libelle"
+                  v-bind:key="sousTypeDepense._id" @click="changeSousTypeDepense(sousTypeDepense)"
+                  :class="{ 'selected-button': sousTypeDepense.libelle === selectedSousTypeDepense.libelle }">{{
+                    sousTypeDepense.libelle }}
+                </div>
               </div>
 
               <!-- @click="changeSousTypeDepense(sousTypeDepense)"
                   :class="{ 'selected-button': sousTypeDepense.libelle === selectedSousTypeDepense.libelle }" -->
-              
+
             </div>
           </div>
-         
+
 
         </div>
         <div class="input-field">
@@ -51,7 +55,8 @@
             <div><label for="">Montant</label></div>
             <input type="number" v-model="montant" placeholder="15 000fcfa" required>
           </div>
-          <div style="width: 45%;" v-if="selectedTypeDepense.libelle && selectedTypeDepense.libelle.toLowerCase().includes('carburant')">
+          <div style="width: 45%;"
+            v-if="selectedTypeDepense.libelle && selectedTypeDepense.libelle.toLowerCase().includes('carburant')">
             <label for="quantite">Quantité : </label>
             <input type="number" placeholder="20 Litres" id="quantite" v-model="quantite">
           </div>
@@ -101,6 +106,7 @@ export default {
       typeDepenses: [],
       sousTypeDepenses: [],
       selectedTypeDepense: {},
+      selectedSousTypeDepense: [],
       quantite: '',
       vehicles: [] // Ajoutez cette ligne pour déclarer la variable "vehicles"
     };
@@ -130,11 +136,21 @@ export default {
       getDocs(collection(db, 'typeDepenses'))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-            this.typeDepenses.push({_id: doc.id, ...doc.data()});
-             // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
+            this.typeDepenses.push({ _id: doc.id, ...doc.data() });
+            // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
           });
 
-          if (this.typeDepenses.length) {this.selectedTypeDepense = this.typeDepenses[0]}
+          if (this.typeDepenses.length) { this.selectedTypeDepense = this.typeDepenses[0] }
+
+        });
+      getDocs(collection(db, 'sousTypeDepense'))
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.sousTypeDepenses.push({ _id: doc.id, ...doc.data() });
+            // Ajouter la typeDepense à la liste des typeDepenses dans les données du composant
+          });
+
+          if (this.sousTypeDepenses.length) { this.selectedSousTypeDepense = this.sousTypeDepenses[0] }
 
         });
     } catch (error) {
@@ -142,8 +158,8 @@ export default {
     }
     this.loading = false; // Mettre loading à false une fois la connexion terminée (succès ou échec)
     //Recuperation des sousTypes de depenses
-    
-    
+
+
     try {
       this.fetchVehicles(); // Appel à la méthode fetchVehicles pour récupérer les véhicules
     } catch (error) {
@@ -167,7 +183,7 @@ export default {
   },
   methods: {
     onTypeDepenseChange() {
-      if (this.selectedTypeDepense == 'Carburant') {
+      if (this.selectedSousTypeDepense == 'Carburant') {
         this.quantite = '';
       }
     },
@@ -204,7 +220,9 @@ export default {
       }
       const depense = {
         _id: uuidv4(),// Générer un ID unique pour la dépense
-        typeDepense: this.selectedTypeDepense._id,
+        typeDepense: this.selectedTypeDepense.libelle,
+        idTypeDepense: this.selectedTypeDepense._id,
+        //sousTypeDepense: this.selectedSousTypeDepense._id,
         montant: this.montant,
         libelle: this.libelle,
         date: this.date,
@@ -228,12 +246,16 @@ export default {
       console.log(this.selectedTypeDepense._id);
       this.fetchSousTypeDepense(this.selectedTypeDepense._id)
     },
-    async fetchSousTypeDepense(idTypeDepense){
+    changeSousTypeDepense(sousTypeDepense) {
+      this.selectedSousTypeDepense = sousTypeDepense;
+      console.log(this.selectedSousTypeDepense._id);
+    },
+    async fetchSousTypeDepense(idTypeDepense) {
       const sousTypeDepensesRef = collection(db, 'sousTypeDepense');
-                const q = query(sousTypeDepensesRef, where('idTypeDepense', '==',idTypeDepense));
-                const querySnapshot = await getDocs(q);
-
-                this.sousTypeDepenses = querySnapshot.docs.map((doc) => doc.data());
+      const q = query(sousTypeDepensesRef, where('idTypeDepense', '==', idTypeDepense));
+      const querySnapshot = await getDocs(q);
+      console.log(this.selectedSousTypeDepenses);
+      this.sousTypeDepenses = querySnapshot.docs.map((doc) => doc.data());
     },
     async fetchVehicles() {
       try {
@@ -417,5 +439,4 @@ label {
   background-color: transparent;
   color: rgba(6, 40, 61, 1);
   border: 1px solid rgba(6, 40, 61, 1);
-}
-</style>
+}</style>
