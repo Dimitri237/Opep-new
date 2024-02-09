@@ -6,8 +6,8 @@
                 <router-link to="'/consommation" class="new_car">
                     <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (2).png" alt="">
                     <div style="margin: auto 10px; width: 500px;">
-                        <h3 >Consommations</h3>
-                        <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">les depenses de type consommation</p>
+                        <h3 >Depense</h3>
+                        <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">les depenses de type par</p>
                     </div>
                     
                 </router-link>
@@ -64,6 +64,11 @@ export default {
     // Calcul de la somme totale des dépenses
     totalDepenses() {
       return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+    }
+  },
+  watch: {
+    '$route.params.id'(newIdTypeDepense) {
+      this.fetchDepenses(newIdTypeDepense);
     }
   },
     methods: {

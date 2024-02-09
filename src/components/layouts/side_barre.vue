@@ -76,27 +76,27 @@
                 <h2 style="font-size: 26px; color: #06283D;">Résumé</h2>
                 <div class="resume">
                     <div style="display: flex; justify-content: space-between;">
-                        <div  @click="getAllDepensesByType('Reparation')" class="inbox">
+                        <div @click="getAllDepensesByType('Reparation')" class="inbox">
                             <img src="@/assets/icon (1).png" alt="">
                             <h3>Reparation</h3>
-                            <p>650.000 fcfa</p>
+                            <p>{{ totalDepenses }} fcfa</p>
                         </div>
                         <div @click="getAllDepensesByType('Consommation')" style="text-decoration: none;" class="inbox">
                             <img src="@/assets/icon (2).png" alt="">
                             <h3>Consommation</h3>
-                            <p>600.000 fcfa</p>
+                            <p>{{ totalDepenses }} fcfa</p>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                         <div @click="getAllDepensesByType('Administration')" class="inbox">
                             <img src="@/assets/icon (3).png" alt="">
                             <h3>Administrations</h3>
-                            <p>300.000 fcfa</p>
+                            <p>{{ totalDepenses }} fcfa</p>
                         </div>
-                        <div  @click="getAllDepensesByType('Autres')" class="inbox">
+                        <div @click="getAllDepensesByType('Autres')" class="inbox">
                             <img src="@/assets/icon (4).png" alt="">
                             <h3>Autres</h3>
-                            <p>100.000 fcfa</p>
+                            <p>{{ totalDepenses }} fcfa</p>
                         </div>
                     </div>
                 </div>
@@ -219,19 +219,39 @@ export default {
         depensesFiltrees() {
             const moisActuel = new Date().getMonth();
             return this.depenses.filter((expense) => expense.mois === moisActuel);
+        },
+        totalDepenses() {
+            return this.depenses.reduce((total, depense) => total + depense.montant, 0);
         }
     },
     methods: {
         async getAllDepensesByType(libelle) {
             const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
+            const totalDepenses = await this.getTotalDepensesByType(libelle);
+
+    console.log('Total des dépenses:', totalDepenses);
+            const depensesRef = collection(db, 'depenses');
+            const q = query(depensesRef, where('idTypeDepense', '==', id));
+            const querySnapshot = await getDocs(q);
+            this.depenses = querySnapshot.docs.map((doc) => doc.data());
+
+            console.log(this.depenses);
+            this.$router.push('/listingDepenses/' + id);
+        },
+        async getTotalDepensesByType(libelle) {
+            const id = this.typeDepenses.find((typeDepense) =>
+                typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase())
+            )._id;
 
             const depensesRef = collection(db, 'depenses');
-                const q = query(depensesRef, where('idTypeDepense', '==', id));
-                const querySnapshot = await getDocs(q);
-                this.depenses = querySnapshot.docs.map((doc) => doc.data());
+            const q = query(depensesRef, where('idTypeDepense', '==', id));
+            const querySnapshot = await getDocs(q);
+            const depenses = querySnapshot.docs.map((doc) => doc.data());
 
-            console.log( this.depenses );
-            this.$router.push('/listingDepenses/' + id);
+            // Calculer le total des dépenses
+            const totalDepenses = depenses.reduce((total, depense) => total + depense.montant, 0);
+
+            return totalDepenses;
         },
         async fetchCurrentUser() {
             const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
@@ -276,9 +296,9 @@ export default {
             try {
                 this.loading = true;
                 const querySnapshot = await getDocs(collection(db, 'typeDepenses'));
-                this.typeDepenses = querySnapshot.docs.map((doc) =>({_id: doc.id, ...doc.data()}));
-                
-                
+                this.typeDepenses = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
+
+
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses :', error);
             } finally {
