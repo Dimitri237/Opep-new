@@ -66,7 +66,6 @@ export default {
       setDoc(doc(firestore, 'users', user._id), { ...user })
         .then(() => {
           // Données enregistrées avec succès
-          alert('Inscrit avec succès');
           this.$router.push("/auth");
         })
         .catch((error) => {

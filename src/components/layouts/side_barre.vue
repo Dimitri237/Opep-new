@@ -174,6 +174,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 
 export default {
+    
     components: {
     },
     data() {
@@ -222,14 +223,16 @@ export default {
         },
         totalDepenses() {
             return this.depenses.reduce((total, depense) => total + depense.montant, 0);
-        }
+        },
+
     },
+    
     methods: {
         async getAllDepensesByType(libelle) {
             const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
             const totalDepenses = await this.getTotalDepensesByType(libelle);
 
-    console.log('Total des dépenses:', totalDepenses);
+            console.log('Total des dépenses:', totalDepenses);
             const depensesRef = collection(db, 'depenses');
             const q = query(depensesRef, where('idTypeDepense', '==', id));
             const querySnapshot = await getDocs(q);
@@ -250,7 +253,15 @@ export default {
 
             // Calculer le total des dépenses
             const totalDepenses = depenses.reduce((total, depense) => total + depense.montant, 0);
+            const result = {};
 
+            depenses.forEach((depense) => {
+                if (result[depense.idTypeDepense]) {
+                    result[depense.idTypeDepense] += depense.montant;
+                } else {
+                    result[depense.idTypeDepense] = depense.montant;
+                }
+            });
             return totalDepenses;
         },
         async fetchCurrentUser() {
@@ -389,7 +400,7 @@ h4 {
 .page {
     margin-top: 20px;
     background-color: transparent;
-    width: 80%;
+    width: 100%;
     height: 100vh;
 }
 

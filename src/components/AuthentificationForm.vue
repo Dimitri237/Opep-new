@@ -67,7 +67,6 @@ export default {
             localStorage.setItem('userId', user._id); // Remplacez userId par l'ID de l'utilisateur connecté
             this.isAuthenticated = true;
             this.userId = user._id;
-            alert('connexion reussi!')
             this.$router.push("/mesVehicules");
           } else {
             // Mot de passe incorrect
