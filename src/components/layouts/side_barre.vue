@@ -105,15 +105,13 @@
                 <div>
                     <h2 style="color: #06283D;">Ce mois</h2>
                     <ul class="dMois">
-                        <li style="width: 97%; border-bottom: 1px solid rgba(0, 0, 0, 0.2); padding: 5px 10px; margin-top: 15px; display: flex; justify-content: space-between;"
+                        <li style="width: 93%; padding: 0 4%; border-radius: 50px; display: flex; justify-content: space-between;"
                             v-for="depense in depenses" :key="depense.id">
-                            <div style="display: block;">
-                                <h4 style="margin-top: 0px;"> {{ depense.typeDepense }}</h4> <br>
-                                <h4 style="margin-top: -40px;">{{ depense.libelle }}</h4>
+                            <div style="display: block; width: 20%;">
+                                <h4 style="margin: 0px;"> {{ depense.typeDepense }}<br/><span> {{ depense.libelle }}</span></h4>
+                               
                             </div>
-                            <div>
                                 <h4 style="color: #F2994A; ">{{ depense.montant }} fcfa</h4>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -181,7 +179,7 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'profil',
+            currentPage: 'depense',
             userId: null,
             vehicleId: null,
             typeDepenses: [],
@@ -271,7 +269,7 @@ export default {
         async fetchCurrentUser() {
             const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
 
-            const usersRef = collection(db, 'users');
+            const usersRef = collection(db, TABLE.USER);
             const queryRef = query(usersRef, where('_id', '==', userId));
 
             try {
@@ -475,8 +473,16 @@ ul {
 li {
     display: inline;
     margin-right: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
-
+.dMois li:hover{
+    border: 1px solid #F2994A;
+    background: transparent!important;
+    transform: scale(1.03);
+}
+.dMois li{
+    transition: all 0.3s;
+}
 li:hover {
     cursor: pointer;
 }
