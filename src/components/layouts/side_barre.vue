@@ -140,7 +140,7 @@
                         <li>
                             <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
                             <router-link style="text-decoration: none;"
-                                to="/modifierUser"><span>Parametres</span></router-link>
+                            :to="{ name: 'modifierUser', params: { userId: getUserIdFromLocalStorage() } }"><span>Parametres</span></router-link>
                         </li>
                         <li>
                             <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
@@ -171,6 +171,7 @@
 </template>
 <script>
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import {TABLE} from '@/config/constantes/tables.js';
 import { db } from '@/config/firebaseConfig';
 
 export default {
@@ -180,7 +181,7 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            currentPage: 'depense',
+            currentPage: 'profil',
             userId: null,
             vehicleId: null,
             typeDepenses: [],
@@ -228,12 +229,15 @@ export default {
     },
     
     methods: {
+        getUserIdFromLocalStorage() {
+      return localStorage.getItem('userId');
+    },
         async getAllDepensesByType(libelle) {
             const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
             const totalDepenses = await this.getTotalDepensesByType(libelle);
 
             console.log('Total des dépenses:', totalDepenses);
-            const depensesRef = collection(db, 'depenses');
+            const depensesRef = collection(db, TABLE.DEPENSE);
             const q = query(depensesRef, where('idTypeDepense', '==', id));
             const querySnapshot = await getDocs(q);
             this.depenses = querySnapshot.docs.map((doc) => doc.data());
@@ -246,7 +250,7 @@ export default {
                 typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase())
             )._id;
 
-            const depensesRef = collection(db, 'depenses');
+            const depensesRef = collection(db, TABLE.DEPENSE);
             const q = query(depensesRef, where('idTypeDepense', '==', id));
             const querySnapshot = await getDocs(q);
             const depenses = querySnapshot.docs.map((doc) => doc.data());
@@ -297,7 +301,7 @@ export default {
         async fetchDepenses() {
             try {
                 this.loading = true;
-                const querySnapshot = await getDocs(collection(db, 'depenses'));
+                const querySnapshot = await getDocs(collection(db, TABLE.DEPENSE));
                 this.depenses = querySnapshot.docs.map((doc) => doc.data());
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses :', error);
@@ -306,7 +310,7 @@ export default {
         async fetchTypeDepense() {
             try {
                 this.loading = true;
-                const querySnapshot = await getDocs(collection(db, 'typeDepenses'));
+                const querySnapshot = await getDocs(collection(db, TABLE.TYPE_DEPENSE));
                 this.typeDepenses = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
 
 

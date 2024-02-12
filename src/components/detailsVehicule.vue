@@ -42,6 +42,7 @@
 <script>
 import { collection, getDocs, where, query} from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
+import {TABLE} from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
 
 export default {
@@ -72,7 +73,7 @@ export default {
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
-                const q = query(collection(db, 'depenses'), where('vehicleId', '==', vehicleId));
+                const q = query(collection(db, TABLE.DEPENSE), where('vehicleId', '==', vehicleId));
                 const querySnapshot = await getDocs(q);
                 this.depenses = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false;
@@ -82,7 +83,7 @@ export default {
         },
         async fetchVehicle(vehicleId) {
             try {
-                const q = query(collection(db, 'vehicles'), where('vehicleId', '==', vehicleId));
+                const q = query(collection(db, TABLE.CAR), where('vehicleId', '==', vehicleId));
                 const querySnapshot = await getDocs(q);
                 this.vehicles = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false;// Stockage des informations du véhicule dans la propriété correspondante

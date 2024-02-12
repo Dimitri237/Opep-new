@@ -42,6 +42,7 @@
 <script>
 import { collection, getDocs, where, query} from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
+import {TABLE} from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
 
 export default {
@@ -76,7 +77,7 @@ export default {
         async fetchDepenses(idTypeDepense) {
             try {
                 this.loading = true;
-                const q = query(collection(db, 'depenses'), where('idTypeDepense', '==', idTypeDepense));
+                const q = query(collection(db, TABLE.DEPENSE), where('idTypeDepense', '==', idTypeDepense));
                 const querySnapshot = await getDocs(q);
                 this.depenses = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false;

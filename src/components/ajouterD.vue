@@ -84,6 +84,7 @@
 </template>
 <script>
 import { db } from '@/config/firebaseConfig';
+import {TABLE} from '@/config/constantes/tables.js';
 import { getDocs, collection, setDoc, doc, query, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -133,7 +134,7 @@ export default {
     containers.addEventListener('mouseleave', this.handleMouseLeave);
     try {
       this.loading = true;
-      getDocs(collection(db, 'typeDepenses'))
+      getDocs(collection(db, TABLE.TYPE_DEPENSE))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             this.typeDepenses.push({ _id: doc.id, ...doc.data() });
@@ -143,7 +144,7 @@ export default {
           if (this.typeDepenses.length) { this.selectedTypeDepense = this.typeDepenses[0] }
 
         });
-      getDocs(collection(db, 'sousTypeDepense'))
+      getDocs(collection(db, TABLE.SOUS_TYPE_DEPENSE))
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             this.sousTypeDepenses.push({ _id: doc.id, ...doc.data() });
@@ -232,7 +233,7 @@ export default {
         vehicleId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
       };
       try {
-        setDoc(doc(db, 'depenses', depense._id), depense);
+        setDoc(doc(db, TABLE.DEPENSE, depense._id), depense);
 
         this.loading = false;
         this.$router.push('/mesVehicules');
@@ -251,7 +252,7 @@ export default {
       console.log(this.selectedSousTypeDepense._id);
     },
     async fetchSousTypeDepense(idTypeDepense) {
-      const sousTypeDepensesRef = collection(db, 'sousTypeDepense');
+      const sousTypeDepensesRef = collection(db, TABLE.SOUS_TYPE_DEPENSE);
       const q = query(sousTypeDepensesRef, where('idTypeDepense', '==', idTypeDepense));
       const querySnapshot = await getDocs(q);
       console.log(this.selectedSousTypeDepenses);
@@ -259,7 +260,7 @@ export default {
     },
     async fetchVehicles() {
       try {
-        const querySnapshot = await getDocs(collection(db, 'vehicles'));
+        const querySnapshot = await getDocs(collection(db, TABLE.CAR));
         this.vehicles = querySnapshot.docs.map(doc => ({ ...doc.data() }));
       } catch (error) {
         console.error('Erreur lors de la récupération des véhicules :', error);

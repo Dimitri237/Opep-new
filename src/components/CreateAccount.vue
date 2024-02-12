@@ -32,6 +32,7 @@
 import { uuid } from 'vue-uuid';
 import bcryptjs from 'bcryptjs';
 import { firestore } from '@/config/firebaseConfig';
+import {TABLE} from '@/config/constantes/tables';
 import { setDoc, doc } from 'firebase/firestore';
 
 
@@ -63,7 +64,7 @@ export default {
       };
 
 
-      setDoc(doc(firestore, 'users', user._id), { ...user })
+      setDoc(doc(firestore, TABLE.USER, user._id), { ...user })
         .then(() => {
           // Données enregistrées avec succès
           this.$router.push("/auth");

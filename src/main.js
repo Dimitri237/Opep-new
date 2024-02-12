@@ -16,7 +16,11 @@ const routes = [
   //{ path: '/LoadingPage', component: LoadingPage },
   { path: '/auth', component: AuthentificationPage },
   { path: '/ajouterV', component: ajouterV },
-  { path: '/modifierUser', component: modifierUser },
+  {
+    path: '/modifier-user/:userId?',
+    name: 'modifierUser',
+    component: modifierUser
+  },
   { path: '/ajouterD', component: ajouterD },
   { path: '/MesVehicules', component: MesVehicules },
   { path: '/detailsVehicule/:id', component: detailsVehicule },

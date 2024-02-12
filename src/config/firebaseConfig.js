@@ -4,12 +4,12 @@ import { getFirestore} from 'firebase/firestore';
 
 
  const firebaseConfig = {
-    apiKey: "AIzaSyA2hQVzKO_2RO6WJtKJxtRg1_JbtMt4vbI",
-    authDomain: "opep-new.firebaseapp.com",
-    projectId: "opep-new",
-    storageBucket: "opep-new.appspot.com",
-    messagingSenderId: "990565326767",
-    appId: "1:990565326767:web:c5f6c4ca18d650c1e5995a"
+    apiKey: "AIzaSyB3xwNS3fEjLQU4PoP4mGh2T0bxnCQZfU4",
+    authDomain: "opepapp-42901.firebaseapp.com",
+    projectId: "opepapp-42901",
+    storageBucket: "opepapp-42901.appspot.com",
+    messagingSenderId: "882367393120",
+    appId: "1:882367393120:web:64b87817d15d9571410205"
 };
 
 

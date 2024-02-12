@@ -24,7 +24,7 @@
                             :src="vehicle.imageUrl" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
-                            <h5 style="margin-top: -20px; color: #F2994A;">{{ getTotalDepenses(vehicle._id) }} FCFA ce mois
+                            <h5 style="margin-top: -20px; color: #F2994A;">{{ totalDepenses }} FCFA ce mois
                             </h5>
                         </div>
                         <div style="display: flex; justify-content: space-between; padding: 10px 0;">
@@ -41,6 +41,7 @@
   
 <script>
 import side_barre from '@/components/layouts/side_barre.vue';
+import {TABLE} from '@/config/constantes/tables.js';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 
@@ -84,19 +85,21 @@ export default {
             this.getUserInfos();
         }
     },
+    computed: {
+        totalDepenses() {
+      return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+    }
+    },
     methods: {
         showPage(page) {
             this.currentPage = page;
         },
-        getTotalDepenses(vehicleId) {
-            const depenses = this.depenses.filter((depense) => depense.vehicleId === vehicleId);
-            return depenses.reduce((total, depense) => total + depense.montant, 0);
-        },
+       
         async getVehicles() {
             try {
                 this.loading = true;
                 // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
-                const vehiclesRef = collection(db, 'vehicles');
+                const vehiclesRef = collection(db, TABLE.CAR);
                 const q = query(vehiclesRef, where('userId', '==', this.userId));
                 const querySnapshot = await getDocs(q);
 
@@ -113,7 +116,7 @@ export default {
         },
         async getUserInfos() {
             try {
-                const usersRef = collection(db, 'users');
+                const usersRef = collection(db, TABLE.USER);
                 const q = query(usersRef, where('userId', '==', this.userId));
                 console.log(this.userId);
                 const querySnapshot = await getDocs(q);
@@ -125,7 +128,7 @@ export default {
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
-                const querySnapshot = await getDocs(collection(db, 'depenses'));
+                const querySnapshot = await getDocs(collection(db, TABLE.DEPENSE));
                 this.depenses = querySnapshot.docs
                     .map((doc) => doc.data())
                     .filter((depense) => depense.vehicleId === vehicleId);
@@ -299,14 +302,14 @@ button {
     align-items: center;
     justify-content: center;
     height: 100px;
-    margin-top: 150px;
+    margin-top: 170px;
 }
 
 .loading-indicator::after {
     content: "";
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: 3px solid #06283D;
     border-top-color: #F2994A;

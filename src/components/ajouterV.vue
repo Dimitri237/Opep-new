@@ -59,7 +59,7 @@
 <script>
 import { db, firestore } from '@/config/firebaseConfig';
 import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
-
+import {TABLE} from '@/config/constantes/tables.js';
 export default {
   name: 'AddVehicle',
   data() {
@@ -97,7 +97,7 @@ export default {
         this.annees.push(index)
       }
       // Récupérer les marques depuis la base de données Firestore
-      getDocs(collection(db, 'marques')).then((querySnapshot) => {
+      getDocs(collection(firestore, TABLE.CAR_MARQUE)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const marque = doc.data();
           this.marques.push(marque.libelle);
@@ -105,7 +105,7 @@ export default {
       });
 
       // Récupérer les modèles depuis la base de données Firestore
-      getDocs(collection(db, 'modeles')).then((querySnapshot) => {
+      getDocs(collection(db, TABLE.CAR_MODEL)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const modele = doc.data();
           this.modeles.push(modele.libelle);
@@ -137,7 +137,7 @@ export default {
       };
 
       try {
-        setDoc(doc(firestore, 'vehicles', vehicle._id), { ...vehicle })
+        setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle })
 
         alert('Véhicule créé');
         // Réinitialiser les champs du formulaire
@@ -196,6 +196,7 @@ nav {
   color: white;
   border: 1px solid rgba(0, 0, 0, 0.2);
   width: 99.6%;
+  height: auto;
 }
 
 .selectM {
