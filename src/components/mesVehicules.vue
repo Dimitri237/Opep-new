@@ -14,10 +14,11 @@
                 </router-link>
             </div>
             <div>
+                <h1 style="margin-top: 80px; color: #06283d;">Mes véhicules</h1>
                 <div v-if="loading" class="loading-indicator">
                     <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
                 </div>
-                <div v-else class="vList" style="margin-top: 100px;">
+                <div v-else class="vList" style="margin-top: 40px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car animate__animated animate__fadeInRight">
                         <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"

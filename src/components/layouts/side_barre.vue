@@ -5,7 +5,15 @@
             <center>
                 <img style="width: 100px;" src="@/assets/log1.png" alt="" />
             </center>
-            <ul>
+            <div class="profil2">
+                    <img style="width: 40px; height: 40px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+                    <div class="name">
+                        <h1 style="font-size: 15px; color: white;"><span>{{ currentUser ? currentUser.name : '' }}</span>
+                        </h1>
+                    </div>
+                </div>
+            
+            <ul style="margin-top: 40px;">
                 <li>
                     <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
                         @click="showPage('home')">
@@ -105,7 +113,7 @@
                 <div>
                     <h2 style="color: #06283D;">Ce mois</h2>
                     <ul class="dMois">
-                        <li style="width: 93%; padding: 0 4%; border-radius: 50px; display: flex; justify-content: space-between;"
+                        <li style="width: 100%;  display: flex; justify-content: space-between;"
                             v-for="depense in depenses" :key="depense.id">
                             <div style="display: block; width: 20%;">
                                 <h4 style="margin: 0px;"> {{ depense.typeDepense }}<br/><span> {{ depense.libelle }}</span></h4>
@@ -473,15 +481,15 @@ ul {
 li {
     display: inline;
     margin-right: 10px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
 .dMois li:hover{
-    border: 1px solid #F2994A;
     background: transparent!important;
-    transform: scale(1.03);
+    
 }
 .dMois li{
     transition: all 0.3s;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
 }
 li:hover {
     cursor: pointer;
@@ -596,6 +604,16 @@ button {
 .profil h1 {
     font-size: 22px;
 
+}
+.profil2 {
+    display: flex;
+    margin-top: -15px;
+}
+
+.profil2 img {
+    border: 6px solid white;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
 .name {
