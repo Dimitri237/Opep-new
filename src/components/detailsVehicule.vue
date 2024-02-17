@@ -19,7 +19,7 @@
 
 
 
-            <div v-if="loading" class="loading-indicator">
+            <div v-if="loading"  class="loading-indicator">
                 <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
             </div>
             <ul v-else>
@@ -219,7 +219,7 @@ p {
     align-items: center;
     justify-content: center;
     height: 100px;
-    margin-top: 150px;
+    margin-top: 200px;
 }
 
 .loading-indicator::after {
