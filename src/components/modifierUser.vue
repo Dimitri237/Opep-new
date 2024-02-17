@@ -38,7 +38,7 @@
 import side_barre from '@/components/layouts/side_barre.vue';
 import { hashSync, compareSync } from 'bcryptjs';
 import { firestore } from '@/config/firebaseConfig';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import { updateDoc, doc, getDoc } from 'firebase/firestore';
 
 export default {
@@ -64,19 +64,19 @@ export default {
 
     methods: {
         async getOldHashedPassword() {
-        try {
-          const userDocRef = doc(firestore, TABLE.USER, this.currentUserID);
-          const userSnapshot = await getDoc(userDocRef);
-          if (userSnapshot.exists()) {
-            const userData = userSnapshot.data();
-            this.oldHashedPassword = userData.password;
-          } else {
-            console.error('Utilisateur non trouvé');
-          }
-        } catch (error) {
-          console.error('Erreur lors de la récupération de l\'ancien mot de passe:', error);
-        }
-      },
+            try {
+                const userDocRef = doc(firestore, TABLE.USER, this.currentUserID);
+                const userSnapshot = await getDoc(userDocRef);
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.data();
+                    this.oldHashedPassword = userData.password;
+                } else {
+                    console.error('Utilisateur non trouvé');
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération de l\'ancien mot de passe:', error);
+            }
+        },
         updateAccount() {
             this.loading = true;
             // Vérification de l'ancien mot de passe
@@ -205,4 +205,5 @@ label {
     background-color: transparent;
     color: rgba(51, 167, 226, 1);
     border: 1px solid rgba(51, 167, 226, 1);
-}</style>
+}
+</style>

@@ -22,9 +22,9 @@
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car animate__animated animate__fadeInRight">
                         <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"
-                            :src="vehicle.imageUrl" alt="Image de la voiture" />
+                            :src="vehicle.images[0].url" alt="Image de la voiture" />
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
-                            <h4 style="color: #06283dc9;">{{ vehicle.marque }} {{ vehicle.modele }}</h4>
+                            <h4 style="color: #06283dc9;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }}</h4>
                             <h5 style="margin-top: -20px; color: #F2994A;">{{ totalDepenses }} FCFA ce mois
                             </h5>
                         </div>

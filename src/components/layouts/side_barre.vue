@@ -6,13 +6,13 @@
                 <img style="width: 100px;" src="@/assets/log1.png" alt="" />
             </center>
             <div class="profil2">
-                    <img style="width: 40px; height: 40px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
-                    <div class="name">
-                        <h1 style="font-size: 15px; color: white;"><span>{{ currentUser ? currentUser.name : '' }}</span>
-                        </h1>
-                    </div>
+                <img style="width: 40px; height: 40px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+                <div class="name">
+                    <h1 style="font-size: 15px; color: white;"><span>{{ currentUser ? currentUser.name : '' }}</span>
+                    </h1>
                 </div>
-            
+            </div>
+
             <ul style="margin-top: 40px;">
                 <li>
                     <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
@@ -109,21 +109,6 @@
                     </div>
                 </div>
             </div>
-            <div style="margin: auto; padding-top: 60px!important; width: 100%;">
-                <div>
-                    <h2 style="color: #06283D;">Ce mois</h2>
-                    <ul class="dMois">
-                        <li style="width: 100%;  display: flex; justify-content: space-between;"
-                            v-for="depense in depenses" :key="depense.id">
-                            <div style="display: block; width: 20%;">
-                                <h4 style="margin: 0px;"> {{ depense.typeDepense }}<br/><span> {{ depense.libelle }}</span></h4>
-                               
-                            </div>
-                                <h4 style="color: #F2994A; ">{{ depense.montant }} fcfa</h4>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         <div class="page" v-if="currentPage === 'stats'">
@@ -146,7 +131,7 @@
                         <li>
                             <img style="width: 30px; margin: auto 0px;" src="@/assets/settings.png" alt="">
                             <router-link style="text-decoration: none;"
-                            :to="{ name: 'modifierUser', params: { userId: getUserIdFromLocalStorage() } }"><span>Parametres</span></router-link>
+                                :to="{ name: 'modifierUser', params: { userId: getUserIdFromLocalStorage() } }"><span>Parametres</span></router-link>
                         </li>
                         <li>
                             <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
@@ -177,11 +162,11 @@
 </template>
 <script>
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import { db } from '@/config/firebaseConfig';
 
 export default {
-    
+
     components: {
     },
     data() {
@@ -233,11 +218,11 @@ export default {
         },
 
     },
-    
+
     methods: {
         getUserIdFromLocalStorage() {
-      return localStorage.getItem('userId');
-    },
+            return localStorage.getItem('userId');
+        },
         async getAllDepensesByType(libelle) {
             const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
             const totalDepenses = await this.getTotalDepensesByType(libelle);
@@ -482,15 +467,18 @@ li {
     display: inline;
     margin-right: 10px;
 }
-.dMois li:hover{
-    background: transparent!important;
-    
+
+.dMois li:hover {
+    background: transparent !important;
+
 }
-.dMois li{
+
+.dMois li {
     transition: all 0.3s;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
 }
+
 li:hover {
     cursor: pointer;
 }
@@ -605,6 +593,7 @@ button {
     font-size: 22px;
 
 }
+
 .profil2 {
     display: flex;
     margin-top: -15px;
@@ -644,5 +633,4 @@ button {
 
 .list li img {
     height: 30px !important;
-}
-</style>
+}</style>

@@ -47,7 +47,7 @@
           <div><label for="">Vehicule</label></div>
           <select class="selectM" v-model="selectedVehicle">
             <option v-for="vehicle in vehicles" :value="vehicle._id" v-bind:key="vehicle._id">{{ vehicle._id }} &#8226; {{
-              vehicle.marque }} &#8226; {{ vehicle.modele }}</option>
+              vehicle.marque.libelle }} &#8226; {{ vehicle.model.libelle }}</option>
           </select>
         </div>
         <div class="input-field" style="display: flex; justify-content: space-between;">
@@ -87,6 +87,7 @@ import { db } from '@/config/firebaseConfig';
 import {TABLE} from '@/config/constantes/tables.js';
 import { getDocs, collection, setDoc, doc, query, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 
 export default {
   name: 'AddDepense',
@@ -95,10 +96,6 @@ export default {
       typeDepense: '',
       montant: '',
       libelle: '',
-      //date: '',
-      date: new Date().toISOString().substr(0, 10),
-      createdAt: new Date().toISOString().substr(0, 10),
-      updatedAt: new Date().toISOString().substr(0, 10),
       loading: false,
       selectedImage: null,
       isAuthenticated: false,
@@ -220,17 +217,16 @@ export default {
         return;
       }
       const depense = {
-        _id: uuidv4(),// Générer un ID unique pour la dépense
-        typeDepense: this.selectedTypeDepense.libelle,
-        idTypeDepense: this.selectedTypeDepense._id,
-        //sousTypeDepense: this.selectedSousTypeDepense._id,
-        montant: this.montant,
-        libelle: this.libelle,
-        date: this.date,
-        createdAt: this.createdAt,
-        updatedAt: this.updatedAt,
-        quantite: this.quantite,
-        vehicleId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
+        _id: uuidv4(),
+        createdAt: moment().format(),
+        date: moment().format(),
+        description: this.libelle,
+        montant: Number(this.montant),
+        quantite: Number(this.quantite),
+        type_depense: this.selectedTypeDepense._id,
+        updatedAt: moment().format(),
+        // Générer un ID unique pour la dépense
+        vehiculeId: this.selectedVehicle // Ajouter l'ID du véhicule au document de la dépense
       };
       try {
         setDoc(doc(db, TABLE.DEPENSE, depense._id), depense);

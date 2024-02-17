@@ -9,71 +9,81 @@
                         <h3>Dépenses liees au vehicule</h3>
                         <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">dépenses liees au vehicule selectionne</p>
                     </div>
-                    
+
                 </router-link>
-                <h2 style="color: #06283D; display: flex;width: 100%;"><h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span></h2>
+                <h2 style="color: #06283D; display: flex;width: 100%;">
+                    <h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span
+                        style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span>
+                </h2>
             </div>
-        
 
 
-        <div v-if="loading" class="loading-indicator">
-            <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+
+            <div v-if="loading" class="loading-indicator">
+                <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+            </div>
+            <ul v-else>
+                <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
+                    <h4>
+                        <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Montant : </p><span> {{ depense.montant }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Description : </p><span>{{ depense.description }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Date : </p><span>{{ depense.date }}</span>
+                    </h4>
+                </li>
+            </ul>
         </div>
-        <ul v-else>
-            <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
-                <h4>
-                    <p>Type de dépense : </p><span> {{ depense.typeDepense }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Montant : </p><span> {{ depense.montant }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Description : </p><span>{{ depense.libelle }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Date : </p><span>{{ depense.date }}</span>
-                </h4>
-            </li>
-        </ul>
-    </div>
     </div>
 </template>
   
 <script>
-import { collection, getDocs, where, query} from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
 
 export default {
     components: {
         side_barre
-  },
+    },
     data() {
         return {
             depenses: [],
             vehicles: [],
+            typeDepenses: [],
             loading: false
         };
     },
     mounted() {
+        console.log({ typeD: this.depenses });
         const vehicleId = this.$route.params.id;
         this.fetchDepenses(vehicleId);
         this.fetchVehicle(vehicleId);
         console.log('Valeur de this.$route.params.id:', this.$route.params.id);
+
+
+
+        this.findTypeDepense()
     },
     computed: {
-    // Calcul de la somme totale des dépenses
-    totalDepenses() {
-      return this.depenses.reduce((total, depense) => total + depense.montant, 0);
-    }
-  },
+        // Calcul de la somme totale des dépenses
+        totalDepenses() {
+            console.log({ depense: this.depenses });
+            return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+        }
+    },
     methods: {
-       
+
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
-                const q = query(collection(db, TABLE.DEPENSE), where('vehicleId', '==', vehicleId));
+                const q = query(collection(db, TABLE.DEPENSE), where('vehiculeId', '==', vehicleId));
                 const querySnapshot = await getDocs(q);
                 this.depenses = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false;
@@ -91,6 +101,18 @@ export default {
                 console.error('Erreur lors de la récupération des informations du véhicule :', error);
             }
         },
+        async findTypeDepense() {
+            try {
+                const q = query(collection(db, TABLE.TYPE_DEPENSE));
+                const querySnapshot = await getDocs(q);
+                this.typeDepenses = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations du véhicule :', error);
+            }
+        },
+        findTypeDepenseById(id) {
+            return this.typeDepenses.find(type => type._id === id).libelle
+        },
 
     },
 };
@@ -102,21 +124,24 @@ body {
     width: 100%;
     padding: 0;
     margin: 0;
-    background-color: rgba(0, 0, 0, 0.5)!important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
     font-family: Monda;
 }
+
 .all {
-    background-color: rgba(0, 0, 0, 0.05)!important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
     width: 100%;
     margin: 0;
     padding: 0;
     display: flex !important;
     font-family: Monda;
 }
+
 .detail {
     width: 95%;
     margin: auto;
 }
+
 h3 {
     color: #06283D;
 }
@@ -125,6 +150,7 @@ p {
     color: #06283D;
     font-size: 12px;
 }
+
 .head {
     width: 37.5%;
     position: fixed;
@@ -132,6 +158,7 @@ p {
     background-color: #ffffff;
     z-index: 9999;
 }
+
 .new_car {
     width: 100%;
     display: flex;
@@ -165,10 +192,12 @@ li {
     overflow-y: auto;
     font-family: Monda;
 }
+
 .container::-webkit-scrollbar {
     width: 0.1em;
     /* Largeur de la barre de défilement */
 }
+
 .container::-webkit-scrollbar-thumb {
     background-color: transparent;
     /* Couleur de la poignée de défilement */
@@ -217,5 +246,4 @@ span {
     margin: auto;
     width: 50%;
     text-align: right;
-}
-</style>
+}</style>

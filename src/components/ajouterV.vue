@@ -12,14 +12,14 @@
         <div class="input-field">
           <div><label for="">Marque véhicule</label></div>
           <select class="selectM" name="" v-model="marque" id="marques-select">
-            <option v-for="marque in marques" :value="marque" v-bind:key="marque">{{ marque }}</option>
+            <option v-for="marque in marques" :value="marque._id" v-bind:key="marque._id">{{ marque.libelle }}</option>
           </select>
         </div>
         <div style="display: flex; justify-content: space-between; margin-top: 20px;">
           <div style="width: 47%;">
             <div><label for="">Modele véhicule</label></div>
             <select class="selectM" name="" v-model="modele" id="modeles-select">
-              <option v-for="modele in modeles" :value="modele" v-bind:key="modele">{{ modele }}</option>
+              <option v-for="modele in modeles" :value="modele._id" v-bind:key="modele._id">{{ modele.libelle }}</option>
             </select>
           </div>
           <div style="width: 47%;">
@@ -36,7 +36,7 @@
         </div>
         <div class="input-field">
           <div><label for="">Immatriculation</label></div>
-          <input v-model="_id" placeholder="CMD4AS5" required>
+          <input v-model="id" placeholder="CMD4AS5" required>
         </div>
         <div class="input-field">
           <div><label for="password">Ajouter une image</label></div>
@@ -57,20 +57,22 @@
   </div>
 </template>
 <script>
-import { db, firestore } from '@/config/firebaseConfig';
+import { db, firestore, uploadToFirebase } from '@/config/firebaseConfig';
 import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
+import  moment  from 'moment';
+
 export default {
   name: 'AddVehicle',
   data() {
     return {
+      id:'',
       marque: '',
       modele: '',
       color: '',
       loading: false,
-      date: new Date().toISOString().substr(0, 10),
-      createdAt: new Date().toISOString().substr(0, 10),
-      updatedAt: new Date().toISOString().substr(0, 10),
+      createdAt: moment().format(),
+      updatedAt: moment().format(),
       selectedImage: null,
       isAuthenticated: false,
       userId: null,
@@ -78,6 +80,7 @@ export default {
       modeles: [],
       annees: [],
       annee: [],
+      fileName:''
     };
   },
   created() {
@@ -91,24 +94,25 @@ export default {
   },
   mounted() {
     try {
-      const date = new Date()
+      const date = new Date();
 
-      for (let index = date.getFullYear()- 24; index <= date.getFullYear(); index++) {
-        this.annees.push(index)
+      for (let index = date.getFullYear() - 24; index <= date.getFullYear(); index++) {
+        this.annees.push(index);
       }
+
       // Récupérer les marques depuis la base de données Firestore
       getDocs(collection(firestore, TABLE.CAR_MARQUE)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const marque = doc.data();
-          this.marques.push(marque.libelle);
+          const marque = {_id:doc.id, ...doc.data()}
+          this.marques.push(marque);
         });
       });
 
       // Récupérer les modèles depuis la base de données Firestore
       getDocs(collection(db, TABLE.CAR_MODEL)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const modele = doc.data();
-          this.modeles.push(modele.libelle);
+          const modele = {_id:doc.id, ...doc.data()};
+          this.modeles.push(modele);
         });
       });
     } catch (error) {
@@ -124,20 +128,24 @@ export default {
         return;
       }
 
-      const vehicle = {
-        marque: this.marque,
-        modele: this.modele,
+
+      try {
+        
+        const url = await uploadToFirebase(this.selectedImage, this.fileName);
+        const vehicle = {
+          _id: this.id, // Veuillez spécifier la source de cet ID (_id)
+        marque: this.marques.find(m=>m._id === this.marque),
+        model: this.modeles.find(m=>m._id === this.modele),
         annee: this.annee,
         color: this.color,
-        imageUrl: this.selectedImage,
-        _id: this._id, // Veuillez spécifier la source de cet ID (_id)
         userId: this.userId,
+        images: [{createdAt: moment().format(),url}],
         createdAt: this.createdAt,
         updatedAt: this.updatedAt
       };
+      console.log({vehicle});
 
-      try {
-        setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle })
+        await setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle });
 
         alert('Véhicule créé');
         // Réinitialiser les champs du formulaire
@@ -150,6 +158,7 @@ export default {
     },
     selectImage(event) {
       const file = event.target.files[0];
+      this.fileName=  file.name
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -162,8 +171,6 @@ export default {
 };
 </script>
 <style scoped>
-.all {}
-
 nav {
   padding-top: 10px;
 }
