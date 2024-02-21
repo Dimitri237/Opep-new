@@ -18,7 +18,7 @@
                 <div v-if="loading" class="loading-indicator">
                     <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
                 </div>
-                <div v-else class="vList" style="margin-top: 40px;">
+                <div v-else- class="vList" style="margin-top: 40px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car animate__animated animate__fadeInRight">
                         <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"
@@ -42,7 +42,7 @@
   
 <script>
 import side_barre from '@/components/layouts/side_barre.vue';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 
@@ -88,14 +88,14 @@ export default {
     },
     computed: {
         totalDepenses() {
-      return this.depenses.reduce((total, depense) => total + depense.montant, 0);
-    }
+            return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+        }
     },
     methods: {
         showPage(page) {
             this.currentPage = page;
         },
-       
+
         async getVehicles() {
             try {
                 this.loading = true;
@@ -106,7 +106,8 @@ export default {
 
                 this.vehicles = querySnapshot.docs.map((doc) => doc.data());
                 this.loading = false; // Fin du chargement
-
+                // Stocker les véhicules dans le localStorage
+                localStorage.setItem('vehicleIds', JSON.stringify(this.vehicles.map((vehicle) => vehicle._id)));
                 // Pour chaque véhicule, récupérer les dépenses associées
                 this.vehicles.forEach((vehicle) => {
                     this.fetchDepenses(vehicle._id);
@@ -418,4 +419,5 @@ button {
 
 .list li img {
     height: 30px !important;
-}</style>
+}
+</style>

@@ -17,6 +17,11 @@
         <input id="contact" v-model="contact" required>
       </div>
       <div class="input-field">
+        <div> <label for="photoProfil">Photo de profil</label></div>
+        <input type="file" id="photoProfil" accept="image/*" @change="selectImage" required>
+        <img class="affiche" :src="selectedImage" v-if="selectedImage">
+      </div>
+      <div class="input-field">
         <div><label for="password">Mot de passe:</label></div>
         <input type="password" id="password" v-model="password" required>
       </div>
@@ -31,9 +36,10 @@
 <script>
 import { uuid } from 'vue-uuid';
 import bcryptjs from 'bcryptjs';
-import { firestore } from '@/config/firebaseConfig';
+import { firestore, uploadToFirebase } from '@/config/firebaseConfig';
 import {TABLE} from '@/config/constantes/tables';
 import { setDoc, doc } from 'firebase/firestore';
+import  moment  from 'moment';
 
 
 export default {
@@ -42,23 +48,33 @@ export default {
       name: "",
       contact: "",
       password: "",
+      selectedImage: null,
       loading: false,
       currentUserID: null
     };
   },
   methods: {
-    createAccount() {
+    selectImage(event) {
+      const file = event.target.files[0];
+      this.fileName=  file.name
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.selectedImage = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    async createAccount() {
       this.loading = true;
-      // Créer un compte utilisateur avec l'email et le mot de passe
       const saltRounds = 10;
-      //const salt = randomBytes(16).toString('hex');
       const hashedPassword = bcryptjs.hashSync(this.password, saltRounds);
       console.log('Mot de passe haché :', hashedPassword);
-      // Succès de la création du compte, vous pouvez enregistrer les autres données dans Firebase Firestore
-      // Enregistrer les autres données dans Firestore
+      const url = await uploadToFirebase(this.selectedImage, this.fileName);
       const user = {
         name: this.name,
         contact: this.contact,
+        images: [{createdAt: moment().format(),url}],
         password: hashedPassword,
         _id: uuid.v4(),
       };

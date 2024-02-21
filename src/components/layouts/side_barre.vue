@@ -5,24 +5,18 @@
             <center>
                 <img style="width: 100px;" src="@/assets/log1.png" alt="" />
             </center>
-            <div class="profil2">
-                <img style="width: 40px; height: 40px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
-                <div class="name">
-                    <h1 style="font-size: 15px; color: white;"><span>{{ currentUser ? currentUser.name : '' }}</span>
-                    </h1>
-                </div>
-            </div>
+
 
             <ul style="margin-top: 40px;">
                 <li>
-                    <button :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
+                    <button class="butt" :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
                         @click="showPage('home')">
                         <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
                         <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
                     </button>
                 </li>
                 <li>
-                    <button :class="{ selected: currentPage === 'depense' }" style="display: flex;text-decoration: none;"
+                    <button class="butt" :class="{ selected: currentPage === 'depense' }" style="display: flex;text-decoration: none;"
                         @click="showPage('depense')">
                         <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
                             class="fas fa-layer-group"></i>
@@ -30,14 +24,14 @@
                     </button>
                 </li>
                 <li>
-                    <button :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
+                    <button class="butt" :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
                         @click="showPage('stats')">
                         <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }" class="fas fa-chart-bar"></i>
                         <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
                     </button>
                 </li>
                 <li>
-                    <button :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
+                    <button class="butt" :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
                         @click="showPage('profil')">
                         <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
                         <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
@@ -53,24 +47,15 @@
                 Mr. <span>{{ currentUser ? currentUser.name : '' }}</span></h1>
             <div class="cont">
                 <div class="cont1">
+                    <img src="@/assets/toyota.png" alt="image 1">
+                </div>
 
-                </div>
-                <div class="cont2">
-                    <div></div>
-                    <div></div>
-                </div>
-                <div class="cont3">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
             </div>
         </div>
 
         <div style=" width: 100%;" class="page" v-if="currentPage === 'depense'">
             <div class="head">
-                <router-link style="margin-left: -15px;" to="/ajouterD" class="new_car">
+                <router-link style="margin: auto;" to="/ajouterD" class="new_car">
                     <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
                     <div style="margin: auto 10px; width: 500px;">
                         <h3>Ajouter une dépense</h3>
@@ -80,7 +65,7 @@
                 </router-link>
             </div>
 
-            <div style="margin-top: 100px; width: 100%;">
+            <!-- <div style="margin-top: 100px; width: 100%;">
                 <h2 style="font-size: 26px; color: #06283D;">Résumé</h2>
                 <div class="resume">
                     <div style="display: flex; justify-content: space-between;">
@@ -108,6 +93,44 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            <div style="margin-top: 100px;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; margin: auto;">
+                        <button class="bDate" @click="selectButton('button1')"
+                            :class="{ active: selectedButton === 'button1' }">Cette semaine</button>
+                        <button class="bDate" @click="selectButton('button2')"
+                            :class="{ active: selectedButton === 'button2' }">Ce mois</button>
+                        <button class="bDate" @click="selectButton('button3')"
+                            :class="{ active: selectedButton === 'button3' }">Cette annee</button>
+                    </div>
+
+                    <div v-if="selectedButton === 'button1'">
+                        <ul style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByWeek" :key="depense._id">
+                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="selectedButton === 'button2'">
+                        <ul  style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByMonth" :key="depense._id">
+                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="selectedButton === 'button3'">
+                        <ul  style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByYear" :key="depense._id">
+                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -119,7 +142,8 @@
         <div class="page" v-if="currentPage === 'profil'">
             <div>
                 <div class="profil">
-                    <img style="width: 80px; height: 80px; margin: auto 10px;" src="@/assets/img1 (4).jpg" alt="">
+                    <img style="width: 60px; margin-top: 10px; border-radius: 50%; height: 60px;"
+                        :src="currentUser.images[0].url" alt="photoProfil" />
                     <div class="name">
                         <h1 style="color: #06283D;"><span>{{ currentUser ? currentUser.name : '' }}</span>
                         </h1>
@@ -164,6 +188,7 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { TABLE } from '@/config/constantes/tables.js';
 import { db } from '@/config/firebaseConfig';
+import moment from 'moment';
 
 export default {
 
@@ -171,6 +196,7 @@ export default {
     },
     data() {
         return {
+            selectedButton: null,
             isAuthenticated: false,
             currentPage: 'depense',
             userId: null,
@@ -178,17 +204,21 @@ export default {
             typeDepenses: [],
             vehicles: [],
             currentUser: null, // Variable pour stocker les informations de l'utilisateur connecté
-            depenses: [],
+
             idTypeDepense: null,
             moisActuel: new Date().getMonth(),
+            depensesByWeek: [],
+            depensesByMonth: [],
+            depensesByYear: [],
             loading: false
         };
     },
     mounted() {
         try {
-            this.fetchDepenses();
+            this.fetchDepensesByWeek();
+            this.fetchDepensesByMonth();
+            this.fetchDepensesByYear();
             this.fetchCurrentUser();
-            this.fetchTypeDepense();
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -208,56 +238,91 @@ export default {
             this.fetchCurrentUser();
         }
     },
-    computed: {
-        depensesFiltrees() {
-            const moisActuel = new Date().getMonth();
-            return this.depenses.filter((expense) => expense.mois === moisActuel);
-        },
-        totalDepenses() {
-            return this.depenses.reduce((total, depense) => total + depense.montant, 0);
-        },
-
-    },
-
     methods: {
+        selectButton(button) {
+            this.selectedButton = button;
+        },
+        async fetchDepensesByWeek() {
+            try {
+
+                var vehicleIds = localStorage.getItem('vehicleIds');
+                if (vehicleIds) {
+                    vehicleIds = JSON.parse(vehicleIds);
+                    const startDate = moment().startOf('week').format(); // Début de la semaine en cours
+                    const endDate = moment().endOf('week').format(); // Fin de la semaine en cours
+
+                    const depensesRef = collection(db, TABLE.DEPENSE)
+                    const q = query(
+                        depensesRef, where('vehiculeId', 'in', vehicleIds),
+                        where('date', '>=', startDate), where('date', '<=', endDate)
+                    );
+                    const depensesQuerySnapshot = await getDocs(q)
+                    // 
+
+                    this.depensesByWeek = depensesQuerySnapshot.docs.map(doc => doc.data());
+                    console.log({ depenses: this.depensesByWeek });
+                }
+
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses par semaine :', error);
+            }
+        },
+        async fetchDepensesByMonth() {
+            try {
+
+                var vehicleIds = localStorage.getItem('vehicleIds');
+                if (vehicleIds) {
+                    vehicleIds = JSON.parse(vehicleIds);
+                    const startDate = moment().startOf('month').format(); // Début de la semaine en cours
+                    const endDate = moment().endOf('month').format(); // Fin de la semaine en cours
+
+                    const depensesRef = collection(db, TABLE.DEPENSE)
+                    const q = query(
+                        depensesRef, where('vehiculeId', 'in', vehicleIds),
+                        where('date', '>=', startDate), where('date', '<=', endDate)
+                    );
+                    const depensesQuerySnapshot = await getDocs(q)
+                    // 
+
+                    this.depensesByMonth = depensesQuerySnapshot.docs.map(doc => doc.data());
+                    console.log({ depenses: this.depensesByMonth });
+                }
+
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses par mois :', error);
+            }
+        },
+        async fetchDepensesByYear() {
+            try {
+
+                var vehicleIds = localStorage.getItem('vehicleIds');
+                if (vehicleIds) {
+                    vehicleIds = JSON.parse(vehicleIds);
+                    const startDate = moment().startOf('Year').format(); // Début de la semaine en cours
+                    const endDate = moment().endOf('Year').format(); // Fin de la semaine en cours
+
+                    const depensesRef = collection(db, TABLE.DEPENSE)
+                    const q = query(
+                        depensesRef, where('vehiculeId', 'in', vehicleIds),
+                        where('date', '>=', startDate), where('date', '<=', endDate)
+                    );
+                    const depensesQuerySnapshot = await getDocs(q)
+                    // 
+
+                    this.depensesByYear = depensesQuerySnapshot.docs.map(doc => doc.data());
+                    console.log({ depenses: this.depensesByYear });
+                }
+
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses par annee :', error);
+            }
+        },
+
         getUserIdFromLocalStorage() {
             return localStorage.getItem('userId');
-        },
-        async getAllDepensesByType(libelle) {
-            const id = this.typeDepenses.find((typeDepense) => typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase()))._id;
-            const totalDepenses = await this.getTotalDepensesByType(libelle);
-
-            console.log('Total des dépenses:', totalDepenses);
-            const depensesRef = collection(db, TABLE.DEPENSE);
-            const q = query(depensesRef, where('idTypeDepense', '==', id));
-            const querySnapshot = await getDocs(q);
-            this.depenses = querySnapshot.docs.map((doc) => doc.data());
-
-            console.log(this.depenses);
-            this.$router.push('/listingDepenses/' + id);
-        },
-        async getTotalDepensesByType(libelle) {
-            const id = this.typeDepenses.find((typeDepense) =>
-                typeDepense.libelle.toLowerCase().includes(libelle.toLowerCase())
-            )._id;
-
-            const depensesRef = collection(db, TABLE.DEPENSE);
-            const q = query(depensesRef, where('idTypeDepense', '==', id));
-            const querySnapshot = await getDocs(q);
-            const depenses = querySnapshot.docs.map((doc) => doc.data());
-
-            // Calculer le total des dépenses
-            const totalDepenses = depenses.reduce((total, depense) => total + depense.montant, 0);
-            const result = {};
-
-            depenses.forEach((depense) => {
-                if (result[depense.idTypeDepense]) {
-                    result[depense.idTypeDepense] += depense.montant;
-                } else {
-                    result[depense.idTypeDepense] = depense.montant;
-                }
-            });
-            return totalDepenses;
         },
         async fetchCurrentUser() {
             const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur connecté depuis le localStorage
@@ -289,32 +354,6 @@ export default {
             // Rediriger l'utilisateur vers la page de connexion
             this.$router.push("/auth");
         },
-        async fetchDepenses() {
-            try {
-                this.loading = true;
-                const querySnapshot = await getDocs(collection(db, TABLE.DEPENSE));
-                this.depenses = querySnapshot.docs.map((doc) => doc.data());
-            } catch (error) {
-                console.error('Erreur lors de la récupération des dépenses :', error);
-            }
-        },
-        async fetchTypeDepense() {
-            try {
-                this.loading = true;
-                const querySnapshot = await getDocs(collection(db, TABLE.TYPE_DEPENSE));
-                this.typeDepenses = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
-
-
-            } catch (error) {
-                console.error('Erreur lors de la récupération des dépenses :', error);
-            } finally {
-                this.loading = false;
-            }
-        },
-        filtrerParMois() {
-            // Appeler cette méthode pour mettre à jour les dépenses filtrées
-            this.depensesFiltrees;
-        }
     }
 };
 </script>
@@ -451,6 +490,27 @@ p {
     /* Couleur de la poignée de défilement */
 }
 
+.bDate {
+    width: 25%;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 50px;
+    color: rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #06283dab;
+}
+
+.bDate:hover {
+    cursor: pointer;
+}
+
 .container::-webkit-scrollbar-thumb {
     background-color: transparent;
     /* Couleur de la poignée de défilement */
@@ -463,7 +523,7 @@ ul {
     padding: 0;
 }
 
-li {
+.men {
     display: inline;
     margin-right: 10px;
 }
@@ -491,7 +551,7 @@ li:hover {
     z-index: 9999;
 }
 
-button {
+.butt {
     border: none;
     background: none;
     cursor: pointer;
@@ -544,9 +604,22 @@ button {
 
 .cont1 {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.05);
     height: 300px;
     border-radius: 15px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    animation: scrollGallery 10s linear infinite;
+}
+
+@keyframes scrollGallery {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 .cont2 {

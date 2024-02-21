@@ -24,18 +24,15 @@
             </div>
             <ul v-else>
                 <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
-                    <h4>
+                    <div style="display: flex;">
                         <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
-                    </h4>
-                    <h4 style="margin-top: -40px;">
+                    </div>
+                    <div style="display: flex; margin-top: -20px;">
                         <p>Montant : </p><span> {{ depense.montant }}</span>
-                    </h4>
-                    <h4 style="margin-top: -40px;">
-                        <p>Description : </p><span>{{ depense.description }}</span>
-                    </h4>
-                    <h4 style="margin-top: -40px;">
+                    </div>
+                    <div style="display: flex; margin-top: -20px;">
                         <p>Date : </p><span>{{ depense.date }}</span>
-                    </h4>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -169,18 +166,15 @@ p {
 }
 
 ul {
-    justify-content: space-between;
     padding: 0;
     margin-top: 200px;
-    width: 95%;
+    width: 100%;
 }
 
 li {
     width: 100%;
     list-style: none;
-    padding: 0 15px;
-    border-radius: 15px;
-    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .container {
