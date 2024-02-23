@@ -32,16 +32,28 @@
 
         <div class="input-field">
           <div><label for="">Couleur</label></div>
-          <input v-model="color" placeholder="Rouge, Jaune, verte ...etc" required>
+          <input class="input" v-model="color" placeholder="Rouge, Jaune, verte ...etc" required>
         </div>
         <div class="input-field">
           <div><label for="">Immatriculation</label></div>
-          <input v-model="id" placeholder="CMD4AS5" required>
+          <input class="input" v-model="id" placeholder="CMD4AS5" required>
         </div>
         <div class="input-field">
-          <div><label for="password">Ajouter une image</label></div>
-          <input class="selectI" type="file" accept="image/*" @change="selectImage">
-          <img class="affiche" :src="selectedImage" v-if="selectedImage">
+          <div><label for="password">Ajouter des images</label></div>
+          <div style=" display: flex; justify-content: space-between;">
+            <div class="inbox">
+              <input class="box" type="file" accept="image/*" @change="onFileSelected" id="image">
+              <img v-if="selectedImage" :src="selectedImageURL" alt="Aperçu de l'image" class="affiche">
+            </div>
+            <div class="inbox">
+              <input class="box" type="file" accept="image/*" @change="onFileSelected1" id="image1">
+              <img v-if="selectedImage1" :src="selectedImageURL1" alt="Aperçu de l'image" class="affiche">
+            </div>
+            <div class="inbox">
+              <input class="box" type="file" accept="image/*" @change="onFileSelected2" id="image2">
+              <img v-if="selectedImage2" :src="selectedImageURL2" alt="Aperçu de l'image" class="affiche">
+            </div>
+          </div>
         </div>
         <div class="button">
           <button class="btn" type="submit">
@@ -60,27 +72,35 @@
 import { db, firestore, uploadToFirebase } from '@/config/firebaseConfig';
 import { collection, setDoc, doc, getDocs } from 'firebase/firestore';
 import { TABLE } from '@/config/constantes/tables.js';
-import  moment  from 'moment';
+import moment from 'moment';
 
 export default {
   name: 'AddVehicle',
+  
   data() {
     return {
-      id:'',
+      id: '',
       marque: '',
       modele: '',
       color: '',
       loading: false,
       createdAt: moment().format(),
       updatedAt: moment().format(),
+      fileName1: '',
+    fileName2: '',
+    fileName3: '',
       selectedImage: null,
+      selectedImageURL: null,
+      selectedImage1: null,
+      selectedImageURL1: null,
+      selectedImage2: null,
       isAuthenticated: false,
+      selectedImageURL2: null,
       userId: null,
       marques: [],
       modeles: [],
       annees: [],
       annee: [],
-      fileName:''
     };
   },
   created() {
@@ -103,7 +123,7 @@ export default {
       // Récupérer les marques depuis la base de données Firestore
       getDocs(collection(firestore, TABLE.CAR_MARQUE)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const marque = {_id:doc.id, ...doc.data()}
+          const marque = { _id: doc.id, ...doc.data() }
           this.marques.push(marque);
         });
       });
@@ -111,7 +131,7 @@ export default {
       // Récupérer les modèles depuis la base de données Firestore
       getDocs(collection(db, TABLE.CAR_MODEL)).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const modele = {_id:doc.id, ...doc.data()};
+          const modele = { _id: doc.id, ...doc.data() };
           this.modeles.push(modele);
         });
       });
@@ -119,54 +139,68 @@ export default {
       console.error('Erreur lors de la récupération des marques :', error);
     }
   },
-  methods: {
-    async ajouterVehicule() {
-      this.loading = true;
+  methods: {async ajouterVehicule() {
+  this.loading = true;
 
-      if (!this.isAuthenticated) {
-        alert('Vous devez être connecté pour ajouter un véhicule.');
-        return;
-      }
+  if (!this.isAuthenticated) {
+    alert('Vous devez être connecté pour ajouter un véhicule.');
+    return;
+  }
 
+  try {
+    const imageUrls = [];
 
-      try {
-        
-        const url = await uploadToFirebase(this.selectedImage, this.fileName);
-        const vehicle = {
-          _id: this.id, // Veuillez spécifier la source de cet ID (_id)
-        marque: this.marques.find(m=>m._id === this.marque),
-        model: this.modeles.find(m=>m._id === this.modele),
-        annee: this.annee,
-        color: this.color,
-        userId: this.userId,
-        images: [{createdAt: moment().format(),url}],
-        createdAt: this.createdAt,
-        updatedAt: this.updatedAt
-      };
-      console.log({vehicle});
+    if (this.selectedImage) {
+      const imageUrl = await uploadToFirebase(this.selectedImage, this.fileName1);
+      imageUrls.push(imageUrl);
+    }
 
-        await setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle });
+    if (this.selectedImage1) {
+      const imageUrl1 = await uploadToFirebase(this.selectedImage1, this.fileName2);
+      imageUrls.push(imageUrl1);
+    }
 
-        alert('Véhicule créé');
-        // Réinitialiser les champs du formulaire
-        this.$router.push("/mesVehicules");
-      } catch (error) {
-        console.error('Erreur lors du téléchargement de l\'image :', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    selectImage(event) {
-      const file = event.target.files[0];
-      this.fileName=  file.name
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.selectedImage = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
+    if (this.selectedImage2) {
+      const imageUrl2 = await uploadToFirebase(this.selectedImage2, this.fileName3);
+      imageUrls.push(imageUrl2);
+    }
+
+    const vehicle = {
+      _id: this.id, // Veuillez spécifier la source de cet ID (_id)
+      marque: this.marques.find(m => m._id === this.marque),
+      model: this.modeles.find(m => m._id === this.modele),
+      annee: this.annee,
+      color: this.color,
+      userId: this.userId,
+      images: imageUrls.map(url => ({ createdAt: moment().format(), url })),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+
+    await setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle });
+    // Réinitialiser les champs du formulaire
+    this.$router.push("/mesVehicules");
+  } catch (error) {
+    console.error('Erreur lors du téléchargement de l\'image :', error);
+  } finally {
+    this.loading = false;
+  }
+},
+onFileSelected(event) {
+    this.selectedImage = event.target.files[0];
+    this.fileName1 = this.selectedImage.name;
+    this.selectedImageURL = URL.createObjectURL(this.selectedImage);
+  },
+  onFileSelected1(event) {
+    this.selectedImage1 = event.target.files[0];
+    this.fileName2 = this.selectedImage1.name;
+    this.selectedImageURL1 = URL.createObjectURL(this.selectedImage1);
+  },
+  onFileSelected2(event) {
+    this.selectedImage2 = event.target.files[0];
+    this.fileName3 = this.selectedImage2.name;
+    this.selectedImageURL2 = URL.createObjectURL(this.selectedImage2);
+  },
   }
 };
 </script>
@@ -197,13 +231,6 @@ nav {
   display: flex;
   justify-content: center;
   height: 100px;
-}
-
-.selectI {
-  color: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  width: 99.6%;
-  height: auto;
 }
 
 .selectM {
@@ -243,10 +270,18 @@ form {
 .monda-font {
   font-family: 'Monda', sans-serif;
 }
-
+.inbox{
+  width: 29%;
+}
 .affiche {
-  width: 100%;
-  height: 300px;
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+  background-color: white;
+  margin-left: 2px;
+  margin-top: 15px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 .input-field {
@@ -254,7 +289,7 @@ form {
   width: 100%;
 }
 
-input {
+.input {
   width: 98.3%;
   height: 30px;
   margin-top: 7px;
@@ -288,9 +323,32 @@ label {
 
 }
 
+/*type file*/
+.box {
+  font-size: 15px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  outline: none;
+}
+
+::-webkit-file-upload-button {
+  color: white;
+  background: rgba(51, 167, 226, 1);
+  padding: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  outline: none;
+}
+
+::-webkit-file-upload-button:hover {
+  background: rgba(51, 168, 226, 0.678);
+}
+
 .btn:nth-child(1) {
   background-color: transparent;
   color: rgba(6, 40, 61, 1);
   border: 1px solid rgba(6, 40, 61, 1);
-}
-</style>
+}</style>

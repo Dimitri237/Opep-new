@@ -24,13 +24,13 @@
         </button>
       </div>
     </form>
-    <p class="pas">Pas de compte ? <router-link to="/">Inscription</router-link></p>
+    <p class="pas">Pas de compte ? <router-link to="/createAccount">Inscription</router-link></p>
   </div>
 </template>
 
 <script>
 import { firestore } from '@/config/firebaseConfig';
-import { getDocs, collection, query,where,} from 'firebase/firestore';
+import { getDocs, collection, query, where, } from 'firebase/firestore';
 
 import bcryptjs from 'bcryptjs';
 
@@ -44,16 +44,16 @@ export default {
       userId: null
     };
   },
-  
+
   methods: {
-    async  login() {
+    async login() {
       this.loading = true;
 
       // Recherche de l'utilisateur correspondant à l'email fourni dans Firestore
       const usersRef = collection(firestore, 'USER');
-      console.log({'this.contact':this.contact});
+      console.log({ 'this.contact': this.contact });
       const q = query(usersRef, where('contact', '==', this.contact));
-      
+
       try {
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
@@ -86,78 +86,89 @@ export default {
 </script>
 
 <style scoped>
-h2{
-    font-size: 25px;
-    font-weight: bold;
-    color: rgba(6, 40, 61, 1);
+h2 {
+  font-size: 25px;
+  font-weight: bold;
+  color: rgba(6, 40, 61, 1);
 }
-.stext{
-    color: rgba(0, 0, 0, 0.2);
-    font-size: 13px;
-    margin-top: -20px;
+
+.stext {
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  margin-top: -20px;
 }
-.container{
-    text-align: left;
-    width: 450px;
-    height: 450px;
-    margin: auto;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2)!important;
-    padding: 15px;
-    margin-top: 120px;
+
+.container {
+  text-align: left;
+  width: 450px;
+  height: 450px;
+  margin: auto;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2) !important;
+  padding: 15px;
+  margin-top: 120px;
 }
-form{
-    width: 100%;
-    margin-top: 20px;
+
+form {
+  width: 100%;
+  margin-top: 20px;
 }
+
 .monda-font {
-    font-family: 'Monda', sans-serif;
-  }
+  font-family: 'Monda', sans-serif;
+}
 
-.input-field{ 
-}
-input{
-width: 98%;
-height: 30px;
-border: none;
-background: transparent;
-border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-outline: none;
-margin-top: 5px;
+.input-field {}
 
-}
-input:nth-child(2){
-    margin-bottom: 20px;
-}
-label{
-    font-weight: 700;
-    font-size: 16px;
-    color: rgba(6, 40, 61, 1);
+input {
+  width: 98%;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  outline: none;
+  margin-top: 5px;
 
 }
-.mot{
-    color: rgba(6, 40, 61, 1);
-    font-weight: 500;
-    font-size: 15px;
+
+input:nth-child(2) {
+  margin-bottom: 20px;
 }
-.btn{
-    margin-top: 20px;
-    font-size: 17px;
-    background: rgba(51, 167, 226, 1);
-    border: none;
-    width: 100%;
-    border-radius: 10px;
-    height: 35px;
-    color: white;
+
+label {
+  font-weight: 700;
+  font-size: 16px;
+  color: rgba(6, 40, 61, 1);
+
 }
-.pas{
-    font-weight: 700;
-    color: rgba(6, 40, 61, 1);
-    font-size: 14px;
+
+.mot {
+  color: rgba(6, 40, 61, 1);
+  font-weight: 500;
+  font-size: 15px;
 }
-.pas a{
-    text-decoration: none;
-    color: rgb(214, 106, 5);
+
+.btn {
+  margin-top: 20px;
+  font-size: 17px;
+  background: rgba(51, 167, 226, 1);
+  border: none;
+  width: 100%;
+  border-radius: 10px;
+  height: 35px;
+  color: white;
 }
+
+.pas {
+  font-weight: 700;
+  color: rgba(6, 40, 61, 1);
+  font-size: 14px;
+}
+
+.pas a {
+  text-decoration: none;
+  color: rgb(214, 106, 5);
+}
+
 .loading-indicator::after {
   content: "";
   display: inline-block;
@@ -175,9 +186,9 @@ label{
     transform: rotate(360deg);
   }
 }
+
 .loading-indicator {
   display: flex;
   justify-content: center;
   height: 100px;
-}
-</style>
+}</style>

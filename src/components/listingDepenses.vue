@@ -6,49 +6,52 @@
                 <router-link to="'/consommation" class="new_car">
                     <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (2).png" alt="">
                     <div style="margin: auto 10px; width: 500px;">
-                        <h3 >Depense</h3>
+                        <h3>Depense</h3>
                         <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">les depenses de type par</p>
                     </div>
-                    
+
                 </router-link>
-                <h2 style="color: #06283D; display: flex;width: 100%;"><h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span></h2>
+                <h2 style="color: #06283D; display: flex;width: 100%;">
+                    <h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span
+                        style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span>
+                </h2>
             </div>
-        
 
 
-        <div v-if="loading" class="loading-indicator">
-            <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+
+            <div v-if="loading" class="loading-indicator">
+                <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+            </div>
+            <ul v-else>
+                <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
+                    <h4>
+                        <p>Type de dépense : </p><span> {{ depense.typeDepense }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Montant : </p><span> {{ depense.montant }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Description : </p><span>{{ depense.libelle }}</span>
+                    </h4>
+                    <h4 style="margin-top: -40px;">
+                        <p>Date : </p><span>{{ depense.date }}</span>
+                    </h4>
+                </li>
+            </ul>
         </div>
-        <ul v-else>
-            <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
-                <h4>
-                    <p>Type de dépense : </p><span> {{ depense.typeDepense }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Montant : </p><span> {{ depense.montant }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Description : </p><span>{{ depense.libelle }}</span>
-                </h4>
-                <h4 style="margin-top: -40px;">
-                    <p>Date : </p><span>{{ depense.date }}</span>
-                </h4>
-            </li>
-        </ul>
-    </div>
     </div>
 </template>
   
 <script>
-import { collection, getDocs, where, query} from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
 
 export default {
     components: {
         side_barre
-  },
+    },
     data() {
         return {
             depenses: [],
@@ -62,18 +65,18 @@ export default {
         this.fetchDepenses(idTypeDepense);
     },
     computed: {
-    // Calcul de la somme totale des dépenses
-    totalDepenses() {
-      return this.depenses.reduce((total, depense) => total + depense.montant, 0);
-    }
-  },
-  watch: {
-    '$route.params.id'(newIdTypeDepense) {
-      this.fetchDepenses(newIdTypeDepense);
-    }
-  },
+        // Calcul de la somme totale des dépenses
+        totalDepenses() {
+            return this.depenses.reduce((total, depense) => total + depense.montant, 0);
+        }
+    },
+    watch: {
+        '$route.params.id'(newIdTypeDepense) {
+            this.fetchDepenses(newIdTypeDepense);
+        }
+    },
     methods: {
-        
+
         async fetchDepenses(idTypeDepense) {
             try {
                 this.loading = true;
@@ -96,21 +99,24 @@ body {
     width: 100%;
     padding: 0;
     margin: 0;
-    background-color: rgba(0, 0, 0, 0.5)!important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
     font-family: Monda;
 }
+
 .all {
-    background-color: rgba(0, 0, 0, 0.05)!important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
     width: 100%;
     margin: 0;
     padding: 0;
     display: flex !important;
     font-family: Monda;
 }
+
 .detail {
     width: 95%;
     margin: auto;
 }
+
 h3 {
     color: #06283D;
 }
@@ -119,6 +125,7 @@ p {
     color: #06283D;
     font-size: 12px;
 }
+
 .head {
     width: 37.5%;
     position: fixed;
@@ -126,6 +133,7 @@ p {
     background-color: #ffffff;
     z-index: 9999;
 }
+
 .new_car {
     width: 100%;
     display: flex;
@@ -159,10 +167,12 @@ li {
     overflow-y: auto;
     font-family: Monda;
 }
+
 .container::-webkit-scrollbar {
     width: 0.1em;
     /* Largeur de la barre de défilement */
 }
+
 .container::-webkit-scrollbar-thumb {
     background-color: transparent;
     /* Couleur de la poignée de défilement */
@@ -211,5 +221,4 @@ span {
     margin: auto;
     width: 50%;
     text-align: right;
-}
-</style>
+}</style>

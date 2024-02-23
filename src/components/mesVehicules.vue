@@ -21,8 +21,10 @@
                 <div v-else- class="vList" style="margin-top: 40px;">
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car animate__animated animate__fadeInRight">
-                        <img style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;"
-                            :src="vehicle.images[0].url" alt="Image de la voiture" />
+                        <div class="image" style="display: flex;">
+                            <img v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="Image de la voiture"
+                                style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" />
+                        </div>
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
                             <h4 style="color: #06283dc9;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }}</h4>
                             <h5 style="margin-top: -20px; color: #F2994A;">{{ totalDepenses }} FCFA ce mois
@@ -48,7 +50,7 @@ import { db } from '@/config/firebaseConfig';
 
 export default {
     components: {
-        side_barre
+        side_barre,
     },
     data() {
         return {
@@ -120,7 +122,6 @@ export default {
             try {
                 const usersRef = collection(db, TABLE.USER);
                 const q = query(usersRef, where('userId', '==', this.userId));
-                console.log(this.userId);
                 const querySnapshot = await getDocs(q);
                 this.users = querySnapshot.docs.map(doc => doc.data());
             } catch (error) {
@@ -419,5 +420,14 @@ button {
 
 .list li img {
     height: 30px !important;
+}
+
+.image img:nth-child(2) {
+    border: 1px solid black;
+    display: none;
+}
+
+.image img:nth-child(3) {
+    display: none;
 }
 </style>

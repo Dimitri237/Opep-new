@@ -12,23 +12,26 @@ const firebaseConfig = {
     messagingSenderId: "791626645352",
     appId: "1:791626645352:web:323c90064720950c0020dd"
 };
+const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage();
 
-const uploadToFirebase = async (file, fileName) => {
-    const storage = getStorage();
+async function uploadToFirebase(file, fileName) {
     const storageRef = ref(storage, `OpepMedia/images/${fileName}`);
-    // Convertir l'image en blob avec le type "image/jpeg"
-    const blob = await fetch(file).then((response) => response.blob());
+    const uploadTask = uploadBytes(storageRef, file);
 
-    // Charger le blob d'image dans le stockage de Firebase
-    await uploadBytes(storageRef, blob);
-
-    return await getDownloadURL(storageRef);
+    try {
+        await uploadTask;
+        const url = await getDownloadURL(storageRef);
+        return url;
+    } catch (error) {
+        console.error('Erreur lors du téléchargement de l\'image :', error);
+        throw error;
+    }
 }
-
 
 // Initialisation de l'application Firebase
 
-const firebaseApp = initializeApp(firebaseConfig);
+
 const firestore = getFirestore(firebaseApp);
 const db = getFirestore(firebaseApp);
 

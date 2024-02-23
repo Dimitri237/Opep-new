@@ -9,32 +9,43 @@
                         <h3>Dépenses liees au vehicule</h3>
                         <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">dépenses liees au vehicule selectionne</p>
                     </div>
-
                 </router-link>
-                <h2 style="color: #06283D; display: flex;width: 100%;">
-                    <h2 style="font-size: 23px; width: 61%;">Somme totale des dépenses :</h2><span
-                        style="width: 39%; padding-right: 10px;"> {{ totalDepenses }}</span>
-                </h2>
             </div>
 
 
 
-            <div v-if="loading"  class="loading-indicator">
+            <div v-if="loading" class="loading-indicator">
                 <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
             </div>
-            <ul v-else>
-                <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
-                    <div style="display: flex;">
-                        <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
-                    </div>
-                    <div style="display: flex; margin-top: -20px;">
-                        <p>Montant : </p><span> {{ depense.montant }}</span>
-                    </div>
-                    <div style="display: flex; margin-top: -20px;">
-                        <p>Date : </p><span>{{ depense.date }}</span>
-                    </div>
-                </li>
-            </ul>
+            <div v-else  style="margin-top: 90px;">
+                <div class="car">
+                    <div class="image" style="display: block;">
+                    <img v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="Image de la voiture"
+                        style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" />
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4 v-for="vehicle in vehicles" :key="vehicle.id" style="color: #06283dc9;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee}}</h4>
+                            <h4 style="color: #F2994A;">{{ totalDepenses }}</h4>
+                        </div>
+                </div>
+                
+                </div>
+                
+                <ul>
+                    <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
+                        <div style="display: flex;">
+                            <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
+                        </div>
+                        <div style="display: flex; margin-top: -20px;">
+                            <p>Montant : </p><span> {{ depense.montant }}</span>
+                        </div>
+                        <div style="display: flex; margin-top: -20px;">
+                            <p>Date : </p><span>{{ depense.date }}</span>
+                        </div>
+                    </li>
+                </ul>
+                
+            </div>
+
         </div>
     </div>
 </template>
@@ -52,31 +63,40 @@ export default {
     data() {
         return {
             depenses: [],
-            vehicles: [],
+            vehicle: [],
             typeDepenses: [],
-            loading: false
+            loading: false,
+            vehicles: [],
         };
     },
     mounted() {
-        console.log({ typeD: this.depenses });
         const vehicleId = this.$route.params.id;
         this.fetchDepenses(vehicleId);
-        this.fetchVehicle(vehicleId);
-        console.log('Valeur de this.$route.params.id:', this.$route.params.id);
-
-
-
-        this.findTypeDepense()
+        this.findTypeDepense();
+        this.getVehicleById(vehicleId);
     },
     computed: {
         // Calcul de la somme totale des dépenses
         totalDepenses() {
-            console.log({ depense: this.depenses });
             return this.depenses.reduce((total, depense) => total + depense.montant, 0);
         }
     },
     methods: {
-
+        async getVehicleById(vehicleId) {
+            try {
+                const q = query(collection(db, TABLE.CAR), where('_id', '==', vehicleId));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    this.vehicle = querySnapshot.docs[0].data();
+                    this.vehicles = querySnapshot.docs.map((doc) => doc.data());
+                } else {
+                    console.log('Le véhicule n\'existe pas.');
+                }
+                this.loading = false;
+            } catch (error) {
+                console.error('Erreur lors de la récupération du véhicule :', error);
+            }
+        },
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
@@ -88,16 +108,6 @@ export default {
                 console.error('Erreur lors de la récupération des dépenses :', error);
             }
         },
-        async fetchVehicle(vehicleId) {
-            try {
-                const q = query(collection(db, TABLE.CAR), where('vehicleId', '==', vehicleId));
-                const querySnapshot = await getDocs(q);
-                this.vehicles = querySnapshot.docs.map((doc) => doc.data());
-                this.loading = false;// Stockage des informations du véhicule dans la propriété correspondante
-            } catch (error) {
-                console.error('Erreur lors de la récupération des informations du véhicule :', error);
-            }
-        },
         async findTypeDepense() {
             try {
                 const q = query(collection(db, TABLE.TYPE_DEPENSE));
@@ -106,10 +116,10 @@ export default {
             } catch (error) {
                 console.error('Erreur lors de la récupération des informations du véhicule :', error);
             }
-        },
-        findTypeDepenseById(id) {
-            return this.typeDepenses.find(type => type._id === id).libelle
-        },
+        }, findTypeDepenseById(id) {
+            const typeDepense = this.typeDepenses.find(type => type._id === id);
+            return typeDepense ? typeDepense.libelle : '';
+        }
 
     },
 };
@@ -124,7 +134,15 @@ body {
     background-color: rgba(0, 0, 0, 0.5) !important;
     font-family: Monda;
 }
-
+.car {
+    background-color: rgba(0, 0, 0, 0.05);
+    width: 95%;
+    padding: 0 2.5%;
+    display: block;
+    margin: auto;
+    border-radius: 15px;
+    margin-top: 15px !important;
+}
 .all {
     background-color: rgba(0, 0, 0, 0.05) !important;
     width: 100%;
@@ -167,7 +185,6 @@ p {
 
 ul {
     padding: 0;
-    margin-top: 200px;
     width: 100%;
 }
 
@@ -240,4 +257,5 @@ span {
     margin: auto;
     width: 50%;
     text-align: right;
-}</style>
+}
+</style>

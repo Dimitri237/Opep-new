@@ -10,20 +10,23 @@
     <form @submit.prevent="createAccount">
       <div class="input-field">
         <div> <label for="name">Nom</label></div>
-        <input type="text" id="name" v-model="name" required>
+        <input class="input" type="text" id="name" v-model="name" required>
       </div>
       <div class="input-field">
         <div> <label for="telephone">Telephone/Email</label></div>
-        <input id="contact" v-model="contact" required>
+        <input class="input" id="contact" v-model="contact" required>
       </div>
       <div class="input-field">
-        <div> <label for="photoProfil">Photo de profil</label></div>
-        <input type="file" id="photoProfil" accept="image/*" @change="selectImage" required>
+        <label for="photoProfil">Photo de profil</label>
+        <input class="box" type="file" id="photoProfil" accept="image/*" @change="selectImage" required>
+        
         <img class="affiche" :src="selectedImage" v-if="selectedImage">
       </div>
       <div class="input-field">
         <div><label for="password">Mot de passe:</label></div>
-        <input type="password" id="password" v-model="password" required>
+        <div>
+          <input class="input"  type="password" id="password" v-model="password" required>
+        </div>
       </div>
       <button class="btn" type="submit" :disabled="loading">
         <span class="loading-indicator" v-if="loading"></span>
@@ -37,9 +40,9 @@
 import { uuid } from 'vue-uuid';
 import bcryptjs from 'bcryptjs';
 import { firestore, uploadToFirebase } from '@/config/firebaseConfig';
-import {TABLE} from '@/config/constantes/tables';
+import { TABLE } from '@/config/constantes/tables';
 import { setDoc, doc } from 'firebase/firestore';
-import  moment  from 'moment';
+import moment from 'moment';
 
 
 export default {
@@ -56,7 +59,7 @@ export default {
   methods: {
     selectImage(event) {
       const file = event.target.files[0];
-      this.fileName=  file.name
+      this.fileName = file.name
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -69,12 +72,11 @@ export default {
       this.loading = true;
       const saltRounds = 10;
       const hashedPassword = bcryptjs.hashSync(this.password, saltRounds);
-      console.log('Mot de passe haché :', hashedPassword);
       const url = await uploadToFirebase(this.selectedImage, this.fileName);
       const user = {
         name: this.name,
         contact: this.contact,
-        images: [{createdAt: moment().format(),url}],
+        images: [{ createdAt: moment().format(), url }],
         password: hashedPassword,
         _id: uuid.v4(),
       };
@@ -131,7 +133,7 @@ form {
 
 .input-field {}
 
-input {
+ .input {
   width: 98%;
   height: 30px;
   border: none;
@@ -140,7 +142,7 @@ input {
   outline: none;
   margin-top: 5px;
 
-}
+} 
 
 input:nth-child(2) {
   margin-bottom: 20px;
@@ -157,6 +159,12 @@ label {
   color: rgba(6, 40, 61, 1);
   font-weight: 500;
   font-size: 15px;
+}
+.affiche {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-left: 38%!important;
 }
 
 .btn {
@@ -203,5 +211,26 @@ label {
   display: flex;
   justify-content: center;
   height: 100px;
+}
+/*type file*/
+.box{
+  font-size: 15px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  outline: none;
+}
+::-webkit-file-upload-button{
+  color: white;
+  background: rgba(51, 167, 226, 1);
+  padding: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  outline: none;
+}
+::-webkit-file-upload-button:hover{
+  background: rgba(51, 168, 226, 0.678);
 }
 </style>

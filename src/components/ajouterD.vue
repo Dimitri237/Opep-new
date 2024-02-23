@@ -84,7 +84,7 @@
 </template>
 <script>
 import { db } from '@/config/firebaseConfig';
-import {TABLE} from '@/config/constantes/tables.js';
+import { TABLE } from '@/config/constantes/tables.js';
 import { getDocs, collection, setDoc, doc, query, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
@@ -240,18 +240,15 @@ export default {
     },
     changeTypeDepense(typeDepense) {
       this.selectedTypeDepense = typeDepense;
-      console.log(this.selectedTypeDepense._id);
       this.fetchSousTypeDepense(this.selectedTypeDepense._id)
     },
     changeSousTypeDepense(sousTypeDepense) {
       this.selectedSousTypeDepense = sousTypeDepense;
-      console.log(this.selectedSousTypeDepense._id);
     },
     async fetchSousTypeDepense(idTypeDepense) {
       const sousTypeDepensesRef = collection(db, TABLE.SOUS_TYPE_DEPENSE);
       const q = query(sousTypeDepensesRef, where('idTypeDepense', '==', idTypeDepense));
       const querySnapshot = await getDocs(q);
-      console.log(this.selectedSousTypeDepenses);
       this.sousTypeDepenses = querySnapshot.docs.map((doc) => doc.data());
     },
     async fetchVehicles() {
@@ -436,4 +433,5 @@ label {
   background-color: transparent;
   color: rgba(6, 40, 61, 1);
   border: 1px solid rgba(6, 40, 61, 1);
-}</style>
+}
+</style>

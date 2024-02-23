@@ -9,30 +9,30 @@
 
             <ul style="margin-top: 40px;">
                 <li>
-                    <button class="butt" :class="{ selected: currentPage === 'home' }" style="display: flex;text-decoration: none;"
-                        @click="showPage('home')">
+                    <button class="butt" :class="{ selected: currentPage === 'home' }"
+                        style="display: flex;text-decoration: none;" @click="showPage('home')">
                         <i :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }" class="fas fa-home"></i>
                         <h3 :style="{ color: currentPage === 'home' ? '#06283dc9' : 'white' }">Accueil</h3>
                     </button>
                 </li>
                 <li>
-                    <button class="butt" :class="{ selected: currentPage === 'depense' }" style="display: flex;text-decoration: none;"
-                        @click="showPage('depense')">
+                    <button class="butt" :class="{ selected: currentPage === 'depense' }"
+                        style="display: flex;text-decoration: none;" @click="showPage('depense')">
                         <i :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }"
                             class="fas fa-layer-group"></i>
                         <h3 :style="{ color: currentPage === 'depense' ? '#06283dc9' : 'white' }">Dépenses</h3>
                     </button>
                 </li>
                 <li>
-                    <button class="butt" :class="{ selected: currentPage === 'stats' }" style="display: flex;text-decoration: none;"
-                        @click="showPage('stats')">
+                    <button class="butt" :class="{ selected: currentPage === 'stats' }"
+                        style="display: flex;text-decoration: none;" @click="showPage('stats')">
                         <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }" class="fas fa-chart-bar"></i>
                         <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
                     </button>
                 </li>
                 <li>
-                    <button class="butt" :class="{ selected: currentPage === 'profil' }" style="display: flex;text-decoration: none;"
-                        @click="showPage('profil')">
+                    <button class="butt" :class="{ selected: currentPage === 'profil' }"
+                        style="display: flex;text-decoration: none;" @click="showPage('profil')">
                         <i :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }" class="fa fa-user"></i>
                         <h3 :style="{ color: currentPage === 'profil' ? '#06283dc9' : 'white' }">Profil</h3>
                     </button>
@@ -107,23 +107,29 @@
 
                     <div v-if="selectedButton === 'button1'">
                         <ul style="margin-top: 50px;">
-                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByWeek" :key="depense._id">
+                            <li class="animate__animated animate__fadeInDown"
+                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                v-for="depense in depensesByWeek" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
                                 <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
                             </li>
                         </ul>
                     </div>
                     <div v-if="selectedButton === 'button2'">
-                        <ul  style="margin-top: 50px;">
-                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByMonth" :key="depense._id">
+                        <ul style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown"
+                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                v-for="depense in depensesByMonth" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
                                 <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
                             </li>
                         </ul>
                     </div>
                     <div v-if="selectedButton === 'button3'">
-                        <ul  style="margin-top: 50px;">
-                            <li class="animate__animated animate__fadeInDown" style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;" v-for="depense in depensesByYear" :key="depense._id">
+                        <ul style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown"
+                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                v-for="depense in depensesByYear" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
                                 <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
                             </li>
@@ -260,7 +266,6 @@ export default {
                     // 
 
                     this.depensesByWeek = depensesQuerySnapshot.docs.map(doc => doc.data());
-                    console.log({ depenses: this.depensesByWeek });
                 }
 
 
@@ -286,7 +291,6 @@ export default {
                     // 
 
                     this.depensesByMonth = depensesQuerySnapshot.docs.map(doc => doc.data());
-                    console.log({ depenses: this.depensesByMonth });
                 }
 
 
@@ -312,7 +316,6 @@ export default {
                     // 
 
                     this.depensesByYear = depensesQuerySnapshot.docs.map(doc => doc.data());
-                    console.log({ depenses: this.depensesByYear });
                 }
 
 
