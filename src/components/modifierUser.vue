@@ -3,6 +3,7 @@
         <side_barre />
         <div class="container">
             <div class="head">
+                <router-link to="/mesVehicules"><i style="margin-top: 15px; color: #06283dc9;" class="fas fa-chevron-left"></i></router-link>
                 <h2 class="monda-font">Modifier votre compte</h2>
                 <p class="stext monda-font">mettre a jour les informations de connexion</p>
             </div>

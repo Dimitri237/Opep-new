@@ -65,73 +65,56 @@
                 </router-link>
             </div>
 
-            <!-- <div style="margin-top: 100px; width: 100%;">
-                <h2 style="font-size: 26px; color: #06283D;">Résumé</h2>
-                <div class="resume">
-                    <div style="display: flex; justify-content: space-between;">
-                        <div @click="getAllDepensesByType('Reparation')" class="inbox">
-                            <img src="@/assets/icon (1).png" alt="">
-                            <h3>Reparation</h3>
-                            <p>{{ totalDepenses }} fcfa</p>
-                        </div>
-                        <div @click="getAllDepensesByType('Consommation')" style="text-decoration: none;" class="inbox">
-                            <img src="@/assets/icon (2).png" alt="">
-                            <h3>Consommation</h3>
-                            <p>{{ totalDepenses }} fcfa</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div @click="getAllDepensesByType('Administration')" class="inbox">
-                            <img src="@/assets/icon (3).png" alt="">
-                            <h3>Administrations</h3>
-                            <p>{{ totalDepenses }} fcfa</p>
-                        </div>
-                        <div @click="getAllDepensesByType('Autres')" class="inbox">
-                            <img src="@/assets/icon (4).png" alt="">
-                            <h3>Autres</h3>
-                            <p>{{ totalDepenses }} fcfa</p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            
             <div style="margin-top: 100px;">
                 <div>
                     <div style="display: flex; justify-content: space-between; width: 100%; margin: auto;">
-                        <button class="bDate" @click="selectButton('button1')"
+                        <button class="bDate" @click="selectButton('button4')"
+                            :class="{ active: selectedButton === 'button4' }">Aujourd'hui</button>
+                        <button   class="bDate" @click="selectButton('button1')"
                             :class="{ active: selectedButton === 'button1' }">Cette semaine</button>
-                        <button class="bDate" @click="selectButton('button2')"
+                        <button   class="bDate" @click="selectButton('button2')"
                             :class="{ active: selectedButton === 'button2' }">Ce mois</button>
-                        <button class="bDate" @click="selectButton('button3')"
+                        <button   class="bDate" @click="selectButton('button3')"
                             :class="{ active: selectedButton === 'button3' }">Cette annee</button>
                     </div>
-
+                    <div v-if="selectedButton === 'button4'">
+                        <ul style="margin-top: 50px;">
+                            <li class="animate__animated animate__fadeInDown"
+                                style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
+                                v-for="depense in depensesByDay" :key="depense._id">
+                                <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
+                            </li>
+                        </ul>
+                    </div>
                     <div v-if="selectedButton === 'button1'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
-                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                style="margin-top: 20px; display: flex; justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByWeek" :key="depense._id">
-                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                                <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
                             </li>
                         </ul>
                     </div>
                     <div v-if="selectedButton === 'button2'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
-                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                style="margin-top: 20px; display: flex; justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByMonth" :key="depense._id">
-                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                                <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
                             </li>
                         </ul>
                     </div>
                     <div v-if="selectedButton === 'button3'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
-                                style="margin-top: 20px; display: flex; border-bottom: 1px solid rgba(0, 0, 0, 0.3); justify-content: space-between; padding: 10px 0;"
+                                style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByYear" :key="depense._id">
-                                <span style="font-weight: bold; color: #06283D;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{ depense.montant }}</span>
+                                <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
                             </li>
                         </ul>
                     </div>
@@ -202,9 +185,9 @@ export default {
     },
     data() {
         return {
-            selectedButton: null,
             isAuthenticated: false,
-            currentPage: 'depense',
+            currentPage: 'home',
+            selectedButton: 'button4',
             userId: null,
             vehicleId: null,
             typeDepenses: [],
@@ -214,6 +197,7 @@ export default {
             idTypeDepense: null,
             moisActuel: new Date().getMonth(),
             depensesByWeek: [],
+            depensesByDay: [],
             depensesByMonth: [],
             depensesByYear: [],
             loading: false
@@ -222,6 +206,7 @@ export default {
     mounted() {
         try {
             this.fetchDepensesByWeek();
+            this.fetchDepensesByDay();
             this.fetchDepensesByMonth();
             this.fetchDepensesByYear();
             this.fetchCurrentUser();
@@ -245,6 +230,10 @@ export default {
         }
     },
     methods: {
+        formatNumber(number) {
+    const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return formattedNumber;
+  },
         selectButton(button) {
             this.selectedButton = button;
         },
@@ -266,6 +255,31 @@ export default {
                     // 
 
                     this.depensesByWeek = depensesQuerySnapshot.docs.map(doc => doc.data());
+                }
+
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dépenses par semaine :', error);
+            }
+        },
+        async fetchDepensesByDay() {
+            try {
+
+                var vehicleIds = localStorage.getItem('vehicleIds');
+                if (vehicleIds) {
+                    vehicleIds = JSON.parse(vehicleIds);
+                    const startDate = moment().startOf('day').format(); // Début de la semaine en cours
+                    const endDate = moment().endOf('day').format(); // Fin de la semaine en cours
+
+                    const depensesRef = collection(db, TABLE.DEPENSE)
+                    const q = query(
+                        depensesRef, where('vehiculeId', 'in', vehicleIds),
+                        where('date', '>=', startDate), where('date', '<=', endDate)
+                    );
+                    const depensesQuerySnapshot = await getDocs(q)
+                    // 
+
+                    this.depensesByDay = depensesQuerySnapshot.docs.map(doc => doc.data());
                 }
 
 
@@ -604,7 +618,11 @@ li:hover {
     width: 100%;
     display: block;
 }
-
+.animate__fadeInDown{
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px 10px!important;
+    border-radius: 15px;
+}
 .cont1 {
     width: 100%;
     height: 300px;

@@ -2,48 +2,43 @@
     <div class="all">
         <side_barre />
         <div class="container">
-            <div class="head">
-                <router-link to="/mesVehicules" class="new_car">
-                    <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
-                    <div style="margin: auto 10px; width: 500px;">
-                        <h3>Dépenses liees au vehicule</h3>
-                        <p style="margin-top: -20px; color: rgba(0, 0, 0, 0.2);">dépenses liees au vehicule selectionne</p>
-                    </div>
-                </router-link>
-            </div>
-
-
 
             <div v-if="loading" class="loading-indicator">
                 <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
             </div>
-            <div v-else  style="margin-top: 90px;">
+            <div v-else >
                 <div class="car">
-                    <div class="image" style="display: block;">
-                    <img v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="Image de la voiture"
-                        style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" />
-                        <div style="display: flex; justify-content: space-between;">
-                            <h4 v-for="vehicle in vehicles" :key="vehicle.id" style="color: #06283dc9;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee}}</h4>
-                            <h4 style="color: #F2994A;">{{ totalDepenses }}</h4>
+                    <router-link to="/mesVehicules"><i style="margin-top: 15px; color: #06283dc9;" class="fas fa-chevron-left"></i></router-link>
+                    <div class="" style="display: block;">
+                        <div class="button-container" ref="buttonContainer">
+                            <div class="image button-wrapper" ref="this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;">
+                            <img class="slide" v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="Image de la voiture"
+                                style="margin-top: 10px; border-radius: 10px; height: auto;" />
                         </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4 v-for="vehicle in vehicles" :key="vehicle.id" style="color: #06283dc9;">{{
+                                vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee }}</h4>
+                            <h4 style="color: #F2994A;">{{ formatNumber(totalDepenses) }}</h4>
+                        </div>
+                    </div>
+
                 </div>
-                
-                </div>
-                
+
                 <ul>
                     <li class="animate__animated animate__fadeInUp" v-for="depense in depenses" :key="depense.id">
                         <div style="display: flex;">
                             <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
                         </div>
                         <div style="display: flex; margin-top: -20px;">
-                            <p>Montant : </p><span> {{ depense.montant }}</span>
+                            <p>Montant : </p><span> {{formatNumber(depense.montant)  }}</span>
                         </div>
                         <div style="display: flex; margin-top: -20px;">
-                            <p>Date : </p><span>{{ depense.date }}</span>
+                            <p>Date : </p><span>{{  depense.date }}</span>
                         </div>
                     </li>
                 </ul>
-                
+
             </div>
 
         </div>
@@ -55,6 +50,7 @@ import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { TABLE } from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
+
 
 export default {
     components: {
@@ -74,14 +70,25 @@ export default {
         this.fetchDepenses(vehicleId);
         this.findTypeDepense();
         this.getVehicleById(vehicleId);
+        
+        
+      
+        
     },
     computed: {
         // Calcul de la somme totale des dépenses
+        formattedTotalDepenses() {
+    return this.formatNumber(this.totalDepenses,);
+  },
         totalDepenses() {
             return this.depenses.reduce((total, depense) => total + depense.montant, 0);
         }
     },
     methods: {
+         formatNumber(number) {
+    const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return formattedNumber;
+  },
         async getVehicleById(vehicleId) {
             try {
                 const q = query(collection(db, TABLE.CAR), where('_id', '==', vehicleId));
@@ -134,6 +141,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5) !important;
     font-family: Monda;
 }
+
 .car {
     background-color: rgba(0, 0, 0, 0.05);
     width: 95%;
@@ -141,8 +149,8 @@ body {
     display: block;
     margin: auto;
     border-radius: 15px;
-    margin-top: 15px !important;
 }
+
 .all {
     background-color: rgba(0, 0, 0, 0.05) !important;
     width: 100%;
@@ -165,7 +173,6 @@ p {
     color: #06283D;
     font-size: 12px;
 }
-
 .head {
     width: 37.5%;
     position: fixed;
@@ -244,7 +251,13 @@ p {
     border-bottom-color: #F2994A;
     animation: spin 1s linear infinite;
 }
-
+.image{
+    display: flex;
+    justify-content: space-between;
+}
+.image img{
+    width: 32%!important;
+}
 @keyframes spin {
     to {
         transform: rotate(360deg);

@@ -131,8 +131,6 @@ form {
   font-family: 'Monda', sans-serif;
 }
 
-.input-field {}
-
  .input {
   width: 98%;
   height: 30px;

@@ -47,7 +47,8 @@
           <div><label for="">Vehicule</label></div>
           <select class="selectM" v-model="selectedVehicle">
             <option v-for="vehicle in vehicles" :value="vehicle._id" v-bind:key="vehicle._id">{{ vehicle._id }} &#8226; {{
-              vehicle.marque.libelle }} &#8226; {{ vehicle.model.libelle }}</option>
+              vehicle.marque.libelle }} &#8226;
+              {{ vehicle.model.libelle }}</option>
           </select>
         </div>
         <div class="input-field" style="display: flex; justify-content: space-between;">
@@ -56,7 +57,7 @@
             <input type="number" v-model="montant" placeholder="15 000fcfa" required>
           </div>
           <div style="width: 45%;"
-            v-if="selectedTypeDepense.libelle && selectedTypeDepense.libelle.toLowerCase().includes('carburant')">
+            v-if="selectedSousTypeDepense.libelle && selectedSousTypeDepense.libelle.toLowerCase().includes('carburant','Huile de frein','Huile  moteur' )">
             <label for="quantite">Quantité : </label>
             <input type="number" placeholder="20 Litres" id="quantite" v-model="quantite">
           </div>
@@ -253,8 +254,11 @@ export default {
     },
     async fetchVehicles() {
       try {
+        const userId = localStorage.getItem('userId');
         const querySnapshot = await getDocs(collection(db, TABLE.CAR));
-        this.vehicles = querySnapshot.docs.map(doc => ({ ...doc.data() }));
+        this.vehicles = querySnapshot.docs
+        .map(doc => ({ ...doc.data(), id: doc.id }))
+        .filter(vehicle => vehicle.userId === userId);
       } catch (error) {
         console.error('Erreur lors de la récupération des véhicules :', error);
       }
