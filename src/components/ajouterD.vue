@@ -64,7 +64,7 @@
         </div>
         <div class="input-field">
           <div><label for="">Description</label></div>
-          <input v-model="libelle" placeholder="Optionel" required>
+          <input v-model="libelle" placeholder="Optionel">
         </div>
         <div class="input-field">
           <div><label for="">Date</label></div>

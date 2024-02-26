@@ -34,11 +34,10 @@
                             <p>Montant : </p><span> {{formatNumber(depense.montant)  }}</span>
                         </div>
                         <div style="display: flex; margin-top: -20px;">
-                            <p>Date : </p><span>{{  depense.date }}</span>
+                            <p>Date : </p><span v-text="formatDate(depense.date)"></span>
                         </div>
                     </li>
                 </ul>
-
             </div>
 
         </div>
@@ -50,6 +49,7 @@ import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { TABLE } from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
+import moment from 'moment';
 
 
 export default {
@@ -85,6 +85,9 @@ export default {
         }
     },
     methods: {
+        formatDate(date) {
+    return moment(date).format('YYYY-MM-DD'); // Remplacez 'YYYY-MM-DD' par le format de date souhaité
+  },
          formatNumber(number) {
     const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     return formattedNumber;
