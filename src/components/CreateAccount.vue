@@ -18,9 +18,9 @@
       </div>
       <div class="input-field">
         <label for="photoProfil">Photo de profil</label>
-        <input class="box" type="file" id="photoProfil" accept="image/*" @change="selectImage" required>
+        <input class="box" type="file" id="photoProfil" accept="image/*" @change="onFileSelected2" required>
         
-        <img class="affiche" :src="selectedImage" v-if="selectedImage">
+        <img class="affiche" :src="selectedImageURL2" v-if="selectedImage2">
       </div>
       <div class="input-field">
         <div><label for="password">Mot de passe:</label></div>
@@ -51,32 +51,32 @@ export default {
       name: "",
       contact: "",
       password: "",
-      selectedImage: null,
+      selectedImage2: null,
+      selectedImageURL2: null,
       loading: false,
       currentUserID: null
     };
   },
   methods: {
-    selectImage(event) {
-      const file = event.target.files[0];
-      this.fileName = file.name
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.selectedImage = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
+    onFileSelected2(event) {
+    this.selectedImage2 = event.target.files[0];
+    this.fileName3 = this.selectedImage2.name;
+    this.selectedImageURL2 = URL.createObjectURL(this.selectedImage2);
+  },
     async createAccount() {
       this.loading = true;
       const saltRounds = 10;
       const hashedPassword = bcryptjs.hashSync(this.password, saltRounds);
-      const url = await uploadToFirebase(this.selectedImage, this.fileName);
+      const imageUrls = [];
+      if (this.selectedImage2) {
+      const imageUrl2 = await uploadToFirebase(this.selectedImage2, this.fileName3);
+      imageUrls.push(imageUrl2);
+    }
+
       const user = {
         name: this.name,
         contact: this.contact,
-        images: [{ createdAt: moment().format(), url }],
+        images: imageUrls.map(url => ({ createdAt: moment().format(), url })),
         password: hashedPassword,
         _id: uuid.v4(),
       };
@@ -130,8 +130,6 @@ form {
 .monda-font {
   font-family: 'Monda', sans-serif;
 }
-
-.input-field {}
 
  .input {
   width: 98%;
