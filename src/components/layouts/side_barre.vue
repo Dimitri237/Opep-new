@@ -26,7 +26,8 @@
                 <li>
                     <button class="butt" :class="{ selected: currentPage === 'stats' }"
                         style="display: flex;text-decoration: none;" @click="showPage('stats')">
-                        <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }" class="fas fa-chart-bar"></i>
+                        <i :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }"
+                            class="fas fa-chart-bar"></i>
                         <h3 :style="{ color: currentPage === 'stats' ? '#06283dc9' : 'white' }">Statistiques</h3>
                     </button>
                 </li>
@@ -43,13 +44,14 @@
     <div class="extra">
 
         <div style="margin-top: -14px;" class="page" v-if="currentPage === 'home'">
-            
+
             <div class="cont">
                 <div class="cont1 ">
-                    
+
                     <img style="width: 70%;" src="@/assets/toyota.png" alt="image 1">
-                    <h1 class="animate__animated animate__fadeInUp" style="color: white; font-size: 26px; width: 70%; margin-top: 90px;">Ravis de vous revoir
-                Mr. <span style=" color: #F2994A;">{{ currentUser ? currentUser.name : '' }}</span></h1>
+                    <h1 class="animate__animated animate__fadeInUp"
+                        style="color: white; font-size: 26px; width: 70%; margin-top: 90px;">Ravis de vous revoir
+                        Mr. <span style=" color: #F2994A;">{{ currentUser ? currentUser.name : '' }}</span></h1>
                 </div>
                 <div style="width: 100%; margin-top: 20px;">
                     <div class="img-container" style="width: 100%;">
@@ -86,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -104,27 +106,28 @@
                 </router-link>
             </div>
 
-            
+
             <div style="margin-top: 100px;">
                 <div>
                     <div style="display: flex; justify-content: space-between; width: 100%; margin: auto;">
                         <button class="bDate" @click="selectButton('button4')"
                             :class="{ active: selectedButton === 'button4' }">Aujourd'hui</button>
-                        <button   class="bDate" @click="selectButton('button1')"
+                        <button class="bDate" @click="selectButton('button1')"
                             :class="{ active: selectedButton === 'button1' }">Cette semaine</button>
-                        <button   class="bDate" @click="selectButton('button2')"
+                        <button class="bDate" @click="selectButton('button2')"
                             :class="{ active: selectedButton === 'button2' }">Ce mois</button>
-                        <button   class="bDate" @click="selectButton('button3')"
+                        <button class="bDate" @click="selectButton('button3')"
                             :class="{ active: selectedButton === 'button3' }">Cette annee</button>
                     </div>
-                    
+
                     <div v-if="selectedButton === 'button4'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
                                 style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByDay" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ formatNumber(depense.montant)
+                                    }}</span>
                             </li>
                         </ul>
                     </div>
@@ -134,7 +137,8 @@
                                 style="margin-top: 20px; display: flex; justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByWeek" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ formatNumber(depense.montant)
+                                    }}</span>
                             </li>
                         </ul>
                     </div>
@@ -144,24 +148,26 @@
                                 style="margin-top: 20px; display: flex; justify-content: space-between; padding: 10px 0;"
                                 v-for="depense in depensesByMonth" :key="depense._id">
                                 <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
+                                <span style="color: #F2994A; font-weight: bold;">{{ formatNumber(depense.montant)
+                                    }}</span>
                             </li>
                         </ul>
                     </div>
                     <div v-if="loading" class="loading-indicator">
-                <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
-            </div>
+                        <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+                    </div>
                     <div v-else>
                         <div v-if="selectedButton === 'button3'">
-                        <ul style="margin-top: 50px;">
-                            <li class="animate__animated animate__fadeInDown"
-                                style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
-                                v-for="depense in depensesByYear" :key="depense._id">
-                                <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
-                                <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
-                            </li>
-                        </ul>
-                    </div>
+                            <ul style="margin-top: 50px;">
+                                <li class="animate__animated animate__fadeInDown"
+                                    style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
+                                    v-for="depense in depensesByYear" :key="depense._id">
+                                    <span style="font-weight: bold; color: #06283da8;">{{ depense.description }}</span>
+                                    <span style="color: #F2994A; font-weight: bold;">{{ formatNumber(depense.montant)
+                                        }}</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -169,8 +175,38 @@
         </div>
 
         <div class="page" v-if="currentPage === 'stats'">
-            <h1>Contact Us</h1>
-            <p>This is the contact page content.</p>
+            <div class="simple-bar-chart">
+                <div class="item" style="--clr: #F8821A; --val: 100">
+                    <div class="label">Tous</div>
+                    <div class="value">100%</div>
+                </div>
+
+                <div class="item" style="--clr: #5EB344; --val: 80">
+                    <div class="label">Citroen 300</div>
+                    <div class="value">80%</div>
+                </div>
+
+                <div class="item" style="--clr: #FCB72A; --val: 50">
+                    <div class="label">Suziki M10</div>
+                    <div class="value">50%</div>
+                </div>
+
+
+                <div class="item" style="--clr: #E0393E; --val: 15">
+                    <div class="label">Pajero 404</div>
+                    <div class="value">15%</div>
+                </div>
+
+                <div class="item" style="--clr: #963D97; --val: 1">
+                    <div class="label">Toyota Hilux</div>
+                    <div class="value">1%</div>
+                </div>
+
+                <div class="item" style="--clr: #069CDB; --val: 90">
+                    <div class="label">Lexux AVG</div>
+                    <div class="value">90%</div>
+                </div>
+            </div>
         </div>
 
         <div class="page" v-if="currentPage === 'profil'">
@@ -218,6 +254,7 @@
 
     </div>
 </template>
+
 <script>
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { TABLE } from '@/config/constantes/tables.js';
@@ -275,9 +312,9 @@ export default {
     },
     methods: {
         formatNumber(number) {
-    const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return formattedNumber;
-  },
+            const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return formattedNumber;
+        },
         selectButton(button) {
             this.selectedButton = button;
         },
@@ -418,7 +455,7 @@ export default {
     }
 };
 </script>
-  
+
 <style scoped>
 @import url(https://fonts.googleapis.com/css2?family=Monda:wght@100;200;300;400;500;600;700&display=swap);
 
@@ -662,11 +699,13 @@ li:hover {
     width: 100%;
     display: block;
 }
-.animate__fadeInDown{
+
+.animate__fadeInDown {
     background-color: rgba(0, 0, 0, 0.1);
-    padding: 10px 10px!important;
+    padding: 10px 10px !important;
     border-radius: 15px;
 }
+
 .cont1 {
     width: 100%;
     height: 300px;
@@ -674,8 +713,10 @@ li:hover {
     display: flex;
     flex-wrap: nowrap;
     background-color: #06283D;
-    overflow: hidden;}
-   /* animation: scrollGallery 10s linear infinite;
+    overflow: hidden;
+}
+
+/* animation: scrollGallery 10s linear infinite;
 
 
 @keyframes scrollGallery {
@@ -769,48 +810,136 @@ li:hover {
     margin: auto 10px;
     color: #06283db7 !important;
 }
-.img-container{
+
+.img-container {
     width: 100%;
     margin-top: 5px;
 }
-.lists{
+
+.lists {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-top: 15px;
 }
-.lists img{
+
+.lists img {
     border-radius: 15px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     width: 40%;
     margin-top: 15px;
     height: 150px;
 }
-.lists div{
+
+.lists div {
     width: 55%;
     margin-top: 15px;
 }
-.lists h1{
+
+.lists h1 {
     width: 100%;
     background-color: #06283D;
     height: 17px;
     border-radius: 50px;
     margin-top: 15px;
 }
-.lists h3{
+
+.lists h3 {
     width: 80%;
     background-color: #06283d98;
     height: 14px;
     border-radius: 50px;
 }
-.lists p{
+
+.lists p {
     width: 70%;
     background-color: #06283d48;
     height: 12px;
     border-radius: 50px;
 }
+
 .list li img {
     height: 30px !important;
 }
 
+/*Statistique*/
+.simple-bar-chart {
+    --line-count: 10;
+    --line-color: currentcolor;
+    --line-opacity: 0.25;
+    --item-gap: 2%;
+    --item-default-color: #060606;
+
+    height: 10rem;
+    display: grid;
+    grid-auto-flow: column;
+    gap: var(--item-gap);
+    align-items: end;
+    padding-inline: var(--item-gap);
+    --padding-block: 1.5rem;
+    /*space for labels*/
+    padding-block: var(--padding-block);
+    position: relative;
+    isolation: isolate;
+}
+
+.simple-bar-chart::after {
+    content: "";
+    position: absolute;
+    inset: var(--padding-block) 0;
+    z-index: -1;
+    --line-width: 1px;
+    --line-spacing: calc(100% / var(--line-count));
+    background-image: repeating-linear-gradient(to top, transparent 0 calc(var(--line-spacing) - var(--line-width)), var(--line-color) 0 var(--line-spacing));
+    box-shadow: 0 var(--line-width) 0 var(--line-color);
+    opacity: var(--line-opacity);
+}
+
+.simple-bar-chart>.item {
+    height: calc(1% * var(--val));
+    background-color: var(--clr, var(--item-default-color));
+    position: relative;
+    animation: item-height 1s ease forwards
+}
+
+@keyframes item-height {
+    from {
+        height: 0
+    }
+}
+
+.simple-bar-chart>.item>* {
+    position: absolute;
+    text-align: center
+}
+
+.simple-bar-chart>.item>.label {
+    inset: 100% 0 auto 0
+}
+
+.simple-bar-chart>.item>.value {
+    inset: auto 0 100% 0
+}
+
+/* demo */
+body {
+    margin: 0;
+    padding: 2rem;
+    color: #1D1E22;
+    background-color: #f0f0f0;
+    font-family: system-ui, sans-serif;
+    text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1D1E22;
+        color: #f0f0f0;
+    }
+}
+
+body>* {
+    max-width: 45rem;
+    margin-inline: auto
+}
 </style>
