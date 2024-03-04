@@ -94,6 +94,7 @@ export default {
   },
         async getVehicleById(vehicleId) {
             try {
+                this.loading = true;
                 const q = query(collection(db, TABLE.CAR), where('_id', '==', vehicleId));
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {

@@ -42,12 +42,51 @@
     </div>
     <div class="extra">
 
-        <div class="page" v-if="currentPage === 'home'">
-            <h1 class="animate__animated animate__fadeInUp" style="font-size: 26px; color: #06283D;">Ravis de vous revoir
-                Mr. <span>{{ currentUser ? currentUser.name : '' }}</span></h1>
+        <div style="margin-top: -14px;" class="page" v-if="currentPage === 'home'">
+            
             <div class="cont">
-                <div class="cont1">
-                    <img src="@/assets/toyota.png" alt="image 1">
+                <div class="cont1 ">
+                    
+                    <img style="width: 70%;" src="@/assets/toyota.png" alt="image 1">
+                    <h1 class="animate__animated animate__fadeInUp" style="color: white; font-size: 26px; width: 70%; margin-top: 90px;">Ravis de vous revoir
+                Mr. <span style=" color: #F2994A;">{{ currentUser ? currentUser.name : '' }}</span></h1>
+                </div>
+                <div style="width: 100%; margin-top: 20px;">
+                    <div class="img-container" style="width: 100%;">
+                        <div class="lists animate__animated animate__fadeInUp">
+                            <img src="@/assets/lexus.png" alt="image 1">
+                            <div>
+                                <h1></h1>
+                                <h3></h3>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="lists animate__animated animate__fadeInUp">
+                            <img src="@/assets/day-exterior-4.png" alt="image 1">
+                            <div>
+                                <h1></h1>
+                                <h3></h3>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="lists animate__animated animate__fadeInUp">
+                            <img src="@/assets/car.png" alt="image 1">
+                            <div>
+                                <h1></h1>
+                                <h3></h3>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="lists animate__animated animate__fadeInUp">
+                            <img src="@/assets/c17c68f3853160d844721a9676dc29e9.png" alt="image 1">
+                            <div>
+                                <h1></h1>
+                                <h3></h3>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
 
             </div>
@@ -78,6 +117,7 @@
                         <button   class="bDate" @click="selectButton('button3')"
                             :class="{ active: selectedButton === 'button3' }">Cette annee</button>
                     </div>
+                    
                     <div v-if="selectedButton === 'button4'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
@@ -108,7 +148,11 @@
                             </li>
                         </ul>
                     </div>
-                    <div v-if="selectedButton === 'button3'">
+                    <div v-if="loading" class="loading-indicator">
+                <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
+            </div>
+                    <div v-else>
+                        <div v-if="selectedButton === 'button3'">
                         <ul style="margin-top: 50px;">
                             <li class="animate__animated animate__fadeInDown"
                                 style="margin-top: 20px; display: flex;  justify-content: space-between; padding: 10px 0;"
@@ -117,6 +161,7 @@
                                 <span style="color: #F2994A; font-weight: bold;">{{formatNumber(depense.montant)  }}</span>
                             </li>
                         </ul>
+                    </div>
                     </div>
                 </div>
 
@@ -147,23 +192,23 @@
                                 :to="{ name: 'modifierUser', params: { userId: getUserIdFromLocalStorage() } }"><span>Parametres</span></router-link>
                         </li>
                         <li>
-                            <img style="width: 30px  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
+                            <img style="width: 30px;  margin: auto 0px;" src="@/assets/help-circle.png" alt="">
                             <span>A propos de nous</span>
                         </li>
                         <li>
-                            <img style="width: 30px  margin: auto 0px;" src="@/assets/sun.png" alt="">
+                            <img style="width: 30px;  margin: auto 0px;" src="@/assets/sun.png" alt="">
                             <span>Theme</span>
                         </li>
                         <li>
-                            <img style="width: 30px  margin: auto 0px;" src="@/assets/log-out.png" alt="">
+                            <img style="width: 30px;  margin: auto 0px;" src="@/assets/log-out.png" alt="">
                             <span @click="logout">Deconnexion</span>
                         </li>
                         <li>
-                            <img style="width: 30px  margin: auto 0px;" src="@/assets/scroll.png" alt="">
+                            <img style="width: 30px;  margin: auto 0px;" src="@/assets/scroll.png" alt="">
                             <span>Politique de confidentialite</span>
                         </li>
                         <li>
-                            <img style="width: 30px  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
+                            <img style="width: 30px;  margin: auto 0px;" src="@/assets/newspaper.png" alt="">
                             <span>Termes et conditions</span>
                         </li>
                     </ul>
@@ -192,8 +237,7 @@ export default {
             vehicleId: null,
             typeDepenses: [],
             vehicles: [],
-            currentUser: null, // Variable pour stocker les informations de l'utilisateur connecté
-
+            currentUser: null,
             idTypeDepense: null,
             moisActuel: new Date().getMonth(),
             depensesByWeek: [],
@@ -239,7 +283,7 @@ export default {
         },
         async fetchDepensesByWeek() {
             try {
-
+                this.loading = true;
                 var vehicleIds = localStorage.getItem('vehicleIds');
                 if (vehicleIds) {
                     vehicleIds = JSON.parse(vehicleIds);
@@ -257,14 +301,14 @@ export default {
                     this.depensesByWeek = depensesQuerySnapshot.docs.map(doc => doc.data());
                 }
 
-
+                this.loading = false;
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses par semaine :', error);
             }
         },
         async fetchDepensesByDay() {
             try {
-
+                this.loading = true;
                 var vehicleIds = localStorage.getItem('vehicleIds');
                 if (vehicleIds) {
                     vehicleIds = JSON.parse(vehicleIds);
@@ -282,14 +326,14 @@ export default {
                     this.depensesByDay = depensesQuerySnapshot.docs.map(doc => doc.data());
                 }
 
-
+                this.loading = false;
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses par semaine :', error);
             }
         },
         async fetchDepensesByMonth() {
             try {
-
+                this.loading = true;
                 var vehicleIds = localStorage.getItem('vehicleIds');
                 if (vehicleIds) {
                     vehicleIds = JSON.parse(vehicleIds);
@@ -307,14 +351,14 @@ export default {
                     this.depensesByMonth = depensesQuerySnapshot.docs.map(doc => doc.data());
                 }
 
-
+                this.loading = false;
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses par mois :', error);
             }
         },
         async fetchDepensesByYear() {
             try {
-
+                this.loading = true;
                 var vehicleIds = localStorage.getItem('vehicleIds');
                 if (vehicleIds) {
                     vehicleIds = JSON.parse(vehicleIds);
@@ -331,7 +375,7 @@ export default {
 
                     this.depensesByYear = depensesQuerySnapshot.docs.map(doc => doc.data());
                 }
-
+                this.loading = false;
 
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses par annee :', error);
@@ -629,9 +673,10 @@ li:hover {
     border-radius: 15px;
     display: flex;
     flex-wrap: nowrap;
-    overflow: hidden;
-    animation: scrollGallery 10s linear infinite;
-}
+    background-color: #06283D;
+    overflow: hidden;}
+   /* animation: scrollGallery 10s linear infinite;
+
 
 @keyframes scrollGallery {
     0% {
@@ -642,7 +687,7 @@ li:hover {
         transform: translateX(-100%);
     }
 }
-
+*/
 .cont2 {
     width: 100%;
     display: flex;
@@ -724,7 +769,48 @@ li:hover {
     margin: auto 10px;
     color: #06283db7 !important;
 }
-
+.img-container{
+    width: 100%;
+    margin-top: 5px;
+}
+.lists{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+.lists img{
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 40%;
+    margin-top: 15px;
+    height: 150px;
+}
+.lists div{
+    width: 55%;
+    margin-top: 15px;
+}
+.lists h1{
+    width: 100%;
+    background-color: #06283D;
+    height: 17px;
+    border-radius: 50px;
+    margin-top: 15px;
+}
+.lists h3{
+    width: 80%;
+    background-color: #06283d98;
+    height: 14px;
+    border-radius: 50px;
+}
+.lists p{
+    width: 70%;
+    background-color: #06283d48;
+    height: 12px;
+    border-radius: 50px;
+}
 .list li img {
     height: 30px !important;
-}</style>
+}
+
+</style>

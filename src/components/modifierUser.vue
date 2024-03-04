@@ -1,6 +1,5 @@
 <template>
     <div class="all">
-        <side_barre />
         <div class="container">
             <div class="head">
                 <router-link to="/mesVehicules"><i style="margin-top: 15px; color: #06283dc9;" class="fas fa-chevron-left"></i></router-link>
@@ -36,7 +35,6 @@
 </template>
   
 <script>
-import side_barre from '@/components/layouts/side_barre.vue';
 import { hashSync, compareSync } from 'bcryptjs';
 import { firestore } from '@/config/firebaseConfig';
 import { TABLE } from '@/config/constantes/tables.js';
@@ -44,7 +42,6 @@ import { updateDoc, doc, getDoc } from 'firebase/firestore';
 
 export default {
     components: {
-        side_barre
     },
     data() {
         return {
