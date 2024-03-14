@@ -55,15 +55,15 @@
                 </div>
                 <div style="width: 100%; margin-top: 20px;">
                     <div class="img-container" style="width: 100%;">
-                        <div class="lists animate__animated animate__fadeInUp">
-                            <img src="@/assets/lexus.png" alt="image 1">
+                        <div v-for="vehicle in vehicles" :key="vehicle.id" class="lists animate__animated animate__fadeInUp">
+                            <img v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="image 1">
                             <div>
-                                <h1></h1>
+                                <h1 style="font-size: 16px;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }} <span style=" color: #F2994A;">MT-</span> {{ vehicle._id }}</h1>
                                 <h3></h3>
                                 <p></p>
                             </div>
                         </div>
-                        <div class="lists animate__animated animate__fadeInUp">
+                        <!-- <div class="lists animate__animated animate__fadeInUp">
                             <img src="@/assets/day-exterior-4.png" alt="image 1">
                             <div>
                                 <h1></h1>
@@ -86,7 +86,7 @@
                                 <h3></h3>
                                 <p></p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -308,9 +308,30 @@ export default {
         if (this.isAuthenticated) {
             // Récupérer les véhicules associés à l'ID de l'utilisateur
             this.fetchCurrentUser();
+            this.getVehicles();
         }
     },
     methods: {
+        async getVehicles() {
+            try {
+                this.loading = true;
+                // Création d'une requête filtrée pour récupérer les voitures de l'utilisateur connecté
+                const vehiclesRef = collection(db, TABLE.CAR);
+                const q = query(vehiclesRef, where('userId', '==', this.userId));
+                const querySnapshot = await getDocs(q);
+
+                this.vehicles = querySnapshot.docs.map((doc) => doc.data());
+                this.loading = false; // Fin du chargement
+                // Stocker les véhicules dans le localStorage
+                localStorage.setItem('vehicleIds', JSON.stringify(this.vehicles.map((vehicle) => vehicle._id)));
+                // Pour chaque véhicule, récupérer les dépenses associées
+                this.vehicles.forEach((vehicle) => {
+                    this.fetchDepenses(vehicle._id);
+                });
+            } catch (error) {
+                console.error('Erreur lors de la récupération des véhicules :', error);
+            }
+        },
         formatNumber(number) {
             const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             return formattedNumber;
@@ -830,6 +851,14 @@ li:hover {
     margin-top: 15px;
     height: 150px;
 }
+.lists img:nth-child(2) {
+    border: 1px solid black;
+    display: none;
+}
+
+.lists img:nth-child(3) {
+    display: none;
+}
 
 .lists div {
     width: 55%;
@@ -837,10 +866,11 @@ li:hover {
 }
 
 .lists h1 {
-    width: 100%;
+    width: 95%;
     background-color: #06283D;
-    height: 17px;
+    color: white;
     border-radius: 50px;
+    padding-left: 5%;
     margin-top: 15px;
 }
 

@@ -70,10 +70,6 @@ export default {
         this.fetchDepenses(vehicleId);
         this.findTypeDepense();
         this.getVehicleById(vehicleId);
-        
-        
-      
-        
     },
     computed: {
         // Calcul de la somme totale des dépenses

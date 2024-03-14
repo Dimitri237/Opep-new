@@ -33,6 +33,7 @@ import { firestore } from '@/config/firebaseConfig';
 import { getDocs, collection, query, where, } from 'firebase/firestore';
 
 import bcryptjs from 'bcryptjs';
+import { TABLE } from '@/config/constantes/tables';
 
 export default {
   data() {
@@ -50,8 +51,7 @@ export default {
       this.loading = true;
 
       // Recherche de l'utilisateur correspondant à l'email fourni dans Firestore
-      const usersRef = collection(firestore, 'USER');
-      console.log({ 'this.contact': this.contact });
+      const usersRef = collection(firestore, TABLE.USER);
       const q = query(usersRef, where('contact', '==', this.contact));
 
       try {

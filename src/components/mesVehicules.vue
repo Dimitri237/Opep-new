@@ -66,8 +66,10 @@ export default {
     },
     mounted() {
         try {
-            this.fetchDepenses();
-            this.getUserInfos();
+            const vehicleId = this.$route.params.id;
+        this.fetchDepenses(vehicleId);
+        this.findTypeDepense();
+        this.getVehicleById(vehicleId);
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -97,7 +99,7 @@ export default {
         showPage(page) {
             this.currentPage = page;
         },
-
+        
         async getVehicles() {
             try {
                 this.loading = true;
@@ -131,16 +133,26 @@ export default {
         async fetchDepenses(vehicleId) {
             try {
                 this.loading = true;
-                const querySnapshot = await getDocs(collection(db, TABLE.DEPENSE));
-                this.depenses = querySnapshot.docs
-                    .map((doc) => doc.data())
-                    .filter((depense) => depense.vehicleId === vehicleId);
+                const q = query(collection(db, TABLE.DEPENSE), where('vehiculeId', '==', vehicleId));
+                const querySnapshot = await getDocs(q);
+                this.depenses = querySnapshot.docs.map((doc) => doc.data());
+                this.loading = false;
             } catch (error) {
                 console.error('Erreur lors de la récupération des dépenses :', error);
-            } finally {
-                this.loading = false;
             }
         },
+        async findTypeDepense() {
+            try {
+                const q = query(collection(db, TABLE.TYPE_DEPENSE));
+                const querySnapshot = await getDocs(q);
+                this.typeDepenses = querySnapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.error('Erreur lors de la récupération des informations du véhicule :', error);
+            }
+        }, findTypeDepenseById(id) {
+            const typeDepense = this.typeDepenses.find(type => type._id === id);
+            return typeDepense ? typeDepense.libelle : '';
+        }
     }
 };
 </script>

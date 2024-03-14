@@ -11,6 +11,7 @@ import detailsVehicule from './components/detailsVehicule.vue';
 import side_barre from './components/layouts/side_barre.vue';
 import modifierUser from './components/modifierUser.vue';
 import listingDepenses from './components/listingDepenses.vue';
+import PasswordReset from './components/ForgotPassword.vue';
 const routes = [
   { path: '/CreateAccount', component: CreateAccount },
   { path: '/', component: LoadingPage },
@@ -20,6 +21,11 @@ const routes = [
     path: '/modifier-user/:userId?',
     name: 'modifierUser',
     component: modifierUser
+  },
+  {
+    path: '/password-reset',
+    name: 'password-reset',
+    component: PasswordReset,
   },
   { path: '/ajouterD', component: ajouterD },
   { path: '/MesVehicules', component: MesVehicules },

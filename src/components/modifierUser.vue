@@ -91,8 +91,8 @@ export default {
             const updatedUser = {
                 name: this.name,
                 contact: this.contact,
-                password: hashedPassword
-            };
+                password: hashedPassword                                                                       
+            };                                                       
 
             if (this.currentUserID) {
                 updateDoc(doc(firestore, TABLE.USER, this.currentUserID), updatedUser)
