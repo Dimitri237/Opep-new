@@ -61,7 +61,7 @@
           </button>
           <button class="btn" type="submit" :disabled="loading">
             <span class="loading-indicator" v-if="loading"></span>
-            <span>Valider</span>
+            <span v-else>Valider</span>
           </button>
         </div>
       </form>
@@ -139,7 +139,8 @@ export default {
       console.error('Erreur lors de la récupération des marques :', error);
     }
   },
-  methods: {async ajouterVehicule() {
+  methods: {
+    async ajouterVehicule() {
   this.loading = true;
 
   if (!this.isAuthenticated) {

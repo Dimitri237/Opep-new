@@ -18,7 +18,8 @@
                 <div class="btns" v-for="typeDepense in typeDepenses" :value="typeDepense.libelle"
                   v-bind:key="typeDepense._id" @click="changeTypeDepense(typeDepense)"
                   :class="{ 'selected-button': typeDepense.libelle === selectedTypeDepense.libelle }">{{
-                    typeDepense.libelle }}</div>
+                    typeDepense.libelle }}
+                    </div>
               </div>
 
             </div>
