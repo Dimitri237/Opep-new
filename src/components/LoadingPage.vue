@@ -1,14 +1,11 @@
 <template>
-  <div class="splash-screen">
-    <!-- Contenu du splash screen -->
-    <img style="margin: auto;" src="@/assets/log1.png" alt="Logo" />
-    <div class="loader">
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
+  <div class="splash">
+    <div class="container">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="text">loading</div>
     </div>
   </div>
 </template>
@@ -19,87 +16,93 @@ export default {
     // Cacher le splash screen après une durée spécifique
     setTimeout(() => {
       this.$router.push('/auth');
-    }, 2000); // Durée en millisecondes (10 secondes dans cet exemple)
+    }, 10000); // Durée en millisecondes (10 secondes dans cet exemple)
   },
 };
 </script>
-
 <style scoped>
-img {
-  margin-left: 550px !important;
-}
-
-.splash-screen {
-  /* Styles pour le conteneur du splash screen */
+.splash {
   background-color: #06283D !important;
-  padding: auto;
   height: 100vh;
-  /* Centrer le contenu, définir un fond, etc. */
+  margin: 0;
 }
 
-/*chargement*/
-.loader {
-  height: 125px;
-  margin: 50px auto;
-  width: 125px;
-  animation: spin 2s ease-in-out infinite;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-top: 300px;
 }
 
-.circle {
+.text {
+  color: white;
+  font-family: sans-serif;
+}
+
+.ring {
   position: absolute;
-  width: 125px;
-  height: 125px;
-  background-color: white;
-  mix-blend-mode: screen;
+  width: 190px;
+  height: 190px;
+  border: 1px solid transparent;
   border-radius: 50%;
-  opacity: 0.75;
-  animation: breath 7s ease-in-out infinite;
+  --color: #ff8df9;
+  border-bottom: 8px solid var(--color);
+  animation: rotate1 2s linear infinite;
 }
 
-.circle:nth-child(1) {
-  transform: translate(-35px, -50px);
-  background-color: #F2994A;
-}
-
-.circle:nth-child(2) {
-  transform: translate(35px, -50px);
-  background-color: #2ecc71;
-}
-
-.circle:nth-child(3) {
-  transform: translate(-60px, 0);
-  background-color: #3498db;
-}
-
-.circle:nth-child(4) {
-  transform: translate(60px, 0);
-  background-color: #9b59b6;
-}
-
-.circle:nth-child(5) {
-  transform: translate(-35px, 50px);
-  background-color: #f1c40f;
-}
-
-.circle:nth-child(6) {
-  transform: translate(35px, 50px);
-  background-color: #e62284;
-}
-
-@keyframes spin {
-  50% {
-    filter: blur(360deg);
+@keyframes rotate1 {
+  from {
+    transform: rotateX(50deg) rotateZ(110deg);
   }
 
-  100% {
-    transform: rotate(360deg);
+  to {
+    transform: rotateX(50deg) rotateZ(470deg);
   }
 }
 
-@keyframes breath {
-  50% {
-    transform: translateY(0px);
+.ring:nth-child(2) {
+  --color: #ff8d8d;
+  animation-name: rotate2;
+}
+
+@keyframes rotate2 {
+  from {
+    transform: rotateX(20deg) rotateY(50deg) rotateZ(20deg);
   }
 
+  to {
+    transform: rotateX(20deg) rotateY(50deg) rotateZ(380deg);
+  }
+}
+
+.ring:nth-child(3) {
+  --color: #8dc8ff;
+  animation-name: rotate3;
+}
+
+@keyframes rotate3 {
+  from {
+    transform: rotateX(40deg) rotateY(130deg) rotateZ(450deg);
+  }
+
+  to {
+    transform: rotateX(40deg) rotateY(130deg) rotateZ(90deg);
+  }
+}
+
+.ring:nth-child(4) {
+  --color: #1bd84a;
+  animation-name: rotate4;
+}
+
+@keyframes rotate4 {
+  from {
+    transform: rotateX(70deg) rotateZ(270deg);
+  }
+
+  to {
+    transform: rotateX(70deg) rotateZ(630deg);
+  }
 }
 </style>

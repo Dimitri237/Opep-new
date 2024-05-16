@@ -6,19 +6,22 @@
             <div v-if="loading" class="loading-indicator">
                 <!-- Indicateur de chargement, vous pouvez personnaliser cet élément -->
             </div>
-            <div v-else >
+            <div v-else>
                 <div class="car">
-                    <router-link to="/mesVehicules"><i style="margin-top: 15px; color: #06283dc9;" class="fas fa-chevron-left"></i></router-link>
+                    <router-link to="/mesVehicules"><i style="margin-top: 15px; color: #06283dc9;"
+                            class="fas fa-chevron-left"></i></router-link>
                     <div class="" style="display: block;">
                         <div class="button-container" ref="buttonContainer">
-                            <div class="image button-wrapper" ref="this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;">
-                            <img class="slide" v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="Image de la voiture"
-                                style="margin-top: 10px; border-radius: 10px; height: auto;" />
-                        </div>
+                            <div class="image button-wrapper"
+                                ref="this.$refs.buttonContainer.scrollLeft = this.scrollLeft - deltaX;">
+                                <img class="slide" v-for="image in vehicle.images" :key="image.id" :src="image.url"
+                                    alt="Image de la voiture"
+                                    style="margin-top: 10px; border-radius: 10px; height: auto;" />
+                            </div>
                         </div>
                         <div style="display: flex; justify-content: space-between;">
                             <h4 v-for="vehicle in vehicles" :key="vehicle.id" style="color: #06283dc9;">{{
-                                vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee }}</h4>
+                vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee }}</h4>
                             <h4 style="color: #F2994A;">{{ formatNumber(totalDepenses) }}</h4>
                         </div>
                     </div>
@@ -31,7 +34,7 @@
                             <p>Type de dépense : </p><span> {{ findTypeDepenseById(depense.type_depense) }}</span>
                         </div>
                         <div style="display: flex; margin-top: -20px;">
-                            <p>Montant : </p><span> {{formatNumber(depense.montant)  }}</span>
+                            <p>Montant : </p><span> {{ formatNumber(depense.montant) }}</span>
                         </div>
                         <div style="display: flex; margin-top: -20px;">
                             <p>Date : </p><span v-text="formatDate(depense.date)"></span>
@@ -43,7 +46,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
@@ -74,20 +77,20 @@ export default {
     computed: {
         // Calcul de la somme totale des dépenses
         formattedTotalDepenses() {
-    return this.formatNumber(this.totalDepenses,);
-  },
+            return this.formatNumber(this.totalDepenses,);
+        },
         totalDepenses() {
             return this.depenses.reduce((total, depense) => total + depense.montant, 0);
         }
     },
     methods: {
         formatDate(date) {
-    return moment(date).format('YYYY-MM-DD'); // Remplacez 'YYYY-MM-DD' par le format de date souhaité
-  },
-         formatNumber(number) {
-    const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return formattedNumber;
-  },
+            return moment(date).format('YYYY-MM-DD'); // Remplacez 'YYYY-MM-DD' par le format de date souhaité
+        },
+        formatNumber(number) {
+            const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return formattedNumber;
+        },
         async getVehicleById(vehicleId) {
             try {
                 this.loading = true;
@@ -173,6 +176,7 @@ p {
     color: #06283D;
     font-size: 12px;
 }
+
 .head {
     width: 37.5%;
     position: fixed;
@@ -251,13 +255,16 @@ p {
     border-bottom-color: #F2994A;
     animation: spin 1s linear infinite;
 }
-.image{
+
+.image {
     display: flex;
     justify-content: space-between;
 }
-.image img{
-    width: 32%!important;
+
+.image img {
+    width: 32% !important;
 }
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
