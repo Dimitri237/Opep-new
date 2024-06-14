@@ -55,10 +55,12 @@
                 </div>
                 <div style="width: 100%; margin-top: 20px;">
                     <div class="img-container" style="width: 100%;">
-                        <div v-for="vehicle in vehicles" :key="vehicle.id" class="lists animate__animated animate__fadeInUp">
+                        <div v-for="vehicle in vehicles" :key="vehicle.id"
+                            class="lists animate__animated animate__fadeInUp">
                             <img v-for="image in vehicle.images" :key="image.id" :src="image.url" alt="image 1">
                             <div>
-                                <h1 style="font-size: 16px;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }} <span style=" color: #F2994A;">MT-</span> {{ vehicle._id }}</h1>
+                                <h1 style="font-size: 16px;">{{ vehicle.marque.libelle }} {{ vehicle.model.libelle }}
+                                    <span style=" color: #F2994A;">MT-</span> {{ vehicle._id }}</h1>
                                 <h3></h3>
                                 <p></p>
                             </div>
@@ -324,6 +326,7 @@ export default {
                 this.loading = false; // Fin du chargement
                 // Stocker les véhicules dans le localStorage
                 localStorage.setItem('vehicleIds', JSON.stringify(this.vehicles.map((vehicle) => vehicle._id)));
+                localStorage.setItem('isAuthenticated', true);
                 // Pour chaque véhicule, récupérer les dépenses associées
                 this.vehicles.forEach((vehicle) => {
                     this.fetchDepenses(vehicle._id);
@@ -851,6 +854,7 @@ li:hover {
     margin-top: 15px;
     height: 150px;
 }
+
 .lists img:nth-child(2) {
     border: 1px solid black;
     display: none;

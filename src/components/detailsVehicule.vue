@@ -21,7 +21,7 @@
                         </div>
                         <div style="display: flex; justify-content: space-between;">
                             <h4 v-for="vehicle in vehicles" :key="vehicle.id" style="color: #06283dc9;">{{
-                vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee }}</h4>
+                                vehicle.marque.libelle }} {{ vehicle.model.libelle }} {{ vehicle.annee }}</h4>
                             <h4 style="color: #F2994A;">{{ formatNumber(totalDepenses) }}</h4>
                         </div>
                     </div>
@@ -42,7 +42,15 @@
                     </li>
                 </ul>
             </div>
-
+            <button @click="newSpend" to="/ajouterD" class="new_spend">
+                <img style="width: 50px; height: 50px; margin: auto 10px;" src="@/assets/icon (4).png" alt="">
+                <div style="margin: auto 10px; width: 500px;">
+                    <h3>Ajouter une dépense</h3>
+                </div>
+            </button>
+            <div class="spendModale" v-if="addSpend">
+                <ajouterD />
+            </div>
         </div>
     </div>
 </template>
@@ -52,12 +60,14 @@ import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { TABLE } from '@/config/constantes/tables.js';
 import side_barre from '@/components/layouts/side_barre.vue';
+import ajouterD from '@/components/ajouterD.vue';
 import moment from 'moment';
 
 
 export default {
     components: {
-        side_barre
+        side_barre,
+        ajouterD
     },
     data() {
         return {
@@ -66,6 +76,7 @@ export default {
             typeDepenses: [],
             loading: false,
             vehicles: [],
+            addSpend: false,
         };
     },
     mounted() {
@@ -84,6 +95,9 @@ export default {
         }
     },
     methods: {
+        newSpend(){
+            this.addSpend = true;
+        },
         formatDate(date) {
             return moment(date).format('YYYY-MM-DD'); // Remplacez 'YYYY-MM-DD' par le format de date souhaité
         },
@@ -99,6 +113,8 @@ export default {
                 if (!querySnapshot.empty) {
                     this.vehicle = querySnapshot.docs[0].data();
                     this.vehicles = querySnapshot.docs.map((doc) => doc.data());
+                    localStorage.setItem('vehicleIds', JSON.stringify(this.vehicles.map((vehicle) => vehicle._id)));
+
                 } else {
                     console.log('Le véhicule n\'existe pas.');
                 }
@@ -143,6 +159,27 @@ body {
     margin: 0;
     background-color: rgba(0, 0, 0, 0.5) !important;
     font-family: Monda;
+}
+.spendModale{
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+}
+
+.new_spend {
+    width: 20%;
+    top: 89%;
+    left: 79%;
+    display: flex;
+    text-decoration: none;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    position: absolute;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 .car {

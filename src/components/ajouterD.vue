@@ -329,6 +329,7 @@ h2 {
   margin-top: 30px;
   padding: 0 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  background-color: white;
   border-radius: 20px;
 }
 

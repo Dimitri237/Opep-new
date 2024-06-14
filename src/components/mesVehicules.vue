@@ -22,7 +22,8 @@
                     <router-link v-for="vehicle in vehicles" :key="vehicle.id" :to="'/detailsVehicule/' + vehicle._id"
                         class="car animate__animated animate__fadeInRight">
                         <div class="image" style="display: flex;">
-                            <img v-for="image in vehicle.images.createdAt" :key="image.id" :src="image.url" alt="Image de la voiture"
+                            <img v-for="image in vehicle.images.createdAt" :key="image.id" :src="image.url"
+                                alt="Image de la voiture"
                                 style="width: 100%; margin-top: 10px; border-radius: 10px; height: auto;" />
                         </div>
                         <div style="padding: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
@@ -37,11 +38,12 @@
                     </router-link>
 
                 </div>
+               
             </div>
         </div>
     </div>
 </template>
-  
+
 <script>
 import side_barre from '@/components/layouts/side_barre.vue';
 import { TABLE } from '@/config/constantes/tables.js';
@@ -67,9 +69,9 @@ export default {
     mounted() {
         try {
             const vehicleId = this.$route.params.id;
-        this.fetchDepenses(vehicleId);
-        this.findTypeDepense();
-        this.getVehicleById(vehicleId);
+            this.fetchDepenses(vehicleId);
+            this.findTypeDepense();
+            this.getVehicleById(vehicleId);
             // ...
         } catch (error) {
             console.error('Erreur lors de la récupération des dépenses :', error);
@@ -99,7 +101,7 @@ export default {
         showPage(page) {
             this.currentPage = page;
         },
-        
+
         async getVehicles() {
             try {
                 this.loading = true;
@@ -156,7 +158,7 @@ export default {
     }
 };
 </script>
-  
+
 <style scoped>
 @import url(https://fonts.googleapis.com/css2?family=Monda:wght@100;200;300;400;500;600;700&display=swap);
 
@@ -232,6 +234,8 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 }
+
+
 
 .vList {
 
