@@ -19,7 +19,8 @@
           <div style="width: 47%;">
             <div><label for="">Modele véhicule</label></div>
             <select class="selectM" name="" v-model="modele" id="modeles-select">
-              <option v-for="modele in modeles" :value="modele._id" v-bind:key="modele._id">{{ modele.libelle }}</option>
+              <option v-for="modele in modeles" :value="modele._id" v-bind:key="modele._id">{{ modele.libelle }}
+              </option>
             </select>
           </div>
           <div style="width: 47%;">
@@ -76,7 +77,7 @@ import moment from 'moment';
 
 export default {
   name: 'AddVehicle',
-  
+
   data() {
     return {
       id: '',
@@ -87,8 +88,8 @@ export default {
       createdAt: moment().format(),
       updatedAt: moment().format(),
       fileName1: '',
-    fileName2: '',
-    fileName3: '',
+      fileName2: '',
+      fileName3: '',
       selectedImage: null,
       selectedImageURL: null,
       selectedImage1: null,
@@ -141,67 +142,67 @@ export default {
   },
   methods: {
     async ajouterVehicule() {
-  this.loading = true;
+      this.loading = true;
 
-  if (!this.isAuthenticated) {
-    alert('Vous devez être connecté pour ajouter un véhicule.');
-    return;
-  }
+      if (!this.isAuthenticated) {
+        alert('Vous devez être connecté pour ajouter un véhicule.');
+        return;
+      }
 
-  try {
-    const imageUrls = [];
+      try {
+        const imageUrls = [];
 
-    if (this.selectedImage) {
-      const imageUrl = await uploadToFirebase(this.selectedImage, this.fileName1);
-      imageUrls.push(imageUrl);
-    }
+        if (this.selectedImage) {
+          const imageUrl = await uploadToFirebase(this.selectedImage, this.fileName1);
+          imageUrls.push(imageUrl);
+        }
 
-    if (this.selectedImage1) {
-      const imageUrl1 = await uploadToFirebase(this.selectedImage1, this.fileName2);
-      imageUrls.push(imageUrl1);
-    }
+        if (this.selectedImage1) {
+          const imageUrl1 = await uploadToFirebase(this.selectedImage1, this.fileName2);
+          imageUrls.push(imageUrl1);
+        }
 
-    if (this.selectedImage2) {
-      const imageUrl2 = await uploadToFirebase(this.selectedImage2, this.fileName3);
-      imageUrls.push(imageUrl2);
-    }
+        if (this.selectedImage2) {
+          const imageUrl2 = await uploadToFirebase(this.selectedImage2, this.fileName3);
+          imageUrls.push(imageUrl2);
+        }
 
-    const vehicle = {
-      _id: this.id, // Veuillez spécifier la source de cet ID (_id)
-      marque: this.marques.find(m => m._id === this.marque),
-      model: this.modeles.find(m => m._id === this.modele),
-      annee: this.annee,
-      color: this.color,
-      userId: this.userId,
-      images: imageUrls.map(url => ({ createdAt: moment().format(), url })),
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
-    };
+        const vehicle = {
+          _id: this.id, // Veuillez spécifier la source de cet ID (_id)
+          marque: this.marques.find(m => m._id === this.marque),
+          model: this.modeles.find(m => m._id === this.modele),
+          annee: this.annee,
+          color: this.color,
+          userId: this.userId,
+          images: imageUrls.map(url => ({ createdAt: moment().format(), url })),
+          createdAt: this.createdAt,
+          updatedAt: this.updatedAt
+        };
 
-    await setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle });
-    // Réinitialiser les champs du formulaire
-    this.$router.push("/mesVehicules");
-  } catch (error) {
-    console.error('Erreur lors du téléchargement de l\'image :', error);
-  } finally {
-    this.loading = false;
-  }
-},
-onFileSelected(event) {
-    this.selectedImage = event.target.files[0];
-    this.fileName1 = this.selectedImage.name;
-    this.selectedImageURL = URL.createObjectURL(this.selectedImage);
-  },
-  onFileSelected1(event) {
-    this.selectedImage1 = event.target.files[0];
-    this.fileName2 = this.selectedImage1.name;
-    this.selectedImageURL1 = URL.createObjectURL(this.selectedImage1);
-  },
-  onFileSelected2(event) {
-    this.selectedImage2 = event.target.files[0];
-    this.fileName3 = this.selectedImage2.name;
-    this.selectedImageURL2 = URL.createObjectURL(this.selectedImage2);
-  },
+        await setDoc(doc(firestore, TABLE.CAR, vehicle._id), { ...vehicle });
+        // Réinitialiser les champs du formulaire
+        this.$router.push("/mesVehicules");
+      } catch (error) {
+        console.error('Erreur lors du téléchargement de l\'image :', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    onFileSelected(event) {
+      this.selectedImage = event.target.files[0];
+      this.fileName1 = this.selectedImage.name;
+      this.selectedImageURL = URL.createObjectURL(this.selectedImage);
+    },
+    onFileSelected1(event) {
+      this.selectedImage1 = event.target.files[0];
+      this.fileName2 = this.selectedImage1.name;
+      this.selectedImageURL1 = URL.createObjectURL(this.selectedImage1);
+    },
+    onFileSelected2(event) {
+      this.selectedImage2 = event.target.files[0];
+      this.fileName3 = this.selectedImage2.name;
+      this.selectedImageURL2 = URL.createObjectURL(this.selectedImage2);
+    },
   }
 };
 </script>
@@ -271,9 +272,11 @@ form {
 .monda-font {
   font-family: 'Monda', sans-serif;
 }
-.inbox{
+
+.inbox {
   width: 29%;
 }
+
 .affiche {
   width: 100px;
   height: 100px;
@@ -352,4 +355,5 @@ label {
   background-color: transparent;
   color: rgba(6, 40, 61, 1);
   border: 1px solid rgba(6, 40, 61, 1);
-}</style>
+}
+</style>
