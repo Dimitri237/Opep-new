@@ -191,4 +191,5 @@ label {
   display: flex;
   justify-content: center;
   height: 100px;
-}</style>
+}
+</style>
